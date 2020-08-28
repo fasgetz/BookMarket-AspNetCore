@@ -1,0 +1,40 @@
+
+/* Оформление */
+.main_page {
+  padding: 20px;
+
+}
+
+
+.main_page h1, h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.main_page h1 {
+
+  color: #f90;
+}
+
+.main_page h2 {
+  display: inline-block;
+  border-bottom: 2px solid rgba(48, 151, 209, 0.25)
+
+}
+
+.main_page h2:hover {
+  color: blue
+}
+
+
+/* Карточка Book */
+.bookData {
+
+}
+
+.bookData__image img {
+  height: 220px;
+  width: 140px;
+  -o-object-fit: cover;
+   object-fit: cover;
+   object-position: center;
+}

@@ -13,6 +13,7 @@ namespace BookMarket.Models.DataBase
         public BookMarketContext(DbContextOptions<BookMarketContext> options)
             : base(options)
         {
+
         }
 
         public virtual DbSet<Author> Author { get; set; }

@@ -1,0 +1,58 @@
+﻿header {
+    background-color: #39c;
+}
+
+/* Секция меню */
+
+.menu li {
+    background-color: #f90;
+    margin-right: 10px;
+    border-radius: 3px;
+    border: 1px solid black;
+    border-color: #fc0;
+}
+
+    .menu li a:hover {
+        background-color: grey;
+    }
+
+/* Конец секции меню */
+
+/* Секция поиска книг */
+.searchBook-input {
+    padding: 5px 10px;
+    background-color: #fc0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+    .searchBook-input span {
+        padding-top: 5px;
+        height: 35px;
+        width: 35px;
+        background-color: white;
+        font-size: 20px;
+        border: 1px solid #ced4da;
+    }
+
+    .searchBook-input input {
+        height: 35px;
+        margin-right: 10px;
+    }
+
+    .searchBook-input button {
+        height: 35px;
+    }
+
+/* Конец секции поиска книг */
+
+/* Блок контента */
+
+body {
+    background-color: azure;
+}
+
+/* Футер */
+.footer {
+    background-color: #39c;
+}

@@ -1,0 +1,21 @@
+﻿@model BookMarket.Models.DataBase.Book
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="book-view">
+    <div class="book-view__poster">
+        <img src="#" alt="Book">
+    </div>
+    <div class="book-view__info">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>@Model.Name</h2>
+            </div>
+            <div class="col-md-6">
+                <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus, odit?</h2>
+            </div>
+        </div>
+    </div>
+</div>

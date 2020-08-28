@@ -1,15 +1,38 @@
-﻿@model IEnumerable<CategoryBook>
+﻿@model IEnumerable<Book>
 
 @{
-    ViewData["Title"] = "Home Page";    
+    ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
-    @foreach (var item in Model)
-    {
-        <p>@item.Name</p>
-    }
-</div>
+    <div class="text-center main_page">
+        <h1 class="display-4">Электронная библиотека</h1>
+        <a href="https://online-knigi.com/new">
+            <div>
+                <h2 class="text-center">Новинки на сайте</h2>
+            </div>
+        </a>
+        <div class="row newsBook__groups">
+            @foreach (var item in Model)
+            {
+                <div class="bookData">
+                    <div class="bookData__image">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                            <img src="@Url.Action("GetImage", "Home", new { id = item.Id })" alt="Poster Book" />
+                        </a>
+                        
+                    </div>
+                    <div class="bookData__name">
+                        <a href="#">
+                            @item.Name
+                        </a>
+                    </div>
+                    <div class="bookData_author">
+                        <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
+                            @item.IdAuthorNavigation.Name
+                        </a>                        
+                    </div>
+                </div>
+            }
+        </div>
+    </div>

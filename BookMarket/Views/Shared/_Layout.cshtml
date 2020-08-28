@@ -6,30 +6,46 @@
     <title>@ViewData["Title"] - BookMarket</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <link href="~/css/test.css" rel="stylesheet" />
+    <link href="~/css/mainpage.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/056ddd099c.js"></script>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="menu navbar navbar-expand-sm navbar-toggleable-sm navbar-light  box-shadow mb-1">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BookMarket</a>
+                <a class="navbar-brand text-light" asp-controller="Home" asp-action="Index">BookMarket</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-light" href="#">Жанры</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+        <div class="container header">
+            <div class="row">
+                <div class="col">
+                    <div class="searchBook-input input-group">
+                        <span class="fa fa-search text-center"></span>
+                        <input name="text" type="text" class="form-control search" placeholder="Поиск по названию книги, автора">
+                        <button class="btn btn-info btn-search" type="submit">Поиск</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
-    <div class="container">
+
+    <div class="content container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -43,6 +59,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/test.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

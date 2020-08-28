@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BookMarket.Models;
 using BookMarket.Models.DataBase;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookMarket.Controllers
 {
@@ -18,15 +16,26 @@ namespace BookMarket.Controllers
         public HomeController(ILogger<HomeController> logger, BookMarketContext context)
         {
             _logger = logger;
+
             this.context = context;
+        }
+
+        public ActionResult GetImage(int id)
+        {
+            using (context = new BookMarketContext())
+            {
+                return File(context.Book.FirstOrDefault(i => i.Id == id).PosterBook, "image/png");
+            }
+
         }
 
         public IActionResult Index()
         {
-
-            EFGenericRepositoryPattern.EFGenericRepository<CategoryBook> rep = new EFGenericRepositoryPattern.EFGenericRepository<CategoryBook>(context);
-
-            return View(rep.GetQueryList(i => i.Id < 3));
+            using (context = new BookMarketContext())
+            {
+                return View(context.Book.Include("IdAuthorNavigation").OrderByDescending(i => i.Id).Take(2).ToList());
+            }
+                
         }
 
         public IActionResult Privacy()
