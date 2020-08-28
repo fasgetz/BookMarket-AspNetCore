@@ -18,7 +18,7 @@ namespace BookMarket.Controllers
             this.context = context;
         }
 
-        // GET: Books
+        // GET: Books 
         public async Task<IActionResult> Index()
         {
             return View(await Task.Run(() => context.Book.ToList()));
