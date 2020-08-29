@@ -56,8 +56,30 @@ namespace BookMarket
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: null,
+                    pattern: "book/{id}",
+                    defaults: new { controller = "Books", action = "AboutBook"}
+                );
+
+
+
+                endpoints.MapControllerRoute(
+                    name: "BookRoute",
+                    pattern: "book/{idBook}/Page{page}",
+                    defaults: new { controller = "Books", action = "GetBook", page = 1 }
+                );
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                //endpoints.MapControllerRoute(
+                //    name: "book",
+                //    pattern: "{controller=Books}/{action=GetBook}/{idBook}/Page{page}");
+
+
+
+                
             });
         }
     }

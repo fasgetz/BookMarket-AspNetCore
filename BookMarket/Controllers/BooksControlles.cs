@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace BookMarket.Controllers
 {
+    //[Route("book")]
     public class BooksController : Controller
     {
         private readonly ILogger<BooksController> _logger;
@@ -25,14 +26,15 @@ namespace BookMarket.Controllers
         }
 
         // GET: Books/About/5
+        //[Route("AboutBook/{id}")]
         public async Task<IActionResult> AboutBook(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var book = await context.Book.FirstOrDefaultAsync(m => m.Id == id);
+            
+            var book = await context.Book.Include("IdAuthorNavigation").FirstOrDefaultAsync(m => m.Id == id);
 
             if (book == null)
             {
@@ -40,6 +42,30 @@ namespace BookMarket.Controllers
             }
 
             return View("About", book);
+        }
+
+        //GET
+        //[Route("{idBook}/Page{page}")]
+        public async Task<IActionResult> GetBook(int? idBook, int? page = 1)
+        {
+            if (idBook == null)
+                return NotFound();
+
+            var book = await context.Book.FirstOrDefaultAsync(i => i.Id == idBook);
+
+            if (book == null)
+                return NotFound();
+
+            // Если книга найдена, то вернуть текст страницы page
+
+            var glavas = book.ContentBook.Split("Глава").Skip(1).ToArray();
+
+            if (page > glavas.Length)
+                return NotFound();
+            
+            var glava = "<h3>Глава " + glavas[(int)page - 1];
+
+            return View("Get", glava);
         }
     }
 }

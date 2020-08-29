@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using BookMarket.Models;
 using BookMarket.Models.DataBase;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace BookMarket.Controllers
 {
@@ -20,14 +21,7 @@ namespace BookMarket.Controllers
             this.context = context;
         }
 
-        public ActionResult GetImage(int id)
-        {
-            using (context = new BookMarketContext())
-            {
-                return File(context.Book.FirstOrDefault(i => i.Id == id).PosterBook, "image/png");
-            }
 
-        }
 
         public IActionResult Index()
         {
