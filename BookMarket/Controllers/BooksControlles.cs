@@ -4,6 +4,7 @@ using BookMarket.Models.DataBase;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using BookMarket.Models.ViewModels;
 
 namespace BookMarket.Controllers
 {
@@ -62,13 +63,17 @@ namespace BookMarket.Controllers
 
             if (page > glavas.Length)
                 return NotFound();
-            
-            var glava = "<h3>Глава " + glavas[(int)page - 1];
-            ViewBag.page = page;
-            ViewBag.idBook = idBook;
-            ViewBag.maxPage = glavas.Length;
 
-            return View("Get", glava);
+            GetBookViewModel vm = new GetBookViewModel()
+            {
+                thisPage = (int)page,
+                IdBook = (int)idBook,
+                CountPage = glavas.Length,
+                content = "<h3>Глава " + glavas[(int)page - 1]
+            };
+
+
+            return View("Get", vm);
         }
     }
 }

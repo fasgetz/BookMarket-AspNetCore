@@ -1,31 +1,30 @@
-﻿@model string
-
+﻿@model GetBookViewModel
 @{
     ViewData["Title"] = "book";
 }
 
     <div>
-        @Model.ToHtmlString()
+        @Model.content.ToHtmlString()
         
         <div class="col text-center">
-            @if (ViewBag.page == 1)
+            @if (Model.thisPage == 1)
             {
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page + 1)" asp-route-idBook="@ViewBag.IdBook">
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage + 1)" asp-route-idBook="@Model.IdBook">
                     <span class="fa fa-book"></span> Далее
                 </a>
             }
-            else if (ViewBag.page > 1 && ViewBag.page < ViewBag.maxPage)
+            else if (Model.thisPage > 1 && Model.thisPage < Model.CountPage)
             {
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page - 1)" asp-route-idBook="@ViewBag.IdBook">
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage - 1)" asp-route-idBook="@Model.IdBook">
                     <span class="fa fa-book"></span> Назад
                 </a>
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page + 1)" asp-route-idBook="@ViewBag.IdBook">
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage + 1)" asp-route-idBook="@Model.IdBook">
                     <span class="fa fa-book"></span> Далее
                 </a>
             }
-            else if (ViewBag.page == ViewBag.maxPage)
+            else if (Model.thisPage == Model.CountPage)
             {
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page - 1)" asp-route-idBook="@ViewBag.IdBook">
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage - 1)" asp-route-idBook="@Model.IdBook">
                     <span class="fa fa-book"></span> Назад
                 </a>
             }
