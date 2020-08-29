@@ -64,6 +64,9 @@ namespace BookMarket.Controllers
                 return NotFound();
             
             var glava = "<h3>Глава " + glavas[(int)page - 1];
+            ViewBag.page = page;
+            ViewBag.idBook = idBook;
+            ViewBag.maxPage = glavas.Length;
 
             return View("Get", glava);
         }

@@ -7,7 +7,28 @@
     <div>
         @Model.ToHtmlString()
         
-        <div>
-            
+        <div class="col text-center">
+            @if (ViewBag.page == 1)
+            {
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page + 1)" asp-route-idBook="@ViewBag.IdBook">
+                    <span class="fa fa-book"></span> Далее
+                </a>
+            }
+            else if (ViewBag.page > 1 && ViewBag.page < ViewBag.maxPage)
+            {
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page - 1)" asp-route-idBook="@ViewBag.IdBook">
+                    <span class="fa fa-book"></span> Назад
+                </a>
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page + 1)" asp-route-idBook="@ViewBag.IdBook">
+                    <span class="fa fa-book"></span> Далее
+                </a>
+            }
+            else if (ViewBag.page == ViewBag.maxPage)
+            {
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(ViewBag.page - 1)" asp-route-idBook="@ViewBag.IdBook">
+                    <span class="fa fa-book"></span> Назад
+                </a>
+            }
+
         </div>
     </div>
