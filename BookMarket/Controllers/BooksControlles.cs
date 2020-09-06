@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 using BookMarket.Models.ViewModels;
+using System.Collections.Generic;
 
 namespace BookMarket.Controllers
 {
@@ -26,8 +27,7 @@ namespace BookMarket.Controllers
             return View(await Task.Run(() => context.Book.ToList()));
         }
 
-        // GET: Books/About/5
-        //[Route("AboutBook/{id}")]
+
         public async Task<IActionResult> AboutBook(int? id)
         {
             if (id == null)
@@ -45,9 +45,32 @@ namespace BookMarket.Controllers
             return View("About", book);
         }
 
-        //GET
-        //[Route("{idBook}/Page{page}")]
-        public async Task<IActionResult> GetBook(int? idBook, int? page = 1)
+
+        [HttpGet]
+        public async Task<JsonResult> GetBookDataJSON(int idBook, int page)
+        {
+            var data = await context.ChapterBook.FirstOrDefaultAsync(i => i.IdBook == idBook && i.NumberChapter == page);
+
+            return new JsonResult(data.ChapterContent);
+        }
+
+        [HttpGet]
+        public IActionResult GetDataBook(int idBook, int page)
+        {            
+            GetBookViewModel vm = new GetBookViewModel()
+            {
+                thisPage = (int)page,
+                IdBook = (int)idBook,
+                CountPage = context.ChapterBook.Where(i => i.IdBook == idBook).Count(),
+                content = $"{context.ChapterBook.FirstOrDefault(i => i.NumberChapter == page).ChapterContent}"
+            };
+
+            return PartialView("GetDataBook", vm);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetBook(int? idBook)
         {
             if (idBook == null)
                 return NotFound();
@@ -57,23 +80,18 @@ namespace BookMarket.Controllers
             if (book == null)
                 return NotFound();
 
-            // Если книга найдена, то вернуть текст страницы page
-
-            var glavas = book.ContentBook.Split("Глава").Skip(1).ToArray();
-
-            if (page > glavas.Length)
-                return NotFound();
-
-            GetBookViewModel vm = new GetBookViewModel()
-            {
-                thisPage = (int)page,
-                IdBook = (int)idBook,
-                CountPage = glavas.Length,
-                content = "<h3>Глава " + glavas[(int)page - 1]
-            };
+            // Прогружаем список глав книги
+            IEnumerable<ChapterBook> Chapters = context.ChapterBook.Where(i => i.IdBook == idBook).Select(i => new ChapterBook { ChapterName = i.ChapterName, NumberChapter = i.NumberChapter}).ToList();
 
 
-            return View("Get", vm);
+
+
+            ViewBag.list = Chapters;
+            ViewBag.idBook = idBook;
+
+
+
+            return View("Get");
         }
     }
 }

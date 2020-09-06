@@ -9,6 +9,11 @@
     <link href="~/css/mainpage.css" rel="stylesheet" />
     <link href="~/css/test.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/056ddd099c.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/test.js"></script>
+    @RenderSection("Scripts", required: false)
 </head>
 <body>
     <header>
@@ -55,10 +60,6 @@
             &copy; 2020 - BookMarket - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/test.js"></script>
-    @RenderSection("Scripts", required: false)
+    
 </body>
 </html>

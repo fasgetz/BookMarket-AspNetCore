@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMarket.Migrations
 {
     [DbContext(typeof(BookMarketContext))]
-    [Migration("20200829074820_ChangeBookAddTypeContent")]
-    partial class ChangeBookAddTypeContent
+    [Migration("20200902115107_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,9 +57,6 @@ namespace BookMarket.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ContentBook")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
@@ -102,6 +99,34 @@ namespace BookMarket.Migrations
                     b.ToTable("CategoryBook");
                 });
 
+            modelBuilder.Entity("BookMarket.Models.DataBase.ChapterBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ChapterContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ChapterName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<int?>("IdBook")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberChapter")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdBook");
+
+                    b.ToTable("ChapterBook");
+                });
+
             modelBuilder.Entity("BookMarket.Models.DataBase.Book", b =>
                 {
                     b.HasOne("BookMarket.Models.DataBase.Author", "IdAuthorNavigation")
@@ -114,6 +139,15 @@ namespace BookMarket.Migrations
                         .WithMany("Book")
                         .HasForeignKey("IdCategory")
                         .HasConstraintName("FK_Book_CategoryBook")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookMarket.Models.DataBase.ChapterBook", b =>
+                {
+                    b.HasOne("BookMarket.Models.DataBase.Book", "IdBookNavigation")
+                        .WithMany("ChapterBook")
+                        .HasForeignKey("IdBook")
+                        .HasConstraintName("FK_ChapterBook_Book")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

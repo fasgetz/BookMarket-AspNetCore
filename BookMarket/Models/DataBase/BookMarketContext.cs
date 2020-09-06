@@ -1,9 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookMarket.Models.DataBase
 {
+
+
+
     public partial class BookMarketContext : DbContext
     {
         public BookMarketContext()
@@ -16,9 +20,12 @@ namespace BookMarket.Models.DataBase
 
         }
 
+
+
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<CategoryBook> CategoryBook { get; set; }
+        public virtual DbSet<ChapterBook> ChapterBook { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -54,6 +61,8 @@ namespace BookMarket.Models.DataBase
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.PosterBook).HasColumnType("image");
+
                 entity.HasOne(d => d.IdAuthorNavigation)
                     .WithMany(p => p.Book)
                     .HasForeignKey(d => d.IdAuthor)
@@ -71,6 +80,22 @@ namespace BookMarket.Models.DataBase
             {
                 entity.Property(e => e.Name).HasMaxLength(50);
             });
+
+            modelBuilder.Entity<ChapterBook>(entity =>
+            {
+                entity.Property(e => e.ChapterName)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.HasOne(d => d.IdBookNavigation)
+                    .WithMany(p => p.ChapterBook)
+                    .HasForeignKey(d => d.IdBook)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_ChapterBook_Book");
+            });
+
+
+
 
             OnModelCreatingPartial(modelBuilder);
         }

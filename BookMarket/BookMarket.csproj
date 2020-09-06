@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200902115915_testMigration.cs" />
+    <Compile Remove="Migrations\20200902115915_testMigration.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\Images\1.png" />
   </ItemGroup>
 

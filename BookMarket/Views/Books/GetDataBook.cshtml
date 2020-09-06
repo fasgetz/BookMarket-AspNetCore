@@ -1,0 +1,31 @@
+﻿@model GetBookViewModel
+@{
+    ViewData["Title"] = "book";
+}
+
+@Model.content.ToHtmlString()
+<div class="col text-center">
+    @if (Model.thisPage == 1)
+    {
+        <a class="btn btn-success" onclick="GetBookDataJson(@Model.IdBook, @(Model.thisPage + 1))">
+            <span class="fa fa-book"></span> Далее
+        </a>
+    }
+    else if (Model.thisPage > 1 && Model.thisPage < Model.CountPage)
+    {
+        <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage - 1)" asp-route-idBook="@Model.IdBook">
+            <span class="fa fa-book"></span> Назад
+        </a>
+        <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage + 1)" asp-route-idBook="@Model.IdBook">
+            <span class="fa fa-book"></span> Далее
+        </a>
+    }
+    else if (Model.thisPage == Model.CountPage)
+    {
+        <a class="btn btn-success" onclick="GetBookDataJson(@Model.IdBook, @(Model.thisPage - 1))">
+            <span class="fa fa-book"></span> Назад
+        </a>
+    }
+
+</div>
+

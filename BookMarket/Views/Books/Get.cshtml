@@ -1,33 +1,38 @@
-﻿@model GetBookViewModel
+﻿
 @{
     ViewData["Title"] = "book";
 }
 
     <div>
-        @Model.content.ToHtmlString()
-        
-        <div class="col text-center">
-            @if (Model.thisPage == 1)
-            {
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage + 1)" asp-route-idBook="@Model.IdBook">
-                    <span class="fa fa-book"></span> Далее
-                </a>
-            }
-            else if (Model.thisPage > 1 && Model.thisPage < Model.CountPage)
-            {
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage - 1)" asp-route-idBook="@Model.IdBook">
-                    <span class="fa fa-book"></span> Назад
-                </a>
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage + 1)" asp-route-idBook="@Model.IdBook">
-                    <span class="fa fa-book"></span> Далее
-                </a>
-            }
-            else if (Model.thisPage == Model.CountPage)
-            {
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-page="@(Model.thisPage - 1)" asp-route-idBook="@Model.IdBook">
-                    <span class="fa fa-book"></span> Назад
-                </a>
-            }
+        <p>
+            <select class="form-control" id="opt">                                
+                <option selected disabled>Выберите главу</option>
+                @foreach(var item in ViewBag.list)
+                {
+                    <option value="@item.NumberChapter">@item.ChapterName</option>
+                }
+            </select>
+        </p>
+        <div id="content"></div>
 
-        </div>
     </div>
+
+
+    <script src="~/js/GetBookDataAjax.js"></script>
+    <script type="text/javascript">
+        
+
+        $(document).ready(function () {
+            GetBookDataJson(@ViewBag.idBook, 1);
+            $('#opt').on('change', function (e) {
+                
+                var numb = $("#opt").val();
+
+                GetBookDataJson(@ViewBag.idBook, numb);
+
+            });
+        });
+
+    </script>
+
+
