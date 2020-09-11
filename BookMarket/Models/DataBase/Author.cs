@@ -5,6 +5,11 @@ namespace BookMarket.Models.DataBase
 {
     public partial class Author
     {
+        #region
+
+        public string NameFamily => $"{Name} {Family}";
+
+        #endregion
         public Author()
         {
             Book = new HashSet<Book>();

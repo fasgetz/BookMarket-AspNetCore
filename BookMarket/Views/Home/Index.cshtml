@@ -15,7 +15,7 @@
     <div class="row newsBook__groups">
         @foreach (var item in Model)
         {
-            <div class="bookData">
+            <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
                 <div class="bookData__image">
                     <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
                         <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
@@ -28,7 +28,7 @@
                 </div>
                 <div class="bookData_author">
                     <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
-                        @item.IdAuthorNavigation.Name
+                        @item.IdAuthorNavigation.Name @item.IdAuthorNavigation.Family
                     </a>
                 </div>
             </div>
@@ -36,4 +36,6 @@
     </div>
 
 </div>
+
+
 

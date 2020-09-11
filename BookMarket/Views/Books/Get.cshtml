@@ -9,7 +9,7 @@
                 <option selected disabled>Выберите главу</option>
                 @foreach(var item in ViewBag.list)
                 {
-                    <option value="@item.NumberChapter">@item.ChapterName</option>
+                    <option value="@item.Id">@item.ChapterName</option>
                 }
             </select>
         </p>
@@ -23,7 +23,13 @@
         
 
         $(document).ready(function () {
-            GetBookDataJson(@ViewBag.idBook, 1);
+
+            var opin = $('#opt').get(0).val;
+
+            alert(opin + '435');
+
+
+            GetBookDataJson(@ViewBag.idBook, @ViewBag.i);
             $('#opt').on('change', function (e) {
                 
                 var numb = $("#opt").val();

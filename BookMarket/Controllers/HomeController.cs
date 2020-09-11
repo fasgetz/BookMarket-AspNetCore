@@ -27,7 +27,7 @@ namespace BookMarket.Controllers
         {
             using (context = new BookMarketContext())
             {
-                return View(context.Book.Include("IdAuthorNavigation").OrderByDescending(i => i.Id).Take(2).ToList());
+                return View(context.Book.Include("IdAuthorNavigation").OrderByDescending(i => i.Id).Take(4).ToList());
             }
                 
         }

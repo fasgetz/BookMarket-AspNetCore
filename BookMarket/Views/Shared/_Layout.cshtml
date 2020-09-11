@@ -12,7 +12,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/test.js"></script>
+
+    
     @RenderSection("Scripts", required: false)
 </head>
 <body>
@@ -31,6 +32,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" href="#">Жанры</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Books" asp-action="AddBook">Add Book</a>
                         </li>
                     </ul>
                 </div>
