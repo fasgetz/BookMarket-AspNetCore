@@ -11,7 +11,6 @@
     <script src="https://use.fontawesome.com/056ddd099c.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     
     @RenderSection("Scripts", required: false)
@@ -37,6 +36,32 @@
                             <a class="nav-link text-light" asp-controller="Books" asp-action="AddBook">Add Book</a>
                         </li>
                     </ul>
+                    <div class="auth__div">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="row">
+                                <div class="col align-self-center userName">
+                                    @User.Identity.Name
+                                </div>
+                                <div class="col">
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <input class="btn btn-warning" type="submit" value="Выход" />
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Вход</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Account" asp-action="Register">Регистрация</a>
+                                </li>
+                            </ul>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>

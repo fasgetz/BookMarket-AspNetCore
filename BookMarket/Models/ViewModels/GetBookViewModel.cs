@@ -11,5 +11,8 @@ namespace BookMarket.Models.ViewModels
         public int IdBook { get; set; } // Айди книги
         public int thisPage { get; set; } // Текущая страница
         public int CountPage { get; set; } // Количество страниц
+
+
+        public int numberChapter { get; set; } // Номер главы
     }
 }

@@ -26,5 +26,9 @@ namespace BookMarket.Models.ViewModels
         [Required(ErrorMessage = "Пожалуйста, загрузите содержимое книги в XML")]
         [Display(Name = "Содержимое книги (XML)")]
         public IFormFile XMLBook { get; set; }
+
+        [Required(ErrorMessage = "Пожалуйста, введите описание книги")]
+        [Display(Name = "Описание книги")]
+        public string DescriptionBook { get; set; }
     }
 }

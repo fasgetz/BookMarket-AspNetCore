@@ -24,7 +24,7 @@ namespace BookMarket.Models.DataBase
 
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Book> Book { get; set; }
-        public virtual DbSet<CategoryBook> CategoryBook { get; set; }
+        public virtual DbSet<GenreBook> CategoryBook { get; set; }
         public virtual DbSet<ChapterBook> ChapterBook { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -76,7 +76,7 @@ namespace BookMarket.Models.DataBase
                     .HasConstraintName("FK_Book_CategoryBook");
             });
 
-            modelBuilder.Entity<CategoryBook>(entity =>
+            modelBuilder.Entity<GenreBook>(entity =>
             {
                 entity.Property(e => e.Name).HasMaxLength(50);
             });

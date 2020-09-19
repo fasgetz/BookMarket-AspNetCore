@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace BookMarket.Models.DataBase
 {
-    public partial class CategoryBook
+    public partial class GenreBook
     {
-        public CategoryBook()
+        public GenreBook()
         {
             Book = new HashSet<Book>();
         }

@@ -33,10 +33,20 @@ namespace BookMarket.Controllers
 
         #region Методы контроллера
 
+        #region Комментарии о книге
+
+        public IActionResult GetCommentaryBook(int idBook)
+        {
+            return PartialView("GetDataBook");
+        }
+
+        #endregion
+
+
         // GET: Books 
         public async Task<IActionResult> Index()
         {
-            return View(await Task.Run(() => context.Book.ToList()));
+            return View(await Task.Run(() => context.Book.OrderByDescending(i => i.Id).ToList()));
         }
 
 
@@ -58,13 +68,13 @@ namespace BookMarket.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<JsonResult> GetBookDataJSON(int idBook, int page)
-        {
-            var data = await context.ChapterBook.FirstOrDefaultAsync(i => i.IdBook == idBook && i.NumberChapter == page);
+        //[HttpGet]
+        //public async Task<JsonResult> GetBookDataJSON(int idBook, int page)
+        //{
+        //    var data = await context.ChapterBook.FirstOrDefaultAsync(i => i.IdBook == idBook && i.NumberChapter == page);
 
-            return new JsonResult(data.ChapterContent);
-        }
+        //    return new JsonResult(data.ChapterContent);
+        //}
 
         [HttpGet]
         public IActionResult GetDataBook(int idBook, int page)
@@ -74,7 +84,7 @@ namespace BookMarket.Controllers
                 thisPage = (int)page,
                 IdBook = (int)idBook,
                 CountPage = context.ChapterBook.Where(i => i.IdBook == idBook).Count(),
-                content = $"{context.ChapterBook.FirstOrDefault(i => i.Id == page).ChapterContent}"
+                content = $"{context.ChapterBook.FirstOrDefault(i => i.IdBook == idBook && i.NumberChapter == page).ChapterContent}"
             };
 
             return PartialView("GetDataBook", vm);
@@ -93,7 +103,7 @@ namespace BookMarket.Controllers
                 return NotFound();
 
             // Прогружаем список глав книги
-            IEnumerable<ChapterBook> Chapters = context.ChapterBook.Where(i => i.IdBook == idBook).Select(i => new ChapterBook { ChapterName = i.ChapterName, Id = i.Id}).ToList();
+            IEnumerable<ChapterBook> Chapters = context.ChapterBook.Where(i => i.IdBook == idBook).OrderBy(i => i.NumberChapter).Select(i => new ChapterBook { ChapterName = i.ChapterName, NumberChapter = i.NumberChapter}).ToList();
 
 
 
@@ -112,7 +122,7 @@ namespace BookMarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddBook([Bind("NameBook, PosterBook, idAuthor, XMLBook")]AddBookViewModel model)
+        public IActionResult AddBook([Bind("NameBook, PosterBook, idAuthor, XMLBook, DescriptionBook")]AddBookViewModel model)
         {
             Book book = null;
 
@@ -130,7 +140,8 @@ namespace BookMarket.Controllers
                 {
                     PosterBook = imageData,
                     Name = model.NameBook,
-                    IdAuthor = (int)model.idAuthor
+                    IdAuthor = (int)model.idAuthor,
+                    Description = model.DescriptionBook                   
                 };
 
                 // Считывание XML файла содержимое книги и парсинг
@@ -146,7 +157,7 @@ namespace BookMarket.Controllers
                         ChapterBook chapter = new ChapterBook();
 
                         // Присваиваем заголовки
-                        chapter.ChapterName = item.Element("title").LastNode.Parent.Value;
+                        chapter.ChapterName = (item.Element("title").LastNode as XElement).Value;
                         chapter.NumberChapter = ++numberChapter;
 
                         // Формируем текст главы
@@ -165,8 +176,10 @@ namespace BookMarket.Controllers
                     return RedirectToAction("Index");
                 }
 
-                
-
+            }
+            else
+            {
+                // LOAD DATA
             }
 
             //View()
@@ -184,6 +197,7 @@ namespace BookMarket.Controllers
 
             return View("AddBook");
         }
+
 
   
 

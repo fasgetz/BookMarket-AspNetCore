@@ -19,7 +19,7 @@ namespace BookMarket.Models.DataBase
         public byte[] PosterBook { get; set; }
 
         public virtual Author IdAuthorNavigation { get; set; }
-        public virtual CategoryBook IdCategoryNavigation { get; set; }
+        public virtual GenreBook IdCategoryNavigation { get; set; }
         public virtual ICollection<ChapterBook> ChapterBook { get; set; }
     }
 }

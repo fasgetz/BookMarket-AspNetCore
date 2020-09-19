@@ -22,7 +22,7 @@
                     </a>
                 </div>
                 <div class="bookData__name">
-                    <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                    <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
                         @item.Name
                     </a>
                 </div>

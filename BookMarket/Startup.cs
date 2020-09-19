@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookMarket.Models.DataBase;
+using BookMarket.Models.UsersIdentity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +28,17 @@ namespace BookMarket
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+
+            // Подключаем контекст работы с пользователями Identity
+            services.AddDbContext<UsersContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("UsersIdentityConnection")));
+
+            services.AddIdentity<User, IdentityRole>(i => 
+            {
+                i.Password.RequireNonAlphanumeric = false;
+            })
+                .AddEntityFrameworkStores<UsersContext>();
 
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
@@ -51,13 +64,14 @@ namespace BookMarket
 
             app.UseRouting();
 
+            app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: null,
-                    pattern: "book/{id}",
+                    pattern: "book/{id}/{name}",
                     defaults: new { controller = "Books", action = "AboutBook" }
                 );
 

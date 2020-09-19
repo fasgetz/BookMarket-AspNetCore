@@ -38,3 +38,7 @@
    object-fit: cover;
    object-position: center;
 }
+
+.bookData .bookData__name {
+    height: 48px;
+}

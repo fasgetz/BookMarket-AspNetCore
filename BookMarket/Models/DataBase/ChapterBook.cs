@@ -7,6 +7,11 @@ namespace BookMarket.Models.DataBase
 {
     public class ChapterBook
     {
+        #region Свойства для View
+
+        public string ChapterNumberName => $"Глава {NumberChapter} - {ChapterName}";
+
+        #endregion
 
         public int Id { get; set; }
         public int NumberChapter { get; set; }

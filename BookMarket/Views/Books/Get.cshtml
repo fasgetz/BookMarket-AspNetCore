@@ -4,32 +4,31 @@
 }
 
     <div>
-        <p>
-            <select class="form-control" id="opt">                                
-                <option selected disabled>Выберите главу</option>
-                @foreach(var item in ViewBag.list)
-                {
-                    <option value="@item.Id">@item.ChapterName</option>
-                }
-            </select>
-        </p>
-        <div id="content"></div>
+        <select class="form-control" id="opt">
+            <option disabled>Выберите главу</option>
+            @foreach (var item in ViewBag.list)
+            {
+                <option value="@item.NumberChapter">@item.ChapterNumberName</option>
+            }
+        </select>
+        <div id="content">
 
+        </div>
     </div>
 
 
     <script src="~/js/GetBookDataAjax.js"></script>
     <script type="text/javascript">
-        
+
 
         $(document).ready(function () {
 
-            var opin = $('#opt').get(0).val;
 
-            alert(opin + '435');
+            $("#opt :nth-child(2)").attr("selected", "selected");
+            var opin = $('#opt :nth-child(2)').val();
+            
+            GetBookDataJson(@ViewBag.idBook, opin);
 
-
-            GetBookDataJson(@ViewBag.idBook, @ViewBag.i);
             $('#opt').on('change', function (e) {
                 
                 var numb = $("#opt").val();
@@ -37,6 +36,8 @@
                 GetBookDataJson(@ViewBag.idBook, numb);
 
             });
+
+            
         });
 
     </script>
