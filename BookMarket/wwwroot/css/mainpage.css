@@ -42,3 +42,60 @@
 .bookData .bookData__name {
     height: 48px;
 }
+
+/* Секция жанров */
+
+.genresBlock .separator {
+    padding-bottom: 20px;
+    border-top: 2px solid white;
+}
+
+.genresBlock h5 {
+    font-size: 14px;
+    background-color: #ff9900;
+    border-radius: 5px;
+    height: 30px;
+    padding: 7px;
+}
+
+.genresBlock ul {
+    padding-bottom: 20px;
+}
+
+.genresBlock .allGenres {
+    padding-bottom: 40px;
+}
+
+.genresBlock {
+    margin-top: 30px;
+    background-color: #39c;
+    border-radius: 15px;
+}
+
+    .genresBlock ul {
+        margin-left: 0; /* Отступ слева в браузере IE и Opera */
+        padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+        list-style-type: none; /* Убираем маркеры */
+    }
+
+    .genresBlock h2 {
+        padding-top: 15px;
+    }
+
+    .genresBlock h2, li > h5, li:not(:last-child) > a {
+        color: white;
+    }
+
+    .genresBlock .genreContent li:not(:last-child) {
+        padding-left: 20px;
+    }
+
+    .genresBlock li:last-child > a {
+        color: black;
+    }
+
+    .genresBlock .genreContent li:last-child a:before {
+        content: "+ ";
+    }
+
+/* Конец секции жанров */

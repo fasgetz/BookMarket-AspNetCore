@@ -4,14 +4,16 @@ using BookMarket.Models.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookMarket.Migrations
 {
     [DbContext(typeof(BookMarketContext))]
-    partial class BookMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20200920090050_AddFkToBook")]
+    partial class AddFkToBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,6 +66,9 @@ namespace BookMarket.Migrations
                     b.Property<int?>("IdCategory")
                         .HasColumnType("int");
 
+                    b.Property<int?>("IdCategoryNavigationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)")
@@ -76,7 +81,7 @@ namespace BookMarket.Migrations
 
                     b.HasIndex("IdAuthor");
 
-                    b.HasIndex("IdCategory");
+                    b.HasIndex("IdCategoryNavigationId");
 
                     b.ToTable("Book");
                 });
@@ -155,9 +160,7 @@ namespace BookMarket.Migrations
 
                     b.HasOne("BookMarket.Models.DataBase.GenreBook", "IdCategoryNavigation")
                         .WithMany("Book")
-                        .HasForeignKey("IdCategory")
-                        .HasConstraintName("FK_Book_GenreBook")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdCategoryNavigationId");
                 });
 
             modelBuilder.Entity("BookMarket.Models.DataBase.ChapterBook", b =>

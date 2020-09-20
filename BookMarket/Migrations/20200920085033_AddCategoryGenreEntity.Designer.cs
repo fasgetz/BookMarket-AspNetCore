@@ -4,14 +4,16 @@ using BookMarket.Models.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookMarket.Migrations
 {
     [DbContext(typeof(BookMarketContext))]
-    partial class BookMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20200920085033_AddCategoryGenreEntity")]
+    partial class AddCategoryGenreEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,7 +158,7 @@ namespace BookMarket.Migrations
                     b.HasOne("BookMarket.Models.DataBase.GenreBook", "IdCategoryNavigation")
                         .WithMany("Book")
                         .HasForeignKey("IdCategory")
-                        .HasConstraintName("FK_Book_GenreBook")
+                        .HasConstraintName("FK_Book_CategoryBook")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

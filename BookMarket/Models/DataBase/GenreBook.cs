@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace BookMarket.Models.DataBase
 {
+
+    /// <summary>
+    /// Жанр книги
+    /// </summary>
     public partial class GenreBook
     {
         public GenreBook()
@@ -12,6 +16,13 @@ namespace BookMarket.Models.DataBase
 
         public int Id { get; set; }
         public string Name { get; set; }
+
+
+        /// <summary>
+        /// Ссылка на категорию жанра
+        /// </summary>
+        public int? IdGenreCategory { get; set; }
+        public virtual CategoryGenre GenreCategory { get; set; }
 
         public virtual ICollection<Book> Book { get; set; }
     }

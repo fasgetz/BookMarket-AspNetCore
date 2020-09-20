@@ -5,7 +5,26 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookMarket.Models.DataBase
 {
+    #region Конфигурации
 
+    /// <summary>
+    /// Конфигурация жанра книги один ко многим
+    /// </summary>
+    public class GenreBookConfiguration : IEntityTypeConfiguration<GenreBook>
+    {
+        public void Configure(EntityTypeBuilder<GenreBook> entity)
+        {
+            entity.Property(e => e.Name).HasMaxLength(50);
+
+            entity.HasOne(d => d.GenreCategory)
+                .WithMany(p => p.GenresBook)
+                .HasForeignKey(d => d.IdGenreCategory)
+                .OnDelete(DeleteBehavior.Cascade)                
+                .HasConstraintName("FK_CategoryGenres");
+        }
+    }
+
+    #endregion
 
 
     public partial class BookMarketContext : DbContext
@@ -21,10 +40,10 @@ namespace BookMarket.Models.DataBase
         }
 
 
-
+        public virtual DbSet<CategoryGenre> GenreCategory { get; set; }
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Book> Book { get; set; }
-        public virtual DbSet<GenreBook> CategoryBook { get; set; }
+        public virtual DbSet<GenreBook> GenreBooks { get; set; }
         public virtual DbSet<ChapterBook> ChapterBook { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -73,13 +92,10 @@ namespace BookMarket.Models.DataBase
                     .WithMany(p => p.Book)
                     .HasForeignKey(d => d.IdCategory)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Book_CategoryBook");
+                    .HasConstraintName("FK_Book_GenreBook");
             });
 
-            modelBuilder.Entity<GenreBook>(entity =>
-            {
-                entity.Property(e => e.Name).HasMaxLength(50);
-            });
+            modelBuilder.ApplyConfiguration(new GenreBookConfiguration());
 
             modelBuilder.Entity<ChapterBook>(entity =>
             {
