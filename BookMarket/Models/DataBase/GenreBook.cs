@@ -7,8 +7,10 @@ namespace BookMarket.Models.DataBase
     /// <summary>
     /// Жанр книги
     /// </summary>
-    public partial class GenreBook
+    public class GenreBook
     {
+
+
         public GenreBook()
         {
             Book = new HashSet<Book>();

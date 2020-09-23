@@ -8,23 +8,18 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/mainpage.css" rel="stylesheet" />
     <link href="~/css/test.css" rel="stylesheet" />
-    <script src="https://use.fontawesome.com/056ddd099c.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    
-    @RenderSection("Scripts", required: false)
+    @RenderSection("Css", required: false)
 </head>
 <body>
     <header>
-        <nav class="menu navbar navbar-expand-sm navbar-toggleable-sm navbar-light  box-shadow mb-1">
+        <nav class="menu navbar navbar-expand-md navbar-toggleable-md navbar-light  box-shadow mb-1">
             <div class="container">
                 <a class="navbar-brand text-light" asp-controller="Home" asp-action="Index">BookMarket</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row">
+                <div class="navbar-collapse collapse d-md-inline-flex flex-md-row">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
@@ -68,11 +63,13 @@
         <div class="container header">
             <div class="row">
                 <div class="col">
-                    <div class="searchBook-input input-group">
-                        <span class="fa fa-search text-center"></span>
-                        <input name="text" type="text" class="form-control search" placeholder="Поиск по названию книги, автора">
-                        <button class="btn btn-info btn-search" type="submit">Поиск</button>
-                    </div>
+                    <form asp-controller="SearchBook" asp-action="Index" method="get">
+                        <div class="searchBook-input input-group">
+                            <span class="fa fa-search text-center"></span>
+                            <input name="word" type="text" class="form-control search" placeholder="Поиск по названию книги, автора">
+                            <button class="btn btn-info btn-search" type="submit">Поиск</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -89,6 +86,12 @@
             &copy; 2020 - BookMarket - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    
+    <script src="https://use.fontawesome.com/056ddd099c.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    @RenderSection("Scripts", required: false)
 </body>
+
 </html>

@@ -1,0 +1,64 @@
+﻿@model BookMarket.Models.ViewModels.SearchBook.SearchBookIndexVM
+
+
+<h2 class="text-center">Все книги</h2>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Назад</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Вперед</a>
+        </li>
+    </ul>
+</nav>
+@foreach (var item in Model.Books)
+{
+    <div class="row bg-white bookResult">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 text-center bookResult__Poster">
+                    <a href="#">
+                        <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" alt="PosterBook" />
+                    </a>
+                </div>
+                <div class="col-lg-7 bookResult__about">
+                    <a href="#">
+                        <h3 class="text-center">@item.Name</h3>
+                    </a>
+
+                    <dl>
+                        <div class="row">
+                            <dt>Автор</dt>
+                            <dd>@item.IdAuthorNavigation.NameFamily</dd>
+                        </div>
+                        <div class="row">
+                            <dt>Жанр</dt>
+                            <dd>@item.IdCategoryNavigation.Name</dd>
+                        </div>
+                        <div class="row">
+                            <dt>Дата добавления</dt>
+                            <dd>@item.AddDatabase.ToString("D")</dd>
+                        </div>
+                    </dl>
+                </div>
+                <div class="col-lg-2 bookResult__buttons">
+                    <div class="row d-flex justify-content-center">
+                        <a class="mybtn btn btn-primary" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@item.Id">
+                            Читать <i class="fa fa-search"></i>
+                        </a>
+                        <a class="mybtn btn btn-primary" asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                            О книге <i class="fa fa-search"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg bookResult__text text-center">
+                    @(new string(item.Description.Take(280).ToArray()))...
+                </div>
+            </div>
+        </div>
+    </div>
+}

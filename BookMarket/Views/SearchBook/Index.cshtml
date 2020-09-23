@@ -1,0 +1,55 @@
+﻿@model BookMarket.Models.ViewModels.SearchBook.SearchBookIndexVM
+
+<section>
+    <div class="container">
+        <div class="row searchBook">
+            <div class="col-lg-3">
+                <ul id="accordion" class="accordion">
+                    @foreach (var item in Model.CategoryGenres)
+                    {
+                        <li>
+                            <div class="link"><i class="fa fa-book"></i>@item.Key.Name<i class="fa fa-chevron-down"></i></div>
+                            <ul class="submenu">
+                                @foreach (var category in item.Value)
+                                {
+                                    <li>
+                                        <a href="#">
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    @category.Name
+                                                </div>
+                                                <div class="col-3">
+                                                    <span class="submenu__countBooks">@category.CountBooks</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div id="contentBooks" class="col-lg-9">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/Accordion.js"></script>
+    <script src="~/js/SearchedBooks.js"></script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            SearchBooks("гарри");
+        });
+
+    </script>
+}
+
+@section Css {
+    <link href="~/css/searchBook.css" rel="stylesheet" />
+}

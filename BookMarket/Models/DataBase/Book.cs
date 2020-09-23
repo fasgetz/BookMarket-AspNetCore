@@ -18,6 +18,8 @@ namespace BookMarket.Models.DataBase
         public int? IdAuthor { get; set; }
         public byte[] PosterBook { get; set; }
 
+        public DateTime AddDatabase { get; set; }
+
         public virtual Author IdAuthorNavigation { get; set; }
         public virtual GenreBook IdCategoryNavigation { get; set; }
         public virtual ICollection<ChapterBook> ChapterBook { get; set; }
