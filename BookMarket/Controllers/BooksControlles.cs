@@ -141,7 +141,8 @@ namespace BookMarket.Controllers
                     PosterBook = imageData,
                     Name = model.NameBook,
                     IdAuthor = (int)model.idAuthor,
-                    Description = model.DescriptionBook                   
+                    Description = model.DescriptionBook,
+                    AddDatabase = DateTime.Now
                 };
 
                 // Считывание XML файла содержимое книги и парсинг

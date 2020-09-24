@@ -1,0 +1,24 @@
+﻿@model IEnumerable<BookMarket.Models.UsersIdentity.User>
+
+    <table class="table table-bordered table-hover">
+        <caption>Список пользователей</caption>
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Логин</th>
+                <th scope="col">email</th>
+                <th scope="col">Дата рождения</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row"></th>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.dateBirth.ToString("D")</td>
+                </tr>
+            }
+        </tbody>
+    </table>

@@ -50,7 +50,7 @@ namespace BookMarket.Controllers
                     GenreName = IdGenre != 0 ? db.GenreBooks.FirstOrDefault(i => i.Id == IdGenre).Name : null
                 };
 
-            vm.MaxCountBooks = 24;
+
 
             return PartialView("SearchedBooks", vm);
         }
