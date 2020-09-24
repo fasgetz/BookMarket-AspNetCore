@@ -13,6 +13,12 @@ namespace BookMarket.Models.ViewModels.SearchBook
         /// </summary>
         public List<Book> Books { get; set; }
 
+
+        /// <summary>
+        /// Строка ввода в поиске
+        /// </summary>
+        public string WordInput { get; set; }
+
         /// <summary>
         /// Для отображения категории жанров
         /// </summary>

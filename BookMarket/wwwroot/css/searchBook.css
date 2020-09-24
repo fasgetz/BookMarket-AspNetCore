@@ -4,6 +4,13 @@
     margin-top: 20px;
 }
 
+/* Навигация pagination */
+
+.pagination a {
+    cursor: pointer;
+    color: blue;
+}
+
 /* Секция карточки bookResult */
 
 .row.bg-white:hover {
@@ -56,6 +63,10 @@
 
 
 /* Аккордион меню */
+
+.submenu a {
+    cursor: pointer
+}
 
 ul {
     list-style-type: none;

@@ -82,7 +82,7 @@
         padding-top: 15px;
     }
 
-    .genresBlock h2, li > h5, li:not(:last-child) > a {
+    .genresBlock h2, .genresBlock li > h5, .genresBlock li:not(:last-child) > a {
         color: white;
     }
 

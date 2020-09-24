@@ -19,21 +19,38 @@ namespace BookMarket.Controllers
 
 
         [HttpGet]
-        public IActionResult getData(string word, int page)
+        public async Task<IActionResult> getData(int IdGenre, int page, string word)
         {
-            SearchBookIndexVM vm = new SearchBookIndexVM()
-            {               
-                Books = db.Book
-                    .Include("IdAuthorNavigation")
-                    .Include("IdCategoryNavigation")
-                    .OrderByDescending(i => i.Id)
-                    // Фильтруем по ключевому слову
-                    .Where(i => !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
-                    .Take(10)
-                    .ToList()
-            };
+            var Books = await db.Book
+                .Include("IdAuthorNavigation")
+                .Include("IdCategoryNavigation")
+                .OrderByDescending(i => i.Id)
+                // Фильтруем по ключевому слову
+                .Where(i =>
+                // по жанру
+                IdGenre != 0 ? i.IdCategoryNavigation.Id == IdGenre : true
+                && !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
+                .Skip(page == 1 ? 0 : page * 10)
+                .Take(10)
+                .ToListAsync();
 
 
+                getDataViewModel vm = new getDataViewModel()
+                {
+                    IdGenre = IdGenre,
+                    InputWord = word,
+                    page = page, // Текущая страница
+                    MaxCountBooks = db.Book // Максимальное количество книг в выборке
+                    .Where(i =>
+                    // по жанру
+                    IdGenre != 0 ? i.IdCategoryNavigation.Id == IdGenre : true
+                    && !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
+                    .Count(),
+                    books = Books,
+                    GenreName = IdGenre != 0 ? db.GenreBooks.FirstOrDefault(i => i.Id == IdGenre).Name : null
+                };
+
+            vm.MaxCountBooks = 24;
 
             return PartialView("SearchedBooks", vm);
         }
@@ -43,6 +60,7 @@ namespace BookMarket.Controllers
         {
             SearchBookIndexVM vm = new SearchBookIndexVM()
             {
+                WordInput = word,
                 // Выборка категорий жанров
                 CategoryGenres = await db.GenreCategory
                     .Include("GenresBook")

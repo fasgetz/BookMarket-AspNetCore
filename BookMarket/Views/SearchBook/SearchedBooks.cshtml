@@ -1,21 +1,63 @@
-﻿@model BookMarket.Models.ViewModels.SearchBook.SearchBookIndexVM
+﻿@model BookMarket.Models.ViewModels.SearchBook.getDataViewModel
 
 
-<h2 class="text-center">Все книги</h2>
+
+@if (!string.IsNullOrEmpty(Model.GenreName))
+{
+    <h2 class="text-center">
+        @Model.GenreName
+    </h2>
+}
+else
+{
+    <h2 class="text-center">
+        Все книги
+    </h2>
+}
+
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Назад</a>
-        </li>
-        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Вперед</a>
-        </li>
+
+        @if (Model.page == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" >Назад</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" onclick="SearchBooks('@Model.InputWord', @(Model.page - 1), @Model.IdGenre)">Назад</a>
+            </li>
+        }
+
+
+        @for (int i = 0; i < Math.Ceiling((double)Model.MaxCountBooks / 10); i++)
+        {
+            @if ((i + 1) == Model.page)
+            {
+                <li class="page-item active"><a class="page-link">@(i + 1)</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" onclick="SearchBooks('@Model.InputWord', @(i + 1), @Model.IdGenre)">@(i + 1)</a></li>
+            }
+        }
+        @if (Model.page == Math.Ceiling((double)Model.MaxCountBooks / 10))
+        {
+            <li class="page-item disabled">
+                <a class="page-link">Вперед</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" onclick="SearchBooks('@Model.InputWord', @(Model.page + 1), @Model.IdGenre)">Вперед</a>
+            </li>
+        }
     </ul>
 </nav>
-@foreach (var item in Model.Books)
+@foreach (var item in Model.books)
 {
     <div class="row bg-white bookResult">
         <div class="container">
