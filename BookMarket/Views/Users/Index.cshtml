@@ -8,17 +8,21 @@
                 <th scope="col">Логин</th>
                 <th scope="col">email</th>
                 <th scope="col">Дата рождения</th>
+                <th scope="col">Права</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <th scope="row"></th>
-                    <td>@item.UserName</td>
-                    <td>@item.Email</td>
-                    <td>@item.dateBirth.ToString("D")</td>
-                </tr>
+            <tr>
+                <th scope="row"></th>
+                <td>@item.UserName</td>
+                <td>@item.Email</td>
+                <td>@item.dateBirth.ToString("D")</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-controller="Roles" asp-action="Edit" asp-route-userid="@item.Id">Права доступа</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

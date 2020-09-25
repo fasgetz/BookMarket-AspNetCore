@@ -12,12 +12,13 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookMarket.Controllers
 {
 
     //[Route("book")]
+    
     public class BooksController : Controller
     {
         private readonly IWebHostEnvironment _appEnvironment;
@@ -122,6 +123,7 @@ namespace BookMarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Администратор")]
         public IActionResult AddBook([Bind("NameBook, PosterBook, idAuthor, idGenre, XMLBook, DescriptionBook")]AddBookViewModel model)
         {
             Book book = null;
@@ -190,6 +192,7 @@ namespace BookMarket.Controllers
 
         // GET: 
         [HttpGet]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> AddBook()
         {
             // Прогружаем список авторов
