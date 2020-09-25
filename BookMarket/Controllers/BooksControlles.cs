@@ -122,7 +122,7 @@ namespace BookMarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddBook([Bind("NameBook, PosterBook, idAuthor, XMLBook, DescriptionBook")]AddBookViewModel model)
+        public IActionResult AddBook([Bind("NameBook, PosterBook, idAuthor, idGenre, XMLBook, DescriptionBook")]AddBookViewModel model)
         {
             Book book = null;
 
@@ -138,6 +138,7 @@ namespace BookMarket.Controllers
 
                 book = new Book()
                 {
+                    IdCategory = model.idGenre,
                     PosterBook = imageData,
                     Name = model.NameBook,
                     IdAuthor = (int)model.idAuthor,
@@ -189,11 +190,13 @@ namespace BookMarket.Controllers
 
         // GET: 
         [HttpGet]
-        public IActionResult AddBook()
+        public async Task<IActionResult> AddBook()
         {
             // Прогружаем список авторов
-            IEnumerable<Author> Authors = context.Author.Select(i => new Author {  Name = i.Name, Family = i.Family, Id = i.Id }).ToList();
+            IEnumerable<Author> Authors = await context.Author.Select(i => new Author {  Name = i.Name, Family = i.Family, Id = i.Id }).ToListAsync();
+            IEnumerable<GenreBook> Genres = await context.GenreBooks.Select(i => new GenreBook { Id = i.Id, Name = i.Name }).ToListAsync();
 
+            ViewBag.genresList = new SelectList(Genres, "Id", "Name");
             ViewBag.list = new SelectList(Authors, "Id", "NameFamily");
 
             return View("AddBook");

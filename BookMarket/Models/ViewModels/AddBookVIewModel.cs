@@ -23,6 +23,10 @@ namespace BookMarket.Models.ViewModels
         [Display(Name = "Автор книги")]
         public int? idAuthor { get; set; }
 
+        [Required(ErrorMessage = "Пожалуйста, выберите жанр")]
+        [Display(Name = "Жанр книги")]
+        public int? idGenre { get; set; }
+
         [Required(ErrorMessage = "Пожалуйста, загрузите содержимое книги в XML")]
         [Display(Name = "Содержимое книги (XML)")]
         public IFormFile XMLBook { get; set; }

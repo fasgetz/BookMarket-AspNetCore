@@ -24,6 +24,12 @@
             <span asp-validation-for="XMLBook" class="text-danger"></span>
         </div>
         <div class="form-group">
+            <select asp-for="idGenre" asp-items="ViewBag.genresList" class="form-control">
+                <option selected disabled>Выберите жанр</option>
+            </select>
+            <span asp-validation-for="idGenre" class="text-danger"></span>
+        </div>
+        <div class="form-group">
             <select asp-for="idAuthor" asp-items="ViewBag.list" class="form-control">
                 <option selected disabled>Выберите автора</option>
             </select>
@@ -36,7 +42,7 @@
         </div>
         <div class="form-group text-center">
             <input class="btn btn-primary" type="submit" />
-        </div>        
+        </div>
     </form>
 
 

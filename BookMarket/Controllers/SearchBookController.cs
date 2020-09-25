@@ -30,7 +30,7 @@ namespace BookMarket.Controllers
                 // по жанру
                 IdGenre != 0 ? i.IdCategoryNavigation.Id == IdGenre : true
                 && !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
-                .Skip(page == 1 ? 0 : page * 10)
+                .Skip(page == 1 ? 0 : (page - 1) * 10)
                 .Take(10)
                 .ToListAsync();
 
