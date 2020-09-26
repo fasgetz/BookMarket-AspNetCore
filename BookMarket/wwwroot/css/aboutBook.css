@@ -1,0 +1,150 @@
+/* Страница AboutBook */
+
+
+.book-view__info {
+    margin-top: 10px;
+}
+
+.book-view__poster img {
+    width: 220px;
+    height: 320px;
+}
+
+.book-view__info h2 {
+    font-size: 18px;
+}
+
+.book-view__info h3 {
+    font-size: 16px;
+}
+
+
+
+.actionBox {
+    margin-top: 10px;
+}
+
+/* Комментарии */
+
+.commentaryBox {
+    border: 1px dotted grey;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.commentaryBox__title {
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
+.commentaryBox__text {
+    padding-left: 10px;
+}
+
+
+.aboutBookBox {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+    .aboutBookBox h3 {
+        margin: 5px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-top: 1px dotted grey;
+        border-bottom: 1px dotted grey;
+    }
+
+    .aboutBookBox p {
+        margin: 15px 10px 5px 5px;
+        padding-bottom: 10px;
+    }
+
+/* Рейтинг звезд */
+
+.rating-result {
+    margin: 0 auto;
+}
+
+    .rating-result span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+        text-shadow: 1px 1px #bbb;
+    }
+
+    .rating-result > span:before {
+        content: '★';
+    }
+
+    .rating-result > span.active {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+    }
+
+/* Рейтинг звезд выставление */
+
+
+
+.rating-area {
+    overflow: hidden;
+    width: 420px;
+    margin: 0 auto;
+}
+
+    .rating-area:not(:checked) > input {
+        display: none;
+    }
+
+    .rating-area:not(:checked) > label {
+        float: right;
+        width: 42px;
+        padding: 0;
+        cursor: pointer;
+        font-size: 50px;
+        line-height: 50px;
+        color: lightgrey;
+        text-shadow: 1px 1px #bbb;
+    }
+
+        .rating-area:not(:checked) > label:before {
+            content: '★';
+        }
+
+    .rating-area > input:checked ~ label {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+    }
+
+    .rating-area:not(:checked) > label:hover,
+    .rating-area:not(:checked) > label:hover ~ label {
+        color: gold;
+    }
+
+    .rating-area > input:checked + label:hover,
+    .rating-area > input:checked + label:hover ~ label,
+    .rating-area > input:checked ~ label:hover,
+    .rating-area > input:checked ~ label:hover ~ label,
+    .rating-area > label:hover ~ input:checked ~ label {
+        color: gold;
+        text-shadow: 1px 1px goldenrod;
+    }
+
+.rate-area > label:active {
+    position: relative;
+}
+
+
+@media screen and (max-width: 768px) {
+    .rating-area {
+        width: 210px;
+    }
+
+        .rating-area:not(:checked) > label {
+            width: 21px;
+            font-size: 25px;
+            line-height: 25px;
+        }
+}

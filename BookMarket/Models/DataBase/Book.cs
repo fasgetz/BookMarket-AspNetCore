@@ -23,5 +23,9 @@ namespace BookMarket.Models.DataBase
         public virtual Author IdAuthorNavigation { get; set; }
         public virtual GenreBook IdCategoryNavigation { get; set; }
         public virtual ICollection<ChapterBook> ChapterBook { get; set; }
+
+
+        // Рейтинг и комменты книги
+        public virtual ICollection<Rating> UserRating { get; set; }
     }
 }

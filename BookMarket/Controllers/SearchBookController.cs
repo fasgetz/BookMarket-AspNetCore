@@ -56,10 +56,11 @@ namespace BookMarket.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string word)
+        public async Task<IActionResult> Index(string word, int idGenre)
         {
             SearchBookIndexVM vm = new SearchBookIndexVM()
             {
+                IdGenre = idGenre,
                 WordInput = word,
                 // Выборка категорий жанров
                 CategoryGenres = await db.GenreCategory

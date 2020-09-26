@@ -1,5 +1,5 @@
 ﻿header {
-    background-color: #39c;
+    background-color: #007fff;
 }
 
 /* Секция меню */
@@ -21,7 +21,7 @@
 /* Секция поиска книг */
 .searchBook-input {
     padding: 5px 10px;
-    background-color: #fc0;
+    background-color: #f4a460;
     border-radius: 5px;
     margin-bottom: 10px;
 }
@@ -61,34 +61,14 @@
 
 body {
     background-color: azure;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-family: 'Arial Narrow', Arial, sans-serif;
+    font-size: 16px;
 }
 
 /* Футер */
 .footer {
-    background-color: #39c;
+    background-color: #007fff;
 }
 
 
-
-/* Страница AboutBook */
-
-
-.book-view__info {
-    margin-top: 10px;
-}
-
-.book-view__poster img {
-    width: 220px;
-    height: 320px;
-}
-
-.book-view__info h2 {
-    font-size: 18px;
-}
-
-.book-view__info h3 {
-    font-size: 16px;
-}
 

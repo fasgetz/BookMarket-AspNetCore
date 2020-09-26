@@ -70,7 +70,7 @@ namespace BookMarket.Controllers
                 // получем список ролей пользователя и все роли
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var allRoles = _roleManager.Roles.ToList();
-
+                
                 EditRoleViewModel vm = new EditRoleViewModel()
                 {
                     UserId = userId,

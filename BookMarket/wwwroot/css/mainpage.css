@@ -1,4 +1,11 @@
 
+.btn, .nav-item a {
+    background: #aecedf;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: white;
+}
+
 /* Оформление */
 .main_page {
   padding: 20px;
@@ -21,9 +28,7 @@
 
 }
 
-.main_page h2:hover {
-  color: blue
-}
+
 
 
 /* Карточка Book */
@@ -50,13 +55,8 @@
     border-top: 2px solid white;
 }
 
-.genresBlock h5 {
-    font-size: 14px;
-    background-color: #ff9900;
-    border-radius: 5px;
-    height: 30px;
-    padding: 7px;
-}
+
+
 
 .genresBlock ul {
     padding-bottom: 20px;
@@ -68,7 +68,7 @@
 
 .genresBlock {
     margin-top: 30px;
-    background-color: #39c;
+    background-color: #008cf0;
     border-radius: 15px;
 }
 
@@ -82,20 +82,29 @@
         padding-top: 15px;
     }
 
-    .genresBlock h2, .genresBlock li > h5, .genresBlock li:not(:last-child) > a {
+    .genresBlock h2, .genresBlock li > h5, .genresBlock li > a {
         color: white;
     }
 
-    .genresBlock .genreContent li:not(:last-child) {
-        padding-left: 20px;
+    .genresBlock h5 {
+        font-size: 18px;
+        background-color: #f4a460;
+        border-radius: 5px;
+        padding: 7px;
     }
 
-    .genresBlock li:last-child > a {
+
+
+    /*.genresBlock .genreContent li:not(:last-child) {
+        padding-left: 20px;
+    }*/
+
+    /*.genresBlock li:last-child > a {
         color: black;
     }
 
     .genresBlock .genreContent li:last-child a:before {
         content: "+ ";
-    }
+    }*/
 
 /* Конец секции жанров */

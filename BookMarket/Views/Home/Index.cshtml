@@ -46,16 +46,14 @@
                         <ul class="genreContent">
                             @foreach(var link in item.Value)
                             {
-                                <li><a href="#">@link.Name</a></li>
+                                <li><a asp-controller="SearchBook" asp-action="Index" asp-route-idGenre="@link.Id" asp-route-name="@link.Name">@link.Name</a></li>
                             }
-                            <li><a href="#">Подробнее</a></li>
+                            @*<li><a href="#">Подробнее</a></li>*@
                         </ul>
                     </li>
                 }
             </ul>
-            <div class="allGenres text-center">
-                <a href="#" class="btn btn-warning">Все жанры</a>
-            </div>
+
         </div>
     </section>
 

@@ -73,10 +73,12 @@ namespace BookMarket
             app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
 
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: null,
+                    name: "aboutBook",
                     pattern: "book/{id}/{name}",
                     defaults: new { controller = "Books", action = "AboutBook" }
                 );
@@ -90,8 +92,15 @@ namespace BookMarket
                 );
 
                 endpoints.MapControllerRoute(
+                    name: "Genres",
+                    pattern: "SearchBook/{name}",
+                    defaults: new { controller = "SearchBook", action = "Index" }
+                );
+
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}");
+
 
                 //endpoints.MapControllerRoute(
                 //    name: "book",
@@ -99,7 +108,7 @@ namespace BookMarket
 
 
 
-                
+
             });
         }
     }

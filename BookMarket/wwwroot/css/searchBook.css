@@ -132,6 +132,10 @@ a {
     color: #AA00FF
 }
 
+.accordion .selectedGenre {
+    background-color: cornflowerblue
+}
+
 .accordion li.open i {
     color: #AA00FF
 }
@@ -145,7 +149,7 @@ a {
 
 .submenu {
     display: none;
-    background: #444359;
+    background: aliceblue;
     font-size: 14px
 }
 
@@ -166,6 +170,6 @@ a {
     }
 
         .submenu a:hover {
-            background: #b63b4d;
+            background: cornflowerblue;
             color: #FFF
         }

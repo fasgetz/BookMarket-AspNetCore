@@ -44,7 +44,22 @@
 
 
         $(document).ready(function () {
-            SearchBooks("@Model.WordInput", 1, 0);
+            SearchBooks("@Model.WordInput", 1, @Model.IdGenre);
+        });
+
+    </script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $('#accordion a').on('click', function (e) {
+                //var elements = $('accordion a');
+                $("#accordion li").removeClass("selectedGenre");
+                $(this).parent("li").addClass("selectedGenre");
+                //alert(this.textContent);
+
+            });
         });
 
     </script>

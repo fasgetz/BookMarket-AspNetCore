@@ -13,6 +13,9 @@ using System;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using BookMarket.Models.UsersIdentity;
+using BookMarket.Models.ViewModels.Books;
 
 namespace BookMarket.Controllers
 {
@@ -23,6 +26,7 @@ namespace BookMarket.Controllers
     {
         private readonly IWebHostEnvironment _appEnvironment;
         private readonly ILogger<BooksController> _logger;
+
         BookMarketContext context;
         public BooksController(ILogger<BooksController> logger, IWebHostEnvironment appEnvironment, BookMarketContext context)
         {
@@ -50,32 +54,95 @@ namespace BookMarket.Controllers
             return View(await Task.Run(() => context.Book.OrderByDescending(i => i.Id).ToList()));
         }
 
+        /// <summary>
+        /// Добавить комментарий к книге
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCommentaryBook(AddCommentaryOnBookViewModel vm)
+        {
+            if (ModelState.IsValid && vm.rating != 0)
+            {
+                // Если юзер авторизован, то оставить комментарий
+                if (User.Identity.IsAuthenticated)
+                {
 
+
+                    // Далее добавляем комментарий в бд
+                    await context.Ratings.AddAsync(new Rating()
+                    {
+                        IdBook = vm.IdBook,
+                        IdUser = User.Identity.Name,
+                        Mark = (byte)vm.rating,
+                        Comment = vm.Commentary
+                    });
+                    await context.SaveChangesAsync();
+
+
+                    return Redirect($"~/Books/AboutBook?id={vm.IdBook}");;
+                }
+            }
+
+
+
+
+
+
+            return await AboutBook(vm.IdBook);
+        }
+
+
+
+
+        /// <summary>
+        /// О книге
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> AboutBook(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            
-            var book = await context.Book.Include("IdAuthorNavigation").FirstOrDefaultAsync(m => m.Id == id);
 
-            if (book == null)
+            AboutBookViewModel vm = new AboutBookViewModel();
+
+            vm.RatingBook = await context.Ratings.Where(i => i.IdBook == id).AverageAsync(i => i.Mark);
+            vm.book = await context.Book.Include("IdAuthorNavigation").FirstOrDefaultAsync(m => m.Id == id);
+
+            // Комментарии книги
+            vm.RatingsBook = await context.Ratings
+                .Where(i => i.IdBook == id)
+                .Select(i => new RatingViewModel() { Comment = i.Comment, DateCreated = i.DateCreated, Mark = i.Mark, UserName = i.IdUser }).ToListAsync(); // Список комментариев книги
+
+            // Если юзер авторизован, то узнать возможность комментирования
+            if (User.Identity.IsAuthenticated)
+            {
+                // Получаем комментарий
+                vm.MyComment = await context.Ratings
+                    .FirstOrDefaultAsync(i => i.IdBook == id && i.IdUser == User.Identity.Name);
+                
+                if (vm.MyComment != null)
+                    // Убираем комментарии пользователя
+                    vm.RatingsBook = vm.RatingsBook.Where(i => i.UserName != vm.MyComment.IdUser).ToList();
+            }
+                
+
+            
+
+
+
+            if (vm.book == null)
             {
                 return NotFound();
             }
 
-            return View("About", book);
+            return View("About", vm);
         }
 
 
-        //[HttpGet]
-        //public async Task<JsonResult> GetBookDataJSON(int idBook, int page)
-        //{
-        //    var data = await context.ChapterBook.FirstOrDefaultAsync(i => i.IdBook == idBook && i.NumberChapter == page);
-
-        //    return new JsonResult(data.ChapterContent);
-        //}
 
         [HttpGet]
         public IActionResult GetDataBook(int idBook, int page)

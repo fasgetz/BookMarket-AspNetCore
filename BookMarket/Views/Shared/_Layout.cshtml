@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="col">
                                     <form method="post" asp-controller="Account" asp-action="Logout">
-                                        <input class="btn btn-warning" type="submit" value="Выход" />
+                                        <input class="btn mybtn" type="submit" value="Выход" />
                                     </form>
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                         <div class="searchBook-input input-group">
                             <span class="fa fa-search text-center"></span>
                             <input id="inputWord" name="word" type="text" class="form-control search" placeholder="Поиск по названию книги, автора">
-                            <button class="btn btn-info btn-search" type="submit">Поиск</button>
+                            <button class="btn mybtn" type="submit">Поиск</button>
                         </div>
                     </form>
                 </div>
@@ -90,9 +90,15 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer">
         <div class="container">
-            &copy; 2020 - BookMarket - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col text-center">
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy">
+                        &copy; 2020 - BookMarket - Privacy
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="https://use.fontawesome.com/056ddd099c.js"></script>

@@ -24,6 +24,22 @@ namespace BookMarket.Models.DataBase
         }
     }
 
+    /// <summary>
+    /// Конфигурация жанра рейтинга один ко многим
+    /// </summary>
+    public class RatingBookConfiguration : IEntityTypeConfiguration<Rating>
+    {
+        public void Configure(EntityTypeBuilder<Rating> entity)
+        {
+
+
+            entity.HasOne(d => d.BookRating)
+                .WithMany(p => p.UserRating)
+                .HasForeignKey(d => d.IdBook)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_BookRatings");
+        }
+    }
     #endregion
 
 
@@ -39,7 +55,7 @@ namespace BookMarket.Models.DataBase
 
         }
 
-
+        public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<CategoryGenre> GenreCategory { get; set; }
         public virtual DbSet<Author> Author { get; set; }
         public virtual DbSet<Book> Book { get; set; }
@@ -93,9 +109,12 @@ namespace BookMarket.Models.DataBase
                     .HasForeignKey(d => d.IdCategory)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Book_GenreBook");
+
+
             });
 
             modelBuilder.ApplyConfiguration(new GenreBookConfiguration());
+            modelBuilder.ApplyConfiguration(new RatingBookConfiguration());
 
             modelBuilder.Entity<ChapterBook>(entity =>
             {

@@ -18,6 +18,10 @@ namespace BookMarket.Models.ViewModels.SearchBook
         /// Строка ввода в поиске
         /// </summary>
         public string WordInput { get; set; }
+        /// <summary>
+        /// Айди жанра
+        /// </summary>
+        public int IdGenre { get; set; }
 
         /// <summary>
         /// Для отображения категории жанров

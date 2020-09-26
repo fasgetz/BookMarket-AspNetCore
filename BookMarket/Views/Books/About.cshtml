@@ -1,39 +1,79 @@
-﻿@model BookMarket.Models.DataBase.Book
-
+﻿@model BookMarket.Models.ViewModels.AboutBookViewModel
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.book.Name;
 }
 
 <div class="book-view">
     <div class="book-view__info">
         <div class="row">
-            <div class="book-view__poster col-xl text-center">
-                <img src="data:image;base64, @System.Convert.ToBase64String(Model.PosterBook)" />
+            <div class="book-view__poster col-xl-3 text-center">
+                <img src="data:image;base64, @System.Convert.ToBase64String(Model.book.PosterBook)" />
             </div>
             <div class="col-xl-9 text-center">
-                <h1>@Model.Name</h1>
-                <h2>@Model.IdAuthorNavigation.Name @Model.IdAuthorNavigation.Family</h2>
-                <h3>@Model.Description</h3>
-                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@Model.Id">
+                <h1>@Model.book.Name</h1>
+                <h2>@Model.book.IdAuthorNavigation.Name @Model.book.IdAuthorNavigation.Family</h2>
+                <h3>Рейтинг @Model.RatingBook</h3>
+                <h3>@Model.book.Description</h3>
+                <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@Model.book.Id">
                     <span class="fa fa-book"></span> Читать книгу
                 </a>
-            </div>
-            <div class="col-xl-9">
-                <div class="aboutBookBox">
-                    Отзывы на книгу @Model.Name
-                </div>                
-                <div class="actionBox">
-                    Оставить отзыв
-                    <form>
-                        <div class="form-group">
-
-                        </div>
-                        <div class="form-group">
-
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
 </div>
+<div class="container aboutBookBox">
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (Model.MyComment == null)
+        {
+            @await Html.PartialAsync("AddCommentary", new AddCommentaryOnBookViewModel() { IdBook = Model.book.Id })
+        }
+        else
+        {
+            <p>Ваш комментарий: @Model.MyComment.Comment</p>
+        }
+
+    }
+    else
+    {
+        <p>Авторизируйтесь, чтобы оставлять комментарии</p>
+    }
+    <h3>Отзывы на книгу Гарри Поттер и Филосовский камень</h3>
+    @foreach (var item in Model.RatingsBook)
+    {
+        <div class="container commentaryBox">
+            <div class="row commentaryBox__title">
+                <div class="col-xl-9">
+                    <div class="row text-xl-left text-center">
+                        <div class="col-xl-3">
+                            <h5>@item.UserName</h5>
+                        </div>
+                        <div class="col-xl rating-result">
+                            @for (int i = 0; i < 10; i++)
+                            {
+                                if (i < item.Mark)
+                                {
+                                    <span class="active"></span>
+                                }
+                                else
+                                {
+                                    <span></span>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 text-center">@item.DateCreated.ToString("F")</div>
+            </div>
+            <div class="row commentaryBox__text">
+                @item.Comment
+            </div>
+        </div>
+    }
+
+
+</div>
+
+@section Css {
+    <link href="~/css/aboutBook.css" rel="stylesheet" />
+}
