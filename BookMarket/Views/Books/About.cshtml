@@ -12,7 +12,15 @@
             <div class="col-xl-9 text-center">
                 <h1>@Model.book.Name</h1>
                 <h2>@Model.book.IdAuthorNavigation.Name @Model.book.IdAuthorNavigation.Family</h2>
-                <h3>Рейтинг @Model.RatingBook</h3>
+                @if (Model.RatingBook != 0)
+                {
+                    <h3>Рейтинг @Model.RatingBook</h3>
+                }
+                else
+                {
+                    <h3 class="book-view__info__h3rating">Будьте первым, кто поставит рейтинг!</h3>
+                }
+
                 <h3>@Model.book.Description</h3>
                 <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@Model.book.Id">
                     <span class="fa fa-book"></span> Читать книгу
@@ -38,7 +46,22 @@
     {
         <p>Авторизируйтесь, чтобы оставлять комментарии</p>
     }
-    <h3>Отзывы на книгу Гарри Поттер и Филосовский камень</h3>
+    @if (Model.RatingsBook.Count != 0)
+    {
+        <h3>Отзывы на книгу @Model.book.Name</h3>
+    }
+    else
+    {
+        if (Model.MyComment == null)
+        {
+            <h3>Оставьте первый отзыв на книгу @Model.book.Name</h3>
+        }
+        else
+        {
+            <h3>Отзывы на книгу @Model.book.Name</h3>
+        }
+
+    }
     @foreach (var item in Model.RatingsBook)
     {
         <div class="container commentaryBox">

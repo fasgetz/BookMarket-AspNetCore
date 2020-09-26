@@ -1,5 +1,8 @@
 /* Страница AboutBook */
 
+.book-view__info__h3rating {
+    font-weight: bold;
+}
 
 .book-view__info {
     margin-top: 10px;

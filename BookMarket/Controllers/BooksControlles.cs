@@ -109,13 +109,18 @@ namespace BookMarket.Controllers
 
             AboutBookViewModel vm = new AboutBookViewModel();
 
-            vm.RatingBook = await context.Ratings.Where(i => i.IdBook == id).AverageAsync(i => i.Mark);
+
+            
             vm.book = await context.Book.Include("IdAuthorNavigation").FirstOrDefaultAsync(m => m.Id == id);
 
             // Комментарии книги
             vm.RatingsBook = await context.Ratings
                 .Where(i => i.IdBook == id)
                 .Select(i => new RatingViewModel() { Comment = i.Comment, DateCreated = i.DateCreated, Mark = i.Mark, UserName = i.IdUser }).ToListAsync(); // Список комментариев книги
+
+            // Если у книги есть комментарии, то посчитай среднюю оценку
+            if (vm.RatingsBook.Count != 0)
+                vm.RatingBook = vm.RatingsBook.Average(i => i.Mark);
 
             // Если юзер авторизован, то узнать возможность комментирования
             if (User.Identity.IsAuthenticated)
