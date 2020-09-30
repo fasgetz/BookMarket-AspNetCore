@@ -1,8 +1,8 @@
 ﻿using BookMarket.Models.DataBase;
 using BookMarket.Models.ViewModels.SearchBook;
+using BookMarket.Services.Books;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,10 +10,12 @@ namespace BookMarket.Controllers
 {
     public class SearchBookController : Controller
     {
+        IBookService bookService;
         BookMarketContext db;
 
-        public SearchBookController(BookMarketContext _db)
+        public SearchBookController(BookMarketContext _db, IBookService bookService)
         {
+            this.bookService = bookService;
             this.db = _db;
         }
 
@@ -73,9 +75,22 @@ namespace BookMarket.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> getLastVisitsBook()
+        public async Task<IActionResult> LastVisitBooks()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                // Запрос на книги
+                var query = await bookService.GetLastVisitBook(User.Identity.Name, 5);
+
+                return PartialView(query);
+            }
+            
+
+
+
+            
+
+            return null;
         }
 
         [HttpGet]

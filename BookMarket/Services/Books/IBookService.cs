@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.SearchBook;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace BookMarket.Services.Books
 {
     public interface IBookService
     {
-        ICollection<Book> GetLastVisitBook(string idUser, int CountBook);
+        Task<IDictionary<BookViewModel, visitUser>> GetLastVisitBook(string idUser, int CountBook);
     }
 }

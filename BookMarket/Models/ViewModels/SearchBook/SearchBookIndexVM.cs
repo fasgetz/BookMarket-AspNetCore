@@ -23,5 +23,6 @@ namespace BookMarket.Models.ViewModels.SearchBook
         /// Для отображения категории жанров
         /// </summary>
         public IDictionary<CategoryGenreVM, System.Collections.Generic.List<GenreBookVM>> CategoryGenres { get; set; }
+
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BookMarket.Models.DataBase;
 using BookMarket.Models.UsersIdentity;
 using BookMarket.Services;
+using BookMarket.Services.Books;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -56,6 +57,7 @@ namespace BookMarket
 
             // Подключаем сервис по работе с логикой
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IBookService, BookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

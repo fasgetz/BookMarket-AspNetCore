@@ -29,6 +29,9 @@
                         </li>
                     }
                 </ul>
+                <div id="lastVisitBooks">
+                    
+                </div>
             </div>
             <div id="contentBooks" class="col-lg-9">
 
@@ -60,6 +63,16 @@
                 //alert(this.textContent);
 
             });
+
+                $.ajax({
+                    type: "GET",
+                    url: '/SearchBook/LastVisitBooks',
+
+                    data: { },
+                    success: function (data) {
+                        $("#lastVisitBooks").html(data);
+                    }
+                });
         });
 
     </script>

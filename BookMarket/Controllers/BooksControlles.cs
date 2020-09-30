@@ -187,10 +187,19 @@ namespace BookMarket.Controllers
             if (book == null)
                 return NotFound();
 
+            // Логируем просмотр книги
+            await Task.Run(() =>
+            {
+                // Получаем пользователя, если он авторизован
+                if (User.Identity.IsAuthenticated)
+                {
+                    userService.AddUserVisit(User.Identity.Name, (int)idBook);
+                }
+            });
+
             // Прогружаем список глав книги
             IEnumerable<ChapterBook> Chapters = context.ChapterBook.Where(i => i.IdBook == idBook).OrderBy(i => i.NumberChapter).Select(i => new ChapterBook { ChapterName = i.ChapterName, NumberChapter = i.NumberChapter}).ToList();
-
-
+                
 
 
             ViewBag.list = Chapters;

@@ -1,0 +1,32 @@
+﻿@model IDictionary<BookMarket.Models.ViewModels.SearchBook.BookViewModel, visitUser>
+
+@if (Model.Count != 0)
+{
+    <h3 class="text-center">Недавно просмотренные</h3>
+
+    foreach (var item in Model)
+    {
+        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Key.Id" asp-route-name="@item.Key.Name">
+            <div class="LastVisitBook text-center">
+                <div class="container">
+                    <div class="LastVisitBook__title">
+                        <h5>@item.Key.Name</h5>
+                    </div>
+                    <div class="LastVisitBook__Poster">
+                        <img src="data:image;base64, @System.Convert.ToBase64String(item.Key.PosterBook)" alt="PosterBook">
+                    </div>
+                    <div class="LastVisitBook__genre">
+                        Жанр <b>@item.Key.CategoryName</b>
+                    </div>
+                    <div class="LastVisitBook__author">
+                        Автор <b>@item.Key.AuthorNameFamily</b>
+                    </div>
+                    <div class="LastVisitBook__dateVisit">
+                        @item.Value.DateVisit.ToString("F")
+                    </div>
+                </div>
+            </div>
+        </a>
+    }
+
+}

@@ -73,12 +73,12 @@ else
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 text-center bookResult__Poster">
-                        <a href="#">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
                             <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" alt="PosterBook" />
                         </a>
                     </div>
                     <div class="col-lg-7 bookResult__about">
-                        <a href="#">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
                             <h3 class="text-center">@item.Name</h3>
                         </a>
                         <div class="row">

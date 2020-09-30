@@ -1,4 +1,35 @@
+/* Недавно просмотренные книги */
 
+.searchBook .col-lg-3 h3 {
+    font-size: 18px;
+}
+
+.LastVisitBook {
+    padding: 5px;
+    border: 1px solid #dddddd;
+    color: black;
+}
+
+
+
+.LastVisitBook {
+    margin-top: 15px;
+}
+
+    .LastVisitBook:hover {
+        -moz-box-shadow: 3px 1px 10px #777;
+        -webkit-box-shadow: 3px 1px 10px #777;
+        box-shadow: 3px 1px 10px #777;
+    }
+
+    .LastVisitBook .LastVisitBook__title h5 {
+        font-size: 16px;
+    }
+
+    .LastVisitBook .LastVisitBook__Poster img {
+        width: 120px;
+        height: 190px;
+    }
 
 .searchBook {
     margin-top: 20px;
@@ -26,11 +57,12 @@
 .bookResult {
     border-radius: 5px;
     border: 1px solid #dddddd;
+    color: black;
 }
 
-    .bookResult h3 {
-        font-size: 18px;
-    }
+.bookResult h3 {
+    font-size: 18px;
+}
 
 .bookResult__Poster img {
     height: 200px;
