@@ -29,11 +29,12 @@
 }
 
 
-
+.mainPage__link div {
+    margin-top: 50px;
+}
 
 /* Карточка Book */
 .bookData {
-
 }
 
 .bookData__image img {
@@ -48,8 +49,13 @@
     height: 48px;
 }
 
-/* Секция жанров */
+.bookData .bookData__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
+}
 
+/* Секция жанров */
 .genresBlock .separator {
     padding-bottom: 20px;
     border-top: 2px solid white;

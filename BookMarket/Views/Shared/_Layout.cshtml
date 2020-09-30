@@ -25,7 +25,7 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" href="#">Жанры</a>
+                            <a class="nav-link text-light" asp-controller="SearchBook" asp-action="Index" asp-route-RatingOrdered="true" method="get">Рейтинг книг</a>
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Администратор"))
                         {

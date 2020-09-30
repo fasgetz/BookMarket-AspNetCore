@@ -19,24 +19,41 @@ namespace BookMarket.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> getData(int IdGenre, int page, string word)
+        public async Task<IActionResult> getData(int IdGenre, int page, string word, byte RatingOrdered = 0)
         {
-            var Books = await db.Book
-                .Include("IdAuthorNavigation")
-                .Include("IdCategoryNavigation")
-                .OrderByDescending(i => i.Id)
+            var Books = await db.Book                
+                .OrderByDescending(i => RatingOrdered == 1 ? i.UserRating.Average(i => i.Mark) : i.Id)
                 // Фильтруем по ключевому слову
                 .Where(i =>
                 // по жанру
                 IdGenre != 0 ? i.IdCategoryNavigation.Id == IdGenre : true
                 && !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
+                
                 .Skip(page == 1 ? 0 : (page - 1) * 10)
+                .Select(i => 
+                new BookViewModel 
+                { 
+                    Id = i.Id,
+                    AddDatabase = i.AddDatabase,
+                    CategoryName = i.IdCategoryNavigation.Name,
+                    Name = i.Name,
+                    IdAuthor = (int)i.IdAuthor,
+                    AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+                    Description = i.Description,
+                    PosterBook = i.PosterBook,
+                    RatingBook = i.UserRating.Average(i => i.Mark)
+                })                
                 .Take(10)
                 .ToListAsync();
 
+            // Выбираем первые 50 слов
+            foreach (var item in Books)
+                item.Description = string.Join(' ', item.Description.Split(' ').Take(50));
 
-                getDataViewModel vm = new getDataViewModel()
+
+            getDataViewModel vm = new getDataViewModel()
                 {
+                    RatingOrdered = RatingOrdered == 1 ? true : false,
                     IdGenre = IdGenre,
                     InputWord = word,
                     page = page, // Текущая страница
@@ -56,10 +73,11 @@ namespace BookMarket.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string word, int idGenre)
+        public async Task<IActionResult> Index(string word, int idGenre, bool RatingOrdered = false)
         {
             SearchBookIndexVM vm = new SearchBookIndexVM()
             {
+                RatingOrdered = RatingOrdered,
                 IdGenre = idGenre,
                 WordInput = word,
                 // Выборка категорий жанров

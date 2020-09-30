@@ -1,63 +1,109 @@
 ﻿@model BookMarket.Models.ViewModels.HomeViewModels.IndexViewModel
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная страница";
 }
 
 
-<div class="text-center main_page">
-    <h1 class="display-4">Электронная библиотека</h1>
-    <a href="https://online-knigi.com/new">
-        <div>
-            <h2 class="text-center">Новинки на сайте</h2>
-        </div>
-    </a>
-    <section class="row newsBook__groups">
-        @foreach (var item in Model.newsBooks)
-        {
-            <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
-                <div class="bookData__image">
-                    <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
-                        <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
-                    </a>
-                </div>
-                <div class="bookData__name">
-                    <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
-                        @item.Name
-                    </a>
-                </div>
-                <div class="bookData_author">
-                    <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
-                        @item.IdAuthorNavigation.Name @item.IdAuthorNavigation.Family
-                    </a>
-                </div>
+    <div class="text-center main_page">
+        <h1 class="display-4">Электронная библиотека</h1>
+        <a asp-controller="SearchBook" asp-action="Index" method="get">
+            <div>
+                <h2 class="text-center">Новинки на сайте</h2>
             </div>
-        }
-    </section>
-    <section class="genresBlock">
-        <div class="container">
-            <h2 class="text-center">Жанры</h2>
-            <div class="separator"></div>
-            <ul class="row">
-                @foreach (var item in Model.CategoryGenres)
-                {
-                    <li class="text-left col-lg-3 col-md-6 col-sm-6 col-6">
-                        <h5>@item.Key.Name</h5>
-                        <ul class="genreContent">
-                            @foreach(var link in item.Value)
-                            {
-                                <li><a asp-controller="SearchBook" asp-action="Index" asp-route-idGenre="@link.Id" asp-route-name="@link.Name">@link.Name</a></li>
-                            }
-                            @*<li><a href="#">Подробнее</a></li>*@
-                        </ul>
-                    </li>
-                }
-            </ul>
+        </a>
+        <section class="row newsBook__groups">
+            @foreach (var item in Model.newsBooks)
+            {
+                <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
+                    <div class="bookData__image">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                            <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
+                        </a>
+                    </div>
+                    <div class="bookData__name">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                            @item.Name
+                        </a>
+                    </div>
+                    <div class="bookData__rating">
+                        @if (item.RatingBook != 0)
+                        {
+                            <h6>Рейтинг @item.RatingBook <span>★</span></h6>
+                        }
+                        else
+                        {
+                            <h6>Нет рейтинга</h6>
+                        }
+                    </div>
+                    <div class="bookData_author">
+                        <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
+                            @item.AuthorNameFamily
+                        </a>
+                    </div>
+                </div>
+            }
+        </section>
+        <a class="mainPage__link" asp-controller="SearchBook" asp-action="Index" asp-route-RatingOrdered="true" method="get">
+            <div>
+                <h2 class="text-center">Популярные книги на сайте</h2>
+            </div>
+        </a>
+        <section class="row newsBook__groups">
+            @foreach (var item in Model.topBooks)
+            {
+                <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
+                    <div class="bookData__image">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                            <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
+                        </a>
+                    </div>
+                    <div class="bookData__name">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                            @item.Name
+                        </a>
+                    </div>
+                    <div class="bookData__rating">
+                        @if (item.RatingBook != 0)
+                        {
+                            <h6>Рейтинг @item.RatingBook <span>★</span></h6>
+                        }
+                        else
+                        {
+                            <h6>Нет рейтинга</h6>
+                        }
+                    </div>
+                    <div class="bookData_author">
+                        <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
+                            @item.AuthorNameFamily
+                        </a>
+                    </div>
+                </div>
+            }
+        </section>
+        <section class="genresBlock">
+            <div class="container">
+                <h2 class="text-center">Жанры</h2>
+                <div class="separator"></div>
+                <ul class="row">
+                    @foreach (var item in Model.CategoryGenres)
+                    {
+                        <li class="text-left col-lg-3 col-md-6 col-sm-6 col-6">
+                            <h5>@item.Key.Name</h5>
+                            <ul class="genreContent">
+                                @foreach (var link in item.Value)
+                                {
+                                    <li><a asp-controller="SearchBook" asp-action="Index" asp-route-idGenre="@link.Id" asp-route-name="@link.Name">@link.Name</a></li>
+                                }
+                                @*<li><a href="#">Подробнее</a></li>*@
+                            </ul>
+                        </li>
+                    }
+                </ul>
 
-        </div>
-    </section>
-
-</div>
+            </div>
+        </section>
+    </div>
 
 
 

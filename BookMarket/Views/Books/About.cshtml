@@ -38,7 +38,10 @@
         }
         else
         {
-            <p>Ваш комментарий: @Model.MyComment.Comment</p>
+            <div class="aboutBookBox__myComment">
+                <p>Ваш комментарий: @Model.MyComment.Comment</p>
+            </div>
+            
         }
 
     }
@@ -64,6 +67,7 @@
     }
     @foreach (var item in Model.RatingsBook)
     {
+
         <div class="container commentaryBox">
             <div class="row commentaryBox__title">
                 <div class="col-xl-9">
@@ -71,6 +75,7 @@
                         <div class="col-xl-3">
                             <h5>@item.UserName</h5>
                         </div>
+                        <input type="hidden" name="mark" value="@item.Mark" />
                         <div class="col-xl rating-result">
                             @for (int i = 0; i < 10; i++)
                             {
@@ -96,6 +101,25 @@
 
 
 </div>
+
+@section Scripts {
+    <script>
+        var commentaries = $(".commentaryBox");
+        commentaries.each(function (i, elem) {
+            var rating = $(this).find("input").val();
+            if (rating >= 6) {
+                $(this).addClass("commentaryBox__good");
+            }
+            else if (rating < 6) {
+                $(this).addClass("commentaryBox__bad");
+            }
+            
+        });
+        
+    </script>
+
+
+}
 
 @section Css {
     <link href="~/css/aboutBook.css" rel="stylesheet" />

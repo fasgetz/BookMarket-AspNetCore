@@ -27,23 +27,23 @@ namespace BookMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            using (context = new BookMarketContext())
+            IndexViewModel vm = new IndexViewModel()
             {
+                topBooks = await context.Book
+                .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+                .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync(),
+                newsBooks = await context.Book
+                .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+                .OrderByDescending(i => i.Id).Take(4).ToListAsync(),
+                CategoryGenres = await context.GenreCategory
+                .Include("GenresBook")
+                .Take(8)
+                .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList())
+            };
 
 
-                IndexViewModel vm = new IndexViewModel()
-                {
-                    newsBooks = await context.Book.Include("IdAuthorNavigation").OrderByDescending(i => i.Id).Take(4).ToListAsync(),
-                    CategoryGenres = await context.GenreCategory
-                    .Include("GenresBook")
-                    .Take(8)
-                    .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList())
-                };
+            return View(vm);
 
-                return View(vm);
-
-            }
-                
         }
 
         public IActionResult Privacy()

@@ -37,8 +37,18 @@
     width: 135px
 }
 
-.bookResult__about dt {
-    width: 150px;
+.bookResult__about h5 {
+    font-weight: bold;
+}
+
+.bookResult__about h5, .bookResult__about h6 {    
+    font-size: 18px;
+}
+
+.bookResult__about .about__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
 }
 
     .bookResult__about dt::after {

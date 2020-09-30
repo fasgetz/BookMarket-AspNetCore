@@ -8,10 +8,16 @@ namespace BookMarket.Models.ViewModels.HomeViewModels
 {
     public class IndexViewModel
     {
+
+        /// <summary>
+        /// Топовые книги
+        /// </summary>
+        public List<IndexBook> topBooks { get; set; }
+
         /// <summary>
         /// Новые книги
         /// </summary>
-        public List<Book> newsBooks { get; set; }
+        public List<IndexBook> newsBooks { get; set; }
 
         /// <summary>
         /// Для отображения категории жанров

@@ -8,11 +8,7 @@ namespace BookMarket.Models.ViewModels.SearchBook
 {
     public class SearchBookIndexVM
     {
-        /// <summary>
-        /// Новые книги
-        /// </summary>
-        public List<Book> Books { get; set; }
-
+        public bool RatingOrdered { get; set; } // Сортировка по рейтингу
 
         /// <summary>
         /// Строка ввода в поиске

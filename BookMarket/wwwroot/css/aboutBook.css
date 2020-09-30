@@ -29,19 +29,36 @@
 
 /* Комментарии */
 
+.aboutBookBox__myComment {
+    background: aqua;
+    border-radius: 5px;
+}
+
 .commentaryBox {
-    border: 1px dotted grey;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
     margin-top: 20px;
     margin-bottom: 10px;
 }
 
-.commentaryBox__title {
+.commentaryBox__good {
+    background: #cfc;
+}
+
+.commentaryBox__bad {
+    background: #f2f2f2;
+}
+
+.commentaryBox__title {    
     padding-top: 10px;
     padding-left: 5px;
+    border-bottom: 1px solid #e3e3e3;
 }
 
 .commentaryBox__text {
+    padding-top: 10px;
     padding-left: 10px;
+    margin-bottom: 5px;
 }
 
 
@@ -55,8 +72,7 @@
         margin: 5px;
         padding-top: 10px;
         padding-bottom: 10px;
-        border-top: 1px dotted grey;
-        border-bottom: 1px dotted grey;
+
     }
 
     .aboutBookBox p {

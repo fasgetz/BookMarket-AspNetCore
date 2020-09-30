@@ -1,106 +1,130 @@
 ﻿@model BookMarket.Models.ViewModels.SearchBook.getDataViewModel
 
 
-
 @if (!string.IsNullOrEmpty(Model.GenreName))
 {
     <h2 class="text-center">
-        @Model.GenreName
+        @if (Model.RatingOrdered == true)
+        {
+            <span>Рейтинг -</span>
+        }
+        <span>@Model.GenreName</span>
     </h2>
 }
 else
 {
     <h2 class="text-center">
-        Все книги
+        @if (Model.RatingOrdered == true)
+        {
+            <span>Рейтинг -</span>
+        }
+
+        <span>Все книги</span>
     </h2>
 }
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
+@if (Model.MaxCountBooks != 0)
+{
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
 
-        @if (Model.page == 1)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" >Назад</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" onclick="SearchBooks('@Model.InputWord', @(Model.page - 1), @Model.IdGenre)">Назад</a>
-            </li>
-        }
-
-
-        @for (int i = 0; i < Math.Ceiling((double)Model.MaxCountBooks / 10); i++)
-        {
-            @if ((i + 1) == Model.page)
+            @if (Model.page == 1)
             {
-                <li class="page-item active"><a class="page-link">@(i + 1)</a></li>
+                <li class="page-item disabled">
+                    <a class="page-link">Назад</a>
+                </li>
             }
             else
             {
-                <li class="page-item"><a class="page-link" onclick="SearchBooks('@Model.InputWord', @(i + 1), @Model.IdGenre)">@(i + 1)</a></li>
+                <li class="page-item">
+                    <a class="page-link" onclick="SearchBooks('@Model.InputWord', @(Model.page - 1), @Model.IdGenre, @(Model.RatingOrdered == true ? 1 : 0))">Назад</a>
+                </li>
             }
-        }
-        @if (Model.page == Math.Ceiling((double)Model.MaxCountBooks / 10))
-        {
-            <li class="page-item disabled">
-                <a class="page-link">Вперед</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" onclick="SearchBooks('@Model.InputWord', @(Model.page + 1), @Model.IdGenre)">Вперед</a>
-            </li>
-        }
-    </ul>
-</nav>
-@foreach (var item in Model.books)
-{
-    <div class="row bg-white bookResult">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 text-center bookResult__Poster">
-                    <a href="#">
-                        <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" alt="PosterBook" />
-                    </a>
-                </div>
-                <div class="col-lg-7 bookResult__about">
-                    <a href="#">
-                        <h3 class="text-center">@item.Name</h3>
-                    </a>
 
-                    <dl>
-                        <div class="row">
-                            <dt>Автор</dt>
-                            <dd>@item.IdAuthorNavigation.NameFamily</dd>
-                        </div>
-                        <div class="row">
-                            <dt>Жанр</dt>
-                            <dd>@item.IdCategoryNavigation.Name</dd>
-                        </div>
-                        <div class="row">
-                            <dt>Дата добавления</dt>
-                            <dd>@item.AddDatabase.ToString("D")</dd>
-                        </div>
-                    </dl>
-                </div>
-                <div class="col-lg-2 bookResult__buttons">
-                    <div class="row d-flex justify-content-center">
-                        <a class="mybtn btn btn-primary" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@item.Id">
-                            Читать <i class="fa fa-search"></i>
-                        </a>
-                        <a class="mybtn btn btn-primary" asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
-                            О книге <i class="fa fa-search"></i>
+
+            @for (int i = 0; i < Math.Ceiling((double)Model.MaxCountBooks / 10); i++)
+            {
+                @if ((i + 1) == Model.page)
+                {
+                    <li class="page-item active"><a class="page-link">@(i + 1)</a></li>
+                }
+                else
+                {
+                    <li class="page-item"><a class="page-link" onclick="SearchBooks('@Model.InputWord', @(i + 1), @Model.IdGenre, @(Model.RatingOrdered == true ? 1 : 0))">@(i + 1)</a></li>
+                }
+            }
+            @if (Model.page == Math.Ceiling((double)Model.MaxCountBooks / 10))
+            {
+                <li class="page-item disabled">
+                    <a class="page-link">Вперед</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" onclick="SearchBooks('@Model.InputWord', @(Model.page + 1), @Model.IdGenre, @(Model.RatingOrdered == true ? 1 : 0))">Вперед</a>
+                </li>
+            }
+        </ul>
+    </nav>
+    @foreach (var item in Model.books)
+    {
+        <div class="row bg-white bookResult">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 text-center bookResult__Poster">
+                        <a href="#">
+                            <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" alt="PosterBook" />
                         </a>
                     </div>
-                </div>
-                <div class="col-lg bookResult__text text-center">
-                    @(new string(item.Description.Take(280).ToArray()))...
+                    <div class="col-lg-7 bookResult__about">
+                        <a href="#">
+                            <h3 class="text-center">@item.Name</h3>
+                        </a>
+                        <div class="row">
+                            <h5 class="col-xl-5 text-center text-xl-left">Автор</h5>
+                            <h6 class="col-xl text-center text-xl-left">@item.AuthorNameFamily</h6>
+                        </div>
+                        <div class="row">
+                            <h5 class="col-xl-5 text-center text-xl-left">Жанр</h5>
+                            <h6 class="col-xl text-center text-xl-left">@item.CategoryName</h6>
+                        </div>
+                        <div class="row">
+                            @if (item.RatingBook != 0)
+                            {
+                                <h5 class="col-xl-5 text-center text-xl-left">Рейтинг</h5>
+                                <h6 class="col-xl text-center text-xl-left about__rating">@item.RatingBook <span>★</span></h6>
+                            }
+                            else
+                            {
+                                <h5 class="col-xl-5 text-center text-xl-left">Рейтинг</h5>
+                                <h6 class="col-xl text-center text-xl-left">Поставьте оценку первым!</h6>
+                            }
+                        </div>
+                        <div class="row">
+                            <h5 class="col-xl-5 text-center text-xl-left">Дата добавления</h5>
+                            <h6 class="col-xl text-center text-xl-left">@item.AddDatabase.ToString("D")</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 bookResult__buttons">
+                        <div class="row d-flex justify-content-center">
+                            <a class="mybtn btn btn-primary" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@item.Id">
+                                Читать <i class="fa fa-search"></i>
+                            </a>
+                            <a class="mybtn btn btn-primary" asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                                О книге <i class="fa fa-search"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg bookResult__text text-center">
+                        @item.Description...
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+}
+else
+{
+    <h3 class="text-center">Нет книг в категории жанра @Model.GenreName</h3>
 }

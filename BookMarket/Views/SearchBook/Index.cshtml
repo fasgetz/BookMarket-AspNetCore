@@ -13,7 +13,7 @@
                                 @foreach (var category in item.Value)
                                 {
                                     <li>
-                                        <a onclick="SearchBooks('', 1, @category.Id)">
+                                        <a onclick="SearchBooks('', 1, @category.Id, @(Model.RatingOrdered == true ? 1 : 0))">
                                             <div class="row">
                                                 <div class="col-9">
                                                     @category.Name
@@ -44,7 +44,7 @@
 
 
         $(document).ready(function () {
-            SearchBooks("@Model.WordInput", 1, @Model.IdGenre);
+            SearchBooks("@Model.WordInput", 1, @Model.IdGenre, @(Model.RatingOrdered == true ? 1 : 0));
         });
 
     </script>

@@ -1,11 +1,14 @@
 
-function SearchBooks(InputWord, NumberPage, GenreeId) {
+function SearchBooks(InputWord, NumberPage, GenreeId, RatingOrdered) {
+    
+    $("#contentBooks").append('<p class="text-center" id="load">Loading...</p>');
+
     $.ajax({
                     type: "GET",
                     url: '/SearchBook/getData',
 
         data: {
-            word: InputWord, page: NumberPage, IdGenre: GenreeId
+            word: InputWord, page: NumberPage, IdGenre: GenreeId, RatingOrdered: RatingOrdered
                     },
 
                     success: function (data) {
@@ -20,4 +23,3 @@ function SearchBooks(InputWord, NumberPage, GenreeId) {
                 });
 
 }
-
