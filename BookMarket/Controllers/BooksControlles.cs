@@ -22,7 +22,7 @@ namespace BookMarket.Controllers
 {
 
     //[Route("book")]
-    
+
     public class BooksController : Controller
     {
         private readonly IUserService userService;
@@ -40,6 +40,56 @@ namespace BookMarket.Controllers
         }
 
         #region Методы контроллера
+
+        #region Редактировать комментарий
+
+        [HttpGet]
+        public IActionResult EditCommentary(int IdBook, string comment, int IdComment)
+        {
+            EditCommentVM vm = new EditCommentVM()
+            {
+                IdComment = IdComment,
+                IdBook = IdBook,
+                comment = comment
+            };
+
+            return PartialView(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditComment(EditCommentVM vm)
+        {
+
+            if (ModelState.IsValid && vm.Mark != 0)
+            {
+                // Если юзер авторизован, то оставить комментарий
+                if (User.Identity.IsAuthenticated)
+                {
+                    // Находим комментарий
+                    var comment = await context.Ratings.FirstOrDefaultAsync(i => i.Id == vm.IdComment); 
+
+                    // Если комментарий найден, то изменить его
+                    if (comment != null)
+                    {
+                        comment.Mark = (byte)vm.Mark;
+                        comment.Comment = vm.comment;
+
+                        context.SaveChanges();
+                        return Redirect($"~/Books/AboutBook?id={vm.IdBook}");
+                    }
+
+                }
+            }
+
+
+
+
+
+
+            return await AboutBook(vm.IdBook);
+        }
+
+        #endregion
 
         #region Комментарии о книге
 

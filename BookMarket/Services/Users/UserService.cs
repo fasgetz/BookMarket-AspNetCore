@@ -17,8 +17,8 @@ namespace BookMarket.Services
 
         public async void AddUserVisit(string IdUser, int IdBook)
         {
-            await db.UsersVisit.AddAsync(new visitUser() { DateVisit = DateTime.Now, IdBook = IdBook, IdUser = IdUser });
-            await db.SaveChangesAsync();
+            db.UsersVisit.AddAsync(new visitUser() { DateVisit = DateTime.Now, IdBook = IdBook, IdUser = IdUser });
+            db.SaveChanges();
         }
     }
 }

@@ -14,7 +14,7 @@
                 <h2>@Model.book.IdAuthorNavigation.Name @Model.book.IdAuthorNavigation.Family</h2>
                 @if (Model.RatingBook != 0)
                 {
-                    <h3>Рейтинг @Model.RatingBook</h3>
+                    <h3 class="about__rating">Рейтинг @Model.RatingBook <span>★</span></h3>
                 }
                 else
                 {
@@ -39,9 +39,28 @@
         else
         {
             <div class="aboutBookBox__myComment">
-                <p>Ваш комментарий: @Model.MyComment.Comment</p>
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="text-center">Ваш комментарий</h5>
+                    </div>
+                    <div class="col-12 aboutBookBox__myComment__rating">
+                        <h6 class="text-center">Рейтинг @Model.MyComment.Mark <span>★</span></h6>
+                    </div>
+                    <div class="col-12 aboutBookBox__myComment__date">
+                        <h6 class="text-center">@Model.MyComment.DateCreated.ToString("F")</h6>
+                    </div>
+                    <div class="col-12 aboutBookBox__myComment__text">
+                        <p>@Model.MyComment.Comment</p>
+                    </div>
+                    <div class="col-12 aboutBookBox__myComment__btn text-center">
+                        <button id="btn_Edit" class="btn">
+                            Редактировать <i class="fa fa-pencil"></i>
+                        </button>
+                    </div>
+                </div>
+
             </div>
-            
+
         }
 
     }
@@ -103,6 +122,19 @@
 </div>
 
 @section Scripts {
+    @if (User.Identity.IsAuthenticated && Model.MyComment != null)
+    {
+        <script src="~/js/Commentary.js"></script>
+        <script>
+
+        var btn_edit = "#btn_Edit"
+            $(btn_edit).click(function () {
+                var text = $(".aboutBookBox__myComment__text p").text();
+            EditComment(@Model.book.Id, text, @Model.MyComment.Id)
+        });
+        </script>
+    }
+
     <script>
         var commentaries = $(".commentaryBox");
         commentaries.each(function (i, elem) {
@@ -113,9 +145,9 @@
             else if (rating < 6) {
                 $(this).addClass("commentaryBox__bad");
             }
-            
+
         });
-        
+
     </script>
 
 

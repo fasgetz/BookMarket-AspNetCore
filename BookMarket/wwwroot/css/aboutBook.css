@@ -22,6 +22,12 @@
 }
 
 
+.book-view__info .about__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
+}
+
 
 .actionBox {
     margin-top: 10px;
@@ -30,10 +36,38 @@
 /* Комментарии */
 
 .aboutBookBox__myComment {
-    background: aqua;
+    margin-top: 5px;
+    padding: 5px;
+    background: #F6FFF8;
     border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
+.aboutBookBox__myComment__text p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    margin: 0px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.aboutBookBox__myComment__btn {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.aboutBookBox__myComment__date h6 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.aboutBookBox__myComment__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
+}
+
+/* Комментарии остальных людей */
 .commentaryBox {
     border: 1px solid #e3e3e3;
     border-radius: 5px;
@@ -75,10 +109,7 @@
 
     }
 
-    .aboutBookBox p {
-        margin: 15px 10px 5px 5px;
-        padding-bottom: 10px;
-    }
+
 
 /* Рейтинг звезд */
 
