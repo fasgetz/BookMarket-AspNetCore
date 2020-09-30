@@ -4,14 +4,16 @@ using BookMarket.Models.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookMarket.Migrations
 {
     [DbContext(typeof(BookMarketContext))]
-    partial class BookMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20200930081116_AddTableVisitBooks")]
+    partial class AddTableVisitBooks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +199,7 @@ namespace BookMarket.Migrations
 
                     b.HasIndex("IdBook");
 
-                    b.ToTable("UsersVisit");
+                    b.ToTable("visitUser");
                 });
 
             modelBuilder.Entity("BookMarket.Models.DataBase.Book", b =>

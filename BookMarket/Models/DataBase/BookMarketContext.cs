@@ -7,6 +7,19 @@ namespace BookMarket.Models.DataBase
 {
     #region Конфигурации
 
+
+    public class VisitBookConfiguration : IEntityTypeConfiguration<visitUser>
+    {
+        public void Configure(EntityTypeBuilder<visitUser> builder)
+        {
+            builder.HasOne(d => d.book)
+                .WithMany(p => p.VisitsBook)
+                .HasForeignKey(d => d.IdBook)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_UsersBookVisits");
+        }
+    }
+
     /// <summary>
     /// Конфигурация жанра книги один ко многим
     /// </summary>
@@ -55,6 +68,8 @@ namespace BookMarket.Models.DataBase
 
         }
 
+
+        public virtual DbSet<visitUser> UsersVisit { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<CategoryGenre> GenreCategory { get; set; }
         public virtual DbSet<Author> Author { get; set; }
@@ -115,6 +130,7 @@ namespace BookMarket.Models.DataBase
 
             modelBuilder.ApplyConfiguration(new GenreBookConfiguration());
             modelBuilder.ApplyConfiguration(new RatingBookConfiguration());
+            modelBuilder.ApplyConfiguration(new VisitBookConfiguration());
 
             modelBuilder.Entity<ChapterBook>(entity =>
             {

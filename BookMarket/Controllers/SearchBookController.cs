@@ -73,6 +73,12 @@ namespace BookMarket.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> getLastVisitsBook()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index(string word, int idGenre, bool RatingOrdered = false)
         {
             SearchBookIndexVM vm = new SearchBookIndexVM()

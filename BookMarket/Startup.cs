@@ -6,6 +6,7 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 using BookMarket.Models.DataBase;
 using BookMarket.Models.UsersIdentity;
+using BookMarket.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -40,6 +41,8 @@ namespace BookMarket
             services.AddDbContext<UsersContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("UsersIdentityConnection")));
 
+
+
             services.AddIdentity<User, IdentityRole>(i => 
             {
                 i.Password.RequireNonAlphanumeric = false;
@@ -49,7 +52,10 @@ namespace BookMarket
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<BookMarketContext>(options =>
-                options.UseSqlServer(connection));
+                options.UseSqlServer(connection), ServiceLifetime.Transient);
+
+            // Подключаем сервис по работе с логикой
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

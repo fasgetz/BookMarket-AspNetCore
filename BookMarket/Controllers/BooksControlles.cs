@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using BookMarket.Models.UsersIdentity;
 using BookMarket.Models.ViewModels.Books;
+using BookMarket.Services;
 
 namespace BookMarket.Controllers
 {
@@ -24,12 +25,14 @@ namespace BookMarket.Controllers
     
     public class BooksController : Controller
     {
+        private readonly IUserService userService;
         private readonly IWebHostEnvironment _appEnvironment;
         private readonly ILogger<BooksController> _logger;
 
         BookMarketContext context;
-        public BooksController(ILogger<BooksController> logger, IWebHostEnvironment appEnvironment, BookMarketContext context)
+        public BooksController(ILogger<BooksController> logger, IWebHostEnvironment appEnvironment, BookMarketContext context, IUserService _userSerivce)
         {
+            this.userService = _userSerivce;
             _logger = logger;
             _appEnvironment = appEnvironment;
 
@@ -109,7 +112,16 @@ namespace BookMarket.Controllers
 
             AboutBookViewModel vm = new AboutBookViewModel();
 
+            await Task.Run(() =>
+            {
+                // Получаем пользователя, если он авторизован
+                if (User.Identity.IsAuthenticated)
+                {
+                    userService.AddUserVisit(User.Identity.Name, (int)id);
+                }
+            });
 
+            
             
             vm.book = await context.Book.Include("IdAuthorNavigation").FirstOrDefaultAsync(m => m.Id == id);
 
