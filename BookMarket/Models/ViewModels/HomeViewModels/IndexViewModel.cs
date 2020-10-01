@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.SearchBook;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,10 @@ namespace BookMarket.Models.ViewModels.HomeViewModels
         /// Для отображения категории жанров
         /// </summary>
         public IDictionary<CategoryGenre, System.Collections.Generic.List<GenreBook>> CategoryGenres { get; set; }
+
+        /// <summary>
+        /// Последние комментарии книг
+        /// </summary>
+        public IDictionary<BookViewModel, Rating> lastCommentBooks { get; set; }
     }
 }

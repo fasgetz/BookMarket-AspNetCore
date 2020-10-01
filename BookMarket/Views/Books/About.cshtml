@@ -44,7 +44,7 @@
                         <h5 class="text-center">Ваш комментарий</h5>
                     </div>
                     <div class="col-12 aboutBookBox__myComment__rating">
-                        <h6 class="text-center">Рейтинг @Model.MyComment.Mark <span>★</span></h6>
+                        <h6 class="text-center">Рейтинг @Model.MyComment.Mark.ToString("0.00") <span>★</span></h6>
                     </div>
                     <div class="col-12 aboutBookBox__myComment__date">
                         <h6 class="text-center">@Model.MyComment.DateCreated.ToString("F")</h6>

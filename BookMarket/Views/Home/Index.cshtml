@@ -5,81 +5,120 @@
 }
 
 
-    <div class="text-center main_page">
+    <section class="text-center main_page">
         <h1 class="display-4">Электронная библиотека</h1>
-        <a asp-controller="SearchBook" asp-action="Index" method="get">
-            <div>
-                <h2 class="text-center">Новинки на сайте</h2>
-            </div>
-        </a>
-        <section class="row newsBook__groups">
-            @foreach (var item in Model.newsBooks)
-            {
-                <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
-                    <div class="bookData__image">
-                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
-                            <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
-                        </a>
-                    </div>
-                    <div class="bookData__name">
-                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
-                            @item.Name
-                        </a>
-                    </div>
-                    <div class="bookData__rating">
-                        @if (item.RatingBook != 0)
-                        {
-                            <h6>Рейтинг @item.RatingBook <span>★</span></h6>
-                        }
-                        else
-                        {
-                            <h6>Нет рейтинга</h6>
-                        }
-                    </div>
-                    <div class="bookData_author">
-                        <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
-                            @item.AuthorNameFamily
-                        </a>
-                    </div>
+        <section>
+            <a asp-controller="SearchBook" asp-action="Index" method="get">
+                <div>
+                    <h2 class="text-center">Новинки на сайте</h2>
                 </div>
-            }
+            </a>
+            <div class="row newsBook__groups">
+                @foreach (var item in Model.newsBooks)
+                {
+                    <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
+                        <div class="bookData__image">
+                            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                                <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
+                            </a>
+                        </div>
+                        <div class="bookData__name">
+                            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                                @item.Name
+                            </a>
+                        </div>
+                        <div class="bookData__rating">
+                            @if (item.RatingBook != 0)
+                            {
+                                <h6>Рейтинг @item.RatingBook.ToString("0.00") <span>★</span></h6>
+                            }
+                            else
+                            {
+                                <h6>Нет рейтинга</h6>
+                            }
+                        </div>
+                        <div class="bookData_author">
+                            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
+                                @item.AuthorNameFamily
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
         </section>
-        <a class="mainPage__link" asp-controller="SearchBook" asp-action="Index" asp-route-RatingOrdered="true" method="get">
-            <div>
-                <h2 class="text-center">Популярные книги на сайте</h2>
-            </div>
-        </a>
-        <section class="row newsBook__groups">
-            @foreach (var item in Model.topBooks)
-            {
-                <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
-                    <div class="bookData__image">
-                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
-                            <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
-                        </a>
-                    </div>
-                    <div class="bookData__name">
-                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
-                            @item.Name
-                        </a>
-                    </div>
-                    <div class="bookData__rating">
-                        @if (item.RatingBook != 0)
-                        {
-                            <h6>Рейтинг @item.RatingBook <span>★</span></h6>
-                        }
-                        else
-                        {
-                            <h6>Нет рейтинга</h6>
-                        }
-                    </div>
-                    <div class="bookData_author">
-                        <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
-                            @item.AuthorNameFamily
-                        </a>
-                    </div>
+        <section>
+            <a class="mainPage__link" asp-controller="SearchBook" asp-action="Index" asp-route-RatingOrdered="true" method="get">
+                <div>
+                    <h2 class="text-center">Популярные книги на сайте</h2>
                 </div>
-            }
+            </a>
+            <div class="row newsBook__groups">
+                @foreach (var item in Model.topBooks)
+                {
+                    <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
+                        <div class="bookData__image">
+                            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                                <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
+                            </a>
+                        </div>
+                        <div class="bookData__name">
+                            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                                @item.Name
+                            </a>
+                        </div>
+                        <div class="bookData__rating">
+                            @if (item.RatingBook != 0)
+                            {
+                                <h6>Рейтинг @item.RatingBook.ToString("0.00") <span>★</span></h6>
+                            }
+                            else
+                            {
+                                <h6>Нет рейтинга</h6>
+                            }
+                        </div>
+                        <div class="bookData_author">
+                            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor">
+                                @item.AuthorNameFamily
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+        <section class="lastCommentsBooks">
+            <h2 class="text-center">Новые комментарии</h2>
+            <div class="row newsBook__groups">
+                @foreach (var item in Model.lastCommentBooks)
+                {
+                    <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
+                        <div class="bookData__image">
+                            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Key.Id">
+                                <img src="data:image;base64, @System.Convert.ToBase64String(item.Key.PosterBook)" />
+                            </a>
+                        </div>
+                        <div class="bookData__name">
+                            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Key.Id" asp-route-name="@item.Key.Name">
+                                @item.Key.Name
+                            </a>
+                        </div>
+                        <div class="bookData__rating">
+                            @if (item.Key.RatingBook != 0)
+                            {
+                                <h6>Рейтинг @item.Key.RatingBook.ToString("0.00") <span>★</span></h6>
+                            }
+                            else
+                            {
+                                <h6>Нет рейтинга</h6>
+                            }
+                        </div>
+                        <div class="bookData_author">
+                            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.Key.IdAuthor">
+                                @item.Key.AuthorNameFamily
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
         </section>
         <section class="genresBlock">
             <div class="container">
@@ -103,7 +142,7 @@
 
             </div>
         </section>
-    </div>
+    </section>
 
 
 

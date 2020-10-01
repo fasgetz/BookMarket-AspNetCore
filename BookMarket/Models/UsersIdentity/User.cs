@@ -10,6 +10,6 @@ namespace BookMarket.Models.UsersIdentity
     {
         public DateTime dateBirth { get; set; }
         
-
+        public byte[] ProfileImage { get; set; }
     }
 }

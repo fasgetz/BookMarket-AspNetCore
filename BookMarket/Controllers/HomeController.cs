@@ -8,18 +8,21 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using BookMarket.Models.ViewModels.HomeViewModels;
 using System.Threading.Tasks;
+using BookMarket.Models.ViewModels.SearchBook;
+using BookMarket.Services.Books;
 
 namespace BookMarket.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IBookService serviceBooks;
         private readonly ILogger<HomeController> _logger;
         BookMarketContext context;
 
-        public HomeController(ILogger<HomeController> logger, BookMarketContext context)
+        public HomeController(ILogger<HomeController> logger, BookMarketContext context, IBookService serviceBooks)
         {
             _logger = logger;
-
+            this.serviceBooks = serviceBooks;
             this.context = context;
         }
 
@@ -38,12 +41,12 @@ namespace BookMarket.Controllers
                 CategoryGenres = await context.GenreCategory
                 .Include("GenresBook")
                 .Take(8)
-                .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList())
+                .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList()),
+                lastCommentBooks = await serviceBooks.GetLastCommentaries(4)
             };
-
+   
 
             return View(vm);
-
         }
 
         public IActionResult Privacy()

@@ -1,3 +1,22 @@
+/* Секция авторизации */
+.auth__div {
+    height: 44px;
+}
+.auth__div .btn, .auth__div input {
+    outline: none; /* Для синий ободки */
+    border: 0;
+    background: transparent;
+}
+
+
+
+    .auth__div_img {
+        border-radius: 50px;
+        width: 42px;
+        height: 100%;
+    }
+
+/* */
 
 .btn, .nav-item a {
     background: #aecedf;
@@ -34,8 +53,7 @@
 }
 
 /* Карточка Book */
-.bookData {
-}
+
 
 .bookData__image img {
   height: 220px;
@@ -55,14 +73,20 @@
     text-shadow: 1px 1px #c60;
 }
 
+
+/* Секция последних кооментариев книгам */
+
+.lastCommentsBooks h2 {
+    margin-top: 50px;
+    color: #4f66d6;
+}
+
+
 /* Секция жанров */
 .genresBlock .separator {
     padding-bottom: 20px;
     border-top: 2px solid white;
 }
-
-
-
 
 .genresBlock ul {
     padding-bottom: 20px;

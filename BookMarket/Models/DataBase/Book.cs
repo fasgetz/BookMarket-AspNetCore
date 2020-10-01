@@ -10,6 +10,7 @@ namespace BookMarket.Models.DataBase
         {
             ChapterBook = new HashSet<ChapterBook>();
             VisitsBook = new HashSet<visitUser>();
+            UserRating = new HashSet<Rating>();
         }
 
         public int Id { get; set; }

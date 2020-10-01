@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace BookMarket.Controllers
@@ -62,10 +63,14 @@ namespace BookMarket.Controllers
             return View(vm);
         }
 
+
+
+
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            return View(new LoginUserViewModel { ReturnUrl = returnUrl });
+            string url = Request.Headers["Referer"].ToString();
+            return View(new LoginUserViewModel { ReturnUrl = url });
         }
 
         [HttpPost]
@@ -82,7 +87,7 @@ namespace BookMarket.Controllers
                 if (result.Succeeded)
                 {
                     // проверяем, принадлежит ли URL приложению
-                    if (!string.IsNullOrEmpty(vm.ReturnUrl) && Url.IsLocalUrl(vm.ReturnUrl))
+                    if (!string.IsNullOrEmpty(vm.ReturnUrl))
                     {
                         return Redirect(vm.ReturnUrl);
                     }
