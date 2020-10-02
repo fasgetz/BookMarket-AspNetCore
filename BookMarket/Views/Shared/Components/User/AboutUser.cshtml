@@ -1,0 +1,22 @@
+﻿@model BookMarket.Models.UsersIdentity.User
+
+<div class="dropdown open">
+    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @Model.UserName
+        @if (Model.ProfileImage != null)
+        {
+            <img id="mainAvatar" class="auth__div_img" src="data:image;base64, @System.Convert.ToBase64String(Model.ProfileImage)" alt="Аватарка" />
+        }
+        else
+        {
+            <img class="auth__div_img" src="~/Images/avatar.png" alt="Аватарка" />
+        }
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a asp-controller="Profile" asp-action="Index" asp-route-name="@User.Identity.Name" class="dropdown-item">Профиль</a>
+        <div class="dropdown-divider"></div>
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <input class="dropdown-item" type="submit" value="Выход" />
+        </form>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+﻿@model string;
+
+@section Css {
+    <link href="~/css/ProfileUser.css" rel="stylesheet" />
+}
+
+<div class="container profile">
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="accordion">
+                <li>
+                    <a asp-action="Index" asp-controller="Profile">
+                        <div class="link"><i class="fa fa-shield"></i>Личные данные</div>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <div class="link"><i class="fa fa-book"></i>Избранные книги</div>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <div class="link"><i class="fa fa-user"></i>Любимые авторы</div>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <div class="link"><i class="fa fa-pencil"></i>Любимые жанры</div>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <div class="link"><i class="fa fa-eye"></i>Просмотренные</div>
+                    </a>
+                </li>
+                <li>
+                    <a>
+                        <div class="link"><i class="fa fa-commenting-o"></i>Мои комментарии</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9 profile__data">
+            @await Component.InvokeAsync("ProfileData", Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                    function sendAvatar() {
+
+
+                    var files = document.getElementById('uploadFile').files;
+                    if (files.length > 0) {
+                        if (window.FormData !== undefined) {
+                            var data = new FormData();
+                            for (var x = 0; x < files.length; x++) {
+                                data.append("file" + x, files[x]);
+                            }
+
+                            $.ajax({
+                                url: '@Url.Action("LoadAvatar", "Profile")',
+                                method: 'post',
+                                contentType: false,
+                                processData: false,
+                                data: data,
+                                success: function (data) {
+                                    $("#uploadFile").val(null);
+                                    location.reload();
+                                }
+                            });
+
+
+                        };
+                    }
+
+
+                    }
+    </script>
+}

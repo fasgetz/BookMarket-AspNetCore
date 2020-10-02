@@ -117,5 +117,8 @@ namespace BookMarket.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+
+
     }
 }

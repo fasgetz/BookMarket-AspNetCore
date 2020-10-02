@@ -11,5 +11,8 @@ namespace BookMarket.Models.UsersIdentity
         public DateTime dateBirth { get; set; }
         
         public byte[] ProfileImage { get; set; }
+
+        public string Name { get; set; }
+        public string Family { get; set; }
     }
 }

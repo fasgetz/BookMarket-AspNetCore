@@ -20,5 +20,7 @@ namespace BookMarket.Services
             db.UsersVisit.AddAsync(new visitUser() { DateVisit = DateTime.Now, IdBook = IdBook, IdUser = IdUser });
             db.SaveChanges();
         }
+
+
     }
 }

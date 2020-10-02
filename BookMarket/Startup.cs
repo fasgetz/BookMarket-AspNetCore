@@ -8,6 +8,7 @@ using BookMarket.Models.DataBase;
 using BookMarket.Models.UsersIdentity;
 using BookMarket.Services;
 using BookMarket.Services.Books;
+using BookMarket.Services.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -58,6 +59,7 @@ namespace BookMarket
             // Подключаем сервис по работе с логикой
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IProfileService, ProfileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,7 +94,6 @@ namespace BookMarket
                 );
 
 
-
                 endpoints.MapControllerRoute(
                     name: "BookRoute",
                     pattern: "book/ReadBook/{idBook}/",
@@ -106,13 +107,15 @@ namespace BookMarket
                 );
 
                 endpoints.MapControllerRoute(
+                    name: "profileMap",
+                    pattern: "profile/{name}",
+                    defaults: new { controller = "Profile", action = "Index" }
+                );
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}");
 
-
-                //endpoints.MapControllerRoute(
-                //    name: "book",
-                //    pattern: "{controller=Books}/{action=GetBook}/{idBook}/Page{page}");
 
 
 
