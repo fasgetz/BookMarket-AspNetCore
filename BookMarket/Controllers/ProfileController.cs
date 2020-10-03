@@ -1,5 +1,6 @@
 ﻿using BookMarket.Models.UsersIdentity;
 using BookMarket.Models.ViewModels.Profile;
+using BookMarket.Services.Books;
 using BookMarket.Services.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,9 +18,11 @@ namespace BookMarket.Controllers
     public class ProfileController : Controller
     {
         private readonly IProfileService profileService;
+        private readonly IBookService bookService;
 
-        public ProfileController(IProfileService profileService)
+        public ProfileController(IProfileService profileService, IBookService bookService)
         {
+            this.bookService = bookService;
             this.profileService = profileService;
         }
         
@@ -29,6 +32,41 @@ namespace BookMarket.Controllers
         {            
             return View("Index", name);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AboutProfile(string name)
+        {
+            var user = await profileService.GetUser(name);
+
+            IndexProfileViewModel vm = new IndexProfileViewModel()
+            {
+                email = name,
+                user = user
+            };
+
+            return PartialView("ProfileData", vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LastVisitBooks(string name)
+        {
+            // Запрос на книги
+            var query = await bookService.GetLastVisitBook(name);
+
+
+            return PartialView(query);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCommentaries(string name)
+        {
+            // Запрос на комментарии
+            var query = await bookService.GetLastCommentariesUser(name);
+
+            return PartialView("Commentaries", query);
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> LoadAvatar()
@@ -51,7 +89,7 @@ namespace BookMarket.Controllers
             if (!updated)
                 return NotFound();
 
-            return RedirectToAction("Index");
+            return Redirect($"{User.Identity.Name}");
         }
 
         [HttpPost]
@@ -65,8 +103,7 @@ namespace BookMarket.Controllers
                     return null;
             }
 
-
-            return Redirect($"~/Profile/{name}");
+            return Redirect($"{name}");
         }
 
         [HttpPost]
@@ -80,7 +117,7 @@ namespace BookMarket.Controllers
                     var updated = await profileService.UpdateUser(vm);
 
                     if (updated == true)
-                        return Redirect($"~/Profile/{vm.email}");
+                        return Redirect($"{vm.email}");
                 }
             }
 

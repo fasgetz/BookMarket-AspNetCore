@@ -134,7 +134,96 @@
         }
         else
         {
-            <h5>Данные на другого пользователя</h5>
+            <div class="row profile__title">
+                <div class="col-md-3 text-center">
+                    @if (Model.user.ProfileImage != null)
+                    {
+                        <img src="data:image;base64, @System.Convert.ToBase64String(Model.user.ProfileImage)" alt="">
+                    }
+                    else
+                    {
+                        <img src="~/Images/avatar.png" alt="">
+                    }
+                </div>
+                <div class="col-md-9 text-left profile__title__about">
+                    @if (string.IsNullOrEmpty(Model.user.Name) && string.IsNullOrEmpty(Model.user.Family))
+                    {
+                        <h3>@Model.user.Email</h3>
+                    }
+                    else
+                    {
+                        <h3>@Model.user.Name @Model.user.Family</h3>
+                    }
+                    <h4>Здесь вы можете просмотреть данные учетной записи @Model.email</h4>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="form-group col-md">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input disabled asp-for="Name" class="form-control" value="@Model.user.Name" />
+                    </div>
+                    <div class="form-group col-md">
+                        <label asp-for="Family" class="control-label"></label>
+                        <input disabled asp-for="Family" class="form-control" value="@Model.user.Family" />
+                    </div>
+                </div>
+                <div class="row form-group col-md-6 mx-auto">
+                    @{
+                        int dayBirth = Model.user.dateBirth.Day;
+                        int monthBirth = Model.user.dateBirth.Month;
+                        int yearBirth = Model.user.dateBirth.Year;
+                        <div class="col-md">
+                            <label class="control-label">День</label>
+                            <select disabled asp-for="DayBirth" class="form-control">
+                                @for (int i = 1; i <= 31; i++)
+                                {
+                                    if (i == dayBirth)
+                                    {
+                                        <option selected value="@i">@i</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label class="control-label">Месяц</label>
+                            <select disabled asp-for="MonthBirth" class="form-control">
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    if (i == monthBirth)
+                                    {
+                                        <option selected value="@i">@i</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md">
+                            <label class="control-label">Год</label>
+                            <select disabled asp-for="YearBirth" class="form-control">
+                                @for (int i = 2006; i >= 1900; i--)
+                                {
+                                    if (i == yearBirth)
+                                    {
+                                        <option selected value="@i">@i</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
+            </div>
         }
     </div>
 
@@ -146,4 +235,3 @@ else
 {
     <h3 class="text-center">Пользователь @Model.email не найден!</h3>
 }
-

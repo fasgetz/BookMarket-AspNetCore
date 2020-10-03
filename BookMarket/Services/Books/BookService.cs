@@ -50,6 +50,22 @@ namespace BookMarket.Services.Books
             return lastCommentsBooks;
         }
 
+        /// <summary>
+        /// Выборка последних комментариев юзера
+        /// </summary>
+        /// <param name="name">Имя юзера</param>
+        /// <returns>Выборка комментариев юзера</returns>
+        public async Task<IList<Rating>> GetLastCommentariesUser(string name)
+        {
+            var query = await db.Ratings
+                            .Where(i => i.IdUser == name)
+                            .OrderByDescending(i => i.DateCreated)
+                           .Include("BookRating")                           
+                           .ToListAsync();
+
+            return query;
+        }
+
 
         /// <summary>
         /// Выборка последних посещенных книг пользователя
@@ -57,7 +73,7 @@ namespace BookMarket.Services.Books
         /// <param name="idUser">Айди пользователя</param>
         /// <param name="CountBook">Количество книг</param>
         /// <returns>Последние посещенные книги</returns>
-        public async Task<IDictionary<BookViewModel, visitUser>> GetLastVisitBook(string idUser, int CountBook)
+        public async Task<IDictionary<BookViewModel, visitUser>> GetLastVisitBook(string idUser, int CountBook = 0)
         {
             var query = (await db.Book
                 .Include("VisitsBook")
@@ -75,7 +91,7 @@ namespace BookMarket.Services.Books
                     PosterBook = i.PosterBook,
                 }, s => s.VisitsBook.OrderByDescending(i => i.Id).FirstOrDefault()))
                 // Сортируем по дате посещения
-                .OrderByDescending(i => i.Value.DateVisit).Take(CountBook).ToDictionary(pair => pair.Key, pair => pair.Value);
+                .OrderByDescending(i => i.Value.DateVisit).Take(CountBook != 0 ? CountBook : 1000).ToDictionary(pair => pair.Key, pair => pair.Value);
 
 
 

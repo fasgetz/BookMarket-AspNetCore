@@ -1,0 +1,44 @@
+﻿@model IList<Rating>
+
+@foreach (var item in Model)
+{
+    <div class="container commentaryBox">
+        <div class="row text-center commentaryBox_book">
+            <div class="col-12">
+                <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.BookRating.Id" asp-route-name="@item.BookRating.Name">
+                    <h3>@item.BookRating.Name</h3>
+                </a>                
+            </div>
+            <div class="col-12">
+                <img src="data:image;base64, @System.Convert.ToBase64String(item.BookRating.PosterBook)" alt="PosterBook">
+            </div>
+        </div>
+        <div class="row commentaryBox__title">
+            <div class="col-xl-8">
+                <div class="row text-xl-left text-center">
+                    <div class="col-xl-3">
+
+                    </div>
+                    <input type="hidden" name="mark" value="@item.Mark" />
+                    <div class="col-xl rating-result">
+                        @for (int i = 0; i < 10; i++)
+                        {
+                            if (i < item.Mark)
+                            {
+                                <span class="active"></span>
+                            }
+                            else
+                            {
+                                <span></span>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 text-center">@item.DateCreated.ToString("F")</div>
+        </div>
+        <div class="row commentaryBox__text">
+            @item.Comment
+        </div>
+    </div>
+}

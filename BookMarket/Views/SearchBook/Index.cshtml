@@ -67,8 +67,9 @@
                 $.ajax({
                     type: "GET",
                     url: '/SearchBook/LastVisitBooks',
-
-                    data: { },
+                    data: {
+                     name: '@User.Identity.Name'
+                    },
                     success: function (data) {
                         $("#lastVisitBooks").html(data);
                     }

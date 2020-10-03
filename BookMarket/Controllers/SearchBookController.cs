@@ -75,12 +75,12 @@ namespace BookMarket.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LastVisitBooks()
+        public async Task<IActionResult> LastVisitBooks(string name)
         {
             if (User.Identity.IsAuthenticated)
             {
                 // Запрос на книги
-                var query = await bookService.GetLastVisitBook(User.Identity.Name, 5);
+                var query = await bookService.GetLastVisitBook(name, 5);
 
                 return PartialView(query);
             }

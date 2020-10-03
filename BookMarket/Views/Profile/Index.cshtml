@@ -1,5 +1,10 @@
 ﻿@model string;
 
+@{
+    ViewData["Title"] = "Профиль";
+}
+
+
 @section Css {
     <link href="~/css/ProfileUser.css" rel="stylesheet" />
 }
@@ -9,11 +14,11 @@
         <div class="col-md-3">
             <ul class="accordion">
                 <li>
-                    <a asp-action="Index" asp-controller="Profile">
+                    <a class="nav-link disabled" onclick="profileData('@Model')">
                         <div class="link"><i class="fa fa-shield"></i>Личные данные</div>
                     </a>
                 </li>
-                <li>
+                @*<li>
                     <a>
                         <div class="link"><i class="fa fa-book"></i>Избранные книги</div>
                     </a>
@@ -27,30 +32,38 @@
                     <a>
                         <div class="link"><i class="fa fa-pencil"></i>Любимые жанры</div>
                     </a>
-                </li>
+                </li>*@
                 <li>
-                    <a>
+                    <a onclick="getLastVisitBooks('@Model')">
                         <div class="link"><i class="fa fa-eye"></i>Просмотренные</div>
                     </a>
                 </li>
                 <li>
-                    <a>
+                    <a onclick="getCommentary('@Model')">
                         <div class="link"><i class="fa fa-commenting-o"></i>Мои комментарии</div>
                     </a>
                 </li>
             </ul>
         </div>
         <div class="col-md-9 profile__data">
-            @await Component.InvokeAsync("ProfileData", Model)
+            @*@await Component.InvokeAsync("ProfileData", Model)*@
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="~/js/Profile.js"></script>
     <script>
+        $(document).ready(function () {
+            $('.accordion a').on('click', function (e) {
+                $('.accordion a').removeClass("disabled").removeClass("nav-link");
+                $(this).addClass("nav-link").addClass("disabled");
+            });
+
+            profileData('@Model')
+
+        });
                     function sendAvatar() {
-
-
                     var files = document.getElementById('uploadFile').files;
                     if (files.length > 0) {
                         if (window.FormData !== undefined) {
@@ -66,7 +79,7 @@
                                 processData: false,
                                 data: data,
                                 success: function (data) {
-                                    $("#uploadFile").val(null);
+                                    //$("#uploadFile").val(null);
                                     location.reload();
                                 }
                             });

@@ -34,11 +34,144 @@
     color: grey;
 }
 
+/* Блок комментариев */
 
+/* Комментарии */
+.commentaryBox_book a {
+    font-size: 25px;
+    color: blue;
+}
+
+.commentaryBox_book h3 {
+    font-size: 20px;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid grey;
+}
+.commentaryBox_book img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 100%;
+    width: 100px;
+}
+
+.aboutBookBox__myComment {
+    margin-top: 5px;
+    padding: 5px;
+    background: #F6FFF8;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.aboutBookBox__myComment__text p {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    margin: 0px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.aboutBookBox__myComment__btn {
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.aboutBookBox__myComment__date h6 {
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.aboutBookBox__myComment__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
+}
+
+/* Комментарии остальных людей */
+.commentaryBox {
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.commentaryBox__good {
+    background: #cfc;
+}
+
+.commentaryBox__bad {
+    background: #f2f2f2;
+}
+
+.commentaryBox__title {
+    padding-top: 10px;
+    padding-left: 5px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.commentaryBox__text {
+    padding-top: 10px;
+    padding-left: 10px;
+    margin-bottom: 5px;
+}
+
+
+.aboutBookBox {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+}
+
+    .aboutBookBox h3 {
+        margin: 5px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+
+
+/* Рейтинг звезд */
+
+.rating-result {
+    margin: 0 auto;
+}
+
+    .rating-result span {
+        padding: 0;
+        font-size: 20px;
+        line-height: 1;
+        color: lightgrey;
+        text-shadow: 1px 1px #bbb;
+    }
+
+    .rating-result > span:before {
+        content: '★';
+    }
+
+    .rating-result > span.active {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+    }
+
+/* Блок недавно просмотренных книг */
+.LastVisitBook {
+    margin-top: 20px;
+    color: black;
+}
+
+    .LastVisitBook:hover {
+        -moz-box-shadow: 3px 1px 10px #777;
+        -webkit-box-shadow: 3px 1px 10px #777;
+        box-shadow: 3px 1px 10px #777;
+    }
+
+.profile__data .LastVisitBook__Poster img {
+    height: 100%;
+    width: 100px;
+}
 
 
 /* Аккордион меню */
-
 ul {
     list-style-type: none;
     padding: 0;
