@@ -10,17 +10,22 @@ using BookMarket.Models.ViewModels.HomeViewModels;
 using System.Threading.Tasks;
 using BookMarket.Models.ViewModels.SearchBook;
 using BookMarket.Services.Books;
+using BookMarket.Services;
+using BookMarket.Models.UsersIdentity;
 
 namespace BookMarket.Controllers
 {
     public class HomeController : Controller
     {
+
         private readonly IBookService serviceBooks;
+        private readonly IUserService userService;
         private readonly ILogger<HomeController> _logger;
         BookMarketContext context;
 
-        public HomeController(ILogger<HomeController> logger, BookMarketContext context, IBookService serviceBooks)
+        public HomeController(ILogger<HomeController> logger, BookMarketContext context, IBookService serviceBooks, IUserService userService)
         {
+            this.userService = userService;
             _logger = logger;
             this.serviceBooks = serviceBooks;
             this.context = context;
@@ -42,7 +47,8 @@ namespace BookMarket.Controllers
                 .Include("GenresBook")
                 .Take(8)
                 .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList()),
-                lastCommentBooks = await serviceBooks.GetLastCommentaries(4)
+                lastCommentBooks = await serviceBooks.GetLastCommentaries(4),
+                topUsers = await userService.GetTopUsers(20)
             };
    
 

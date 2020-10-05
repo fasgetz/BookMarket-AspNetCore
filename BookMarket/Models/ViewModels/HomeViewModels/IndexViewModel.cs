@@ -29,5 +29,10 @@ namespace BookMarket.Models.ViewModels.HomeViewModels
         /// Последние комментарии книг
         /// </summary>
         public IDictionary<BookViewModel, Rating> lastCommentBooks { get; set; }
+
+        /// <summary>
+        /// Рейтинг пользователей
+        /// </summary>
+        public ICollection<TopUser> topUsers { get; set; }
     }
 }

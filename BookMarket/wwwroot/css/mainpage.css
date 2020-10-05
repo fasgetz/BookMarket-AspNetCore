@@ -138,3 +138,74 @@
     }*/
 
 /* Конец секции жанров */
+
+/* Рейтинг читателей */
+
+/* Рейтинг читателей */
+
+.CommentaryBox__header {
+    font-size: 16px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: rgba(0,0,0,.3);
+}
+
+.CommentaryBox {
+    border-top: 1px solid white;
+}
+
+    .CommentaryBox:last-child {
+        border-bottom: 1px solid white;
+    }
+
+    .CommentaryBox:hover:not(.CommentaryBox__header) {
+        background: #f5f5f5;
+    }
+
+
+
+
+.UsersRating {
+    background: #008cf0;
+    color: white;
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #dddddd;
+}
+
+    .UsersRating a {
+        color: white;
+        text-decoration: none;
+    }
+
+        .UsersRating a:hover {
+            color: black;
+        }
+
+    .UsersRating .commentator_ava img {
+        height: 35px;
+        width: 35px;
+        border-radius: 150px;
+    }
+
+    .UsersRating .commentator__stars span {
+        color: gold;
+        text-shadow: 1px 1px #c60;
+    }
+
+/* Медиа запросы к мобильным устройствам */
+
+@media screen and (max-width: 767.98px) {
+    .CommentaryBox__header {
+        display: none;
+    }
+
+    .UsersRating, .CommentaryBox__header {
+        font-size: 72.5%;
+    }
+
+        .UsersRating .commentator_ava img {
+            height: 30px;
+            width: 30px;
+        }
+}

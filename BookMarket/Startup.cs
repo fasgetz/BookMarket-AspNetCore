@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using System.Threading.Tasks;
 using BookMarket.Models.DataBase;
 using BookMarket.Models.UsersIdentity;
 using BookMarket.Services;
@@ -11,7 +7,6 @@ using BookMarket.Services.Books;
 using BookMarket.Services.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,9 +34,12 @@ namespace BookMarket
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.All);
             });
 
+            // получаем строку подключения из файла конфигурации
+            string userConnect = Configuration.GetConnectionString("UsersIdentityConnection");
+
             // Подключаем контекст работы с пользователями Identity
             services.AddDbContext<UsersContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("UsersIdentityConnection")));
+                options.UseSqlServer(userConnect));
 
 
 
