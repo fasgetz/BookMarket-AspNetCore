@@ -1,0 +1,66 @@
+/* Автор */
+.AboutAuthor h3 {
+    margin-top: 15px;
+}
+
+
+/* Секция карточки bookResult */
+
+.row.bg-white:hover {
+    -moz-box-shadow: 3px 1px 10px #777;
+    -webkit-box-shadow: 3px 1px 10px #777;
+    box-shadow: 3px 1px 10px #777;
+}
+
+.bookResult .container {
+    margin: 20px;
+}
+
+.bookResult {
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    color: black;
+}
+
+    .bookResult h3 {
+        font-size: 18px;
+    }
+
+.bookResult__Poster img {
+    height: 200px;
+    width: 135px
+}
+
+.bookResult__about h5 {
+    font-weight: bold;
+}
+
+.bookResult__about h5, .bookResult__about h6 {
+    font-size: 18px;
+}
+
+.bookResult__about .about__rating span {
+    font-size: 20px;
+    color: gold;
+    text-shadow: 1px 1px #c60;
+}
+
+.bookResult__about dt::after {
+    content: ":"
+}
+
+.bookResult__text {
+    border-radius: 5px;
+    background-color: rgba(0,0,0,.1);
+    border: 1px solid #dddddd;
+    margin-top: 20px;
+}
+
+.bookResult__buttons a {
+    margin-top: 10px;
+}
+
+
+.searchBook .bookResult {
+    margin-bottom: 20px;
+}

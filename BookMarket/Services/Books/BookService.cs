@@ -89,7 +89,10 @@ namespace BookMarket.Services.Books
                     CategoryName = i.IdCategoryNavigation.Name,
                     IdAuthor = (int)i.IdAuthor,
                     PosterBook = i.PosterBook,
-                }, s => s.VisitsBook.OrderByDescending(i => i.Id).FirstOrDefault()))
+                }, s => s.VisitsBook
+                .OrderByDescending(i => i.Id)
+                .Where(i => i.IdUser == idUser)
+                .FirstOrDefault()))
                 // Сортируем по дате посещения
                 .OrderByDescending(i => i.Value.DateVisit).Take(CountBook != 0 ? CountBook : 1000).ToDictionary(pair => pair.Key, pair => pair.Value);
 

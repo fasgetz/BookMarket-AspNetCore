@@ -99,10 +99,18 @@ namespace BookMarket
                 );
 
                 endpoints.MapControllerRoute(
+                    name: "AuthorsRoute",
+                    pattern: "Author/{id}/{name}",
+                    defaults: new { controller = "Authors", action = "Details" }
+                );
+
+                endpoints.MapControllerRoute(
                     name: "Genres",
                     pattern: "SearchBook/{name}",
                     defaults: new { controller = "SearchBook", action = "Index" }
                 );
+
+
 
                 endpoints.MapControllerRoute(
                     name: "profileMap",

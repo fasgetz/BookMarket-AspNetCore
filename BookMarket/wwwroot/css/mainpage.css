@@ -196,12 +196,26 @@
 /* Медиа запросы к мобильным устройствам */
 
 @media screen and (max-width: 767.98px) {
+
+    .searchBook-input {
+        margin-top: 35px;
+    }
+    html, body {
+        font-size: 80%;
+    }
+
+    /* Блок рейтинга пользователей */
+
     .CommentaryBox__header {
         display: none;
     }
 
-    .UsersRating, .CommentaryBox__header {
+    .UsersRating, .CommentaryBox__header, .genresBlock {
         font-size: 72.5%;
+    }
+
+    .genresBlock h5 {
+        font-size: 14px;
     }
 
         .UsersRating .commentator_ava img {

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookMarket.Models.DataBase;
+using Microsoft.AspNetCore.Authorization;
+using BookMarket.Models.ViewModels.Authors;
+using BookMarket.Models.ViewModels.SearchBook;
 
 namespace BookMarket.Controllers
 {
@@ -19,6 +22,7 @@ namespace BookMarket.Controllers
         }
 
         // GET: Authors
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Author.ToListAsync());
@@ -39,10 +43,34 @@ namespace BookMarket.Controllers
                 return NotFound();
             }
 
-            return View(author);
+            DetailViewModel vm = new DetailViewModel()
+            {
+                author = author,
+                books = await _context.Book
+                .OrderByDescending(i => i.AddDatabase)
+                // Фильтруем по ключевому слову
+                .Where(i => i.IdAuthor == (int)id)
+                .Select(i =>
+                new BookViewModel
+                {
+                    Id = i.Id,
+                    AddDatabase = i.AddDatabase,
+                    CategoryName = i.IdCategoryNavigation.Name,
+                    Name = i.Name,
+                    IdAuthor = (int)i.IdAuthor,
+                    AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+                    Description = i.Description,
+                    PosterBook = i.PosterBook,
+                    RatingBook = i.UserRating.Average(i => i.Mark)
+                })
+                .ToListAsync()
+            };
+
+            return View(vm);
         }
 
         // GET: Authors/Create
+        [Authorize(Roles = "Администратор")]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +81,7 @@ namespace BookMarket.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Create([Bind("Id,Name,Family,Surname,DateBirth")] Author author)
         {
             if (ModelState.IsValid)
@@ -65,6 +94,7 @@ namespace BookMarket.Controllers
         }
 
         // GET: Authors/Edit/5
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,6 +115,7 @@ namespace BookMarket.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Family,Surname,DateBirth")] Author author)
         {
             if (id != author.Id)
@@ -116,6 +147,7 @@ namespace BookMarket.Controllers
         }
 
         // GET: Authors/Delete/5
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,6 +168,7 @@ namespace BookMarket.Controllers
         // POST: Authors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var author = await _context.Author.FindAsync(id);

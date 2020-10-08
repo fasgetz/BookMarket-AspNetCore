@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Html;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookMarket.Extensions
 {
+
+
     public static class StringExtensions
     {
         /// <summary>
@@ -16,6 +14,11 @@ namespace BookMarket.Extensions
         public static HtmlString ToHtmlString(this string value)
         {
             return new HtmlString(value);
+        }
+
+        public static string ToTranslit(this string value)
+        {
+            return Transliteration.Front(value);
         }
     }
 }

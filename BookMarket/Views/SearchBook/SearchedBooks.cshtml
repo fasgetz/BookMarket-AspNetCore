@@ -73,17 +73,19 @@ else
             <div class="container">
                 <div class="row">
                     <div class="col-lg-3 text-center bookResult__Poster">
-                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name.ToTranslit()">
                             <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" alt="PosterBook" />
                         </a>
                     </div>
                     <div class="col-lg-7 bookResult__about">
-                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                        <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name.ToTranslit()">
                             <h3 class="text-center">@item.Name</h3>
                         </a>
                         <div class="row">
                             <h5 class="col-xl-5 text-center text-xl-left">Автор</h5>
-                            <h6 class="col-xl text-center text-xl-left">@item.AuthorNameFamily</h6>
+                            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor" asp-route-name="@item.AuthorNameFamily.ToTranslit()">
+                                <h6 class="col-xl text-center text-xl-left">@item.AuthorNameFamily</h6>
+                            </a>
                         </div>
                         <div class="row">
                             <h5 class="col-xl-5 text-center text-xl-left">Жанр</h5>
@@ -93,7 +95,7 @@ else
                             @if (item.RatingBook != 0)
                             {
                                 <h5 class="col-xl-5 text-center text-xl-left">Рейтинг</h5>
-                                <h6 class="col-xl text-center text-xl-left about__rating">@item.RatingBook <span>★</span></h6>
+                                <h6 class="col-xl text-center text-xl-left about__rating">@item.RatingBook.ToString("0.00") <span>★</span></h6>
                             }
                             else
                             {
@@ -111,7 +113,7 @@ else
                             <a class="mybtn btn btn-primary" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@item.Id">
                                 Читать <i class="fa fa-search"></i>
                             </a>
-                            <a class="mybtn btn btn-primary" asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                            <a class="mybtn btn btn-primary" asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name.ToTranslit()">
                                 О книге <i class="fa fa-search"></i>
                             </a>
                         </div>
