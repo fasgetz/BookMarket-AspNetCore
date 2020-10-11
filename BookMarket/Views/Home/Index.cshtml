@@ -206,6 +206,60 @@
         }
 
     </section>
+    <section class="UsersRating text-center container-fluid px-0 mx-0">
+        <h3 class="text-center">Новые пользователи</h3>
+        <div class="CommentaryBox CommentaryBox__header container">
+            <div class="row commentator align-items-center">
+                <div class="col-2 commentator_number">
+                    №
+                </div>
+                <div class="col-6 commentator_data">
+                    Пользователь
+                </div>
+                <div class="col-4">
+                    Дата регистрации
+                </div>
+            </div>
+        </div>
+        @{
+            count = 1;
+            @foreach (var item in Model.NewUsers)
+            {
+                <div class="CommentaryBox container">
+                    <a asp-controller="Profile" asp-action="Index" asp-route-name="@item.Name">
+                        <div class="row commentator align-items-center">
+                            <div class="col-2 col-md-2 px-0 commentator_ava text-center">
+                                @(count++)
+                            </div>
+                            <div class="col-6 col-md-6 commentator_ava">
+                                <div class="container mx-0 px-0">
+                                    <div class="row align-items-center  ">
+                                        <div class="col-3 px-0">
+                                            @if (item.Ava != null)
+                                            {
+                                                <img src="data:image;base64, @System.Convert.ToBase64String(item.Ava)" alt="avatar">
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Images/avatar.png" alt="avatar">
+                                            }
+                                        </div>
+                                        <div class="col px-0">
+                                            @item.Name
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 px-0 commentator_ava text-center">
+                                @item.dateRegistration.ToString("F")
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+
+    </section>
 </section>
 
 

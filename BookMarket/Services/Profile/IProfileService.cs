@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.UsersIdentity;
+using BookMarket.Models.ViewModels.HomeViewModels;
 using BookMarket.Models.ViewModels.Profile;
 using System;
 using System.Collections.Generic;
@@ -38,5 +39,8 @@ namespace BookMarket.Services.Profile
         /// <param name="vm">Юзер модель</param>
         /// <returns>true, если обновилось</returns>
         Task<bool> UpdateUser(IndexProfileViewModel vm);
+
+
+
     }
 }

@@ -1,3 +1,6 @@
+
+
+
 /* Секция авторизации */
 .auth__div {
     height: 44px;
@@ -141,8 +144,13 @@
 
 /* Рейтинг читателей */
 
-/* Рейтинг читателей */
 
+.UsersRating:last-child {
+    margin-top: 20px;
+}
+
+
+/* Рейтинг читателей */
 .CommentaryBox__header {
     font-size: 16px;
     padding-top: 3px;

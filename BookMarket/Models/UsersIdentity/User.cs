@@ -9,10 +9,17 @@ namespace BookMarket.Models.UsersIdentity
     public class User : IdentityUser
     {
         public DateTime dateBirth { get; set; }
+
+        public DateTime dateRegistration { get; set; }
         
         public byte[] ProfileImage { get; set; }
 
         public string Name { get; set; }
         public string Family { get; set; }
+
+        public User()
+        {
+            dateRegistration = DateTime.Now;
+        }
     }
 }

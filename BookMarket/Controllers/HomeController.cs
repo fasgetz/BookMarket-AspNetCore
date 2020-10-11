@@ -48,7 +48,8 @@ namespace BookMarket.Controllers
                 .Take(8)
                 .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList()),
                 lastCommentBooks = await serviceBooks.GetLastCommentaries(4),
-                topUsers = await userService.GetTopUsers(20)
+                topUsers = await userService.GetTopUsers(10),
+                NewUsers = await userService.GetNewUsers(10)
             };
    
 

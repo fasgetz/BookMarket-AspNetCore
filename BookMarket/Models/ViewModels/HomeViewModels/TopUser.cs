@@ -15,6 +15,7 @@ namespace BookMarket.Models.ViewModels.HomeViewModels
         public byte[] Ava { get; set; }
         public int TotalComments { get; set; }
         public double AvgRating { get; set; }
+        public DateTime dateRegistration { get; set; }
 
     }
 }

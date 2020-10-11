@@ -17,5 +17,13 @@ namespace BookMarket.Services
         /// <param name="count">Количество пользователей</param>
         /// <returns>Список пользователей</returns>
         Task<IList<TopUser>> GetTopUsers(int count);
+
+        /// <summary>
+        /// Получить список новых зарегистрированных пользователей
+        /// </summary>
+        /// <param name="count">Количество пользователей</param>
+        /// <returns>Список пользователей</returns>
+        Task<IList<TopUser>> GetNewUsers(int count);
+
     }
 }

@@ -34,5 +34,11 @@ namespace BookMarket.Models.ViewModels.HomeViewModels
         /// Рейтинг пользователей
         /// </summary>
         public ICollection<TopUser> topUsers { get; set; }
+
+
+        /// <summary>
+        /// Новые пользователи
+        /// </summary>
+        public ICollection<TopUser> NewUsers { get; set; }
     }
 }

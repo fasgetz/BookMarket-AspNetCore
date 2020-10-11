@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.UsersIdentity;
+using BookMarket.Models.ViewModels.HomeViewModels;
 using BookMarket.Models.ViewModels.Profile;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -107,5 +108,8 @@ namespace BookMarket.Services.Profile
 
             return true;
         }
+
+
+
     }
 }
