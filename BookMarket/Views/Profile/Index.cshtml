@@ -11,28 +11,33 @@
 
 <div class="container profile">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-xl-3">
             <ul class="accordion">
                 <li>
                     <a class="nav-link disabled" onclick="profileData('@Model')">
                         <div class="link"><i class="fa fa-shield"></i>Личные данные</div>
                     </a>
                 </li>
-                @*<li>
-                    <a>
+                <li>
+                    <a onclick="FavoriteBooksUser('@Model')">
                         <div class="link"><i class="fa fa-book"></i>Избранные книги</div>
                     </a>
                 </li>
-                <li>
-                    <a>
-                        <div class="link"><i class="fa fa-user"></i>Любимые авторы</div>
-                    </a>
-                </li>
-                <li>
-                    <a>
-                        <div class="link"><i class="fa fa-pencil"></i>Любимые жанры</div>
-                    </a>
-                </li>*@
+                @*<li>
+            <a>
+                <div class="link"><i class="fa fa-book"></i>Избранные книги</div>
+            </a>
+        </li>
+        <li>
+            <a>
+                <div class="link"><i class="fa fa-user"></i>Любимые авторы</div>
+            </a>
+        </li>
+        <li>
+            <a>
+                <div class="link"><i class="fa fa-pencil"></i>Любимые жанры</div>
+            </a>
+        </li>*@
                 <li>
                     <a onclick="getLastVisitBooks('@Model')">
                         <div class="link"><i class="fa fa-eye"></i>Просмотренные</div>
@@ -45,7 +50,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-9 profile__data">
+        <div class="col-xl-9 profile__data">
             @*@await Component.InvokeAsync("ProfileData", Model)*@
         </div>
     </div>

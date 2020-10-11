@@ -35,6 +35,7 @@ namespace BookMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+
             IndexViewModel vm = new IndexViewModel()
             {
                 topBooks = await context.Book

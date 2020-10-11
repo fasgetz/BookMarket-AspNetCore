@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
+using System.Linq;
 
 namespace BookMarket.Extensions
 {
@@ -19,6 +20,11 @@ namespace BookMarket.Extensions
         public static string ToTranslit(this string value)
         {
             return Transliteration.Front(value);
+        }
+
+        public static string GetCountWords(this string value, int countWords)
+        {
+            return string.Join(' ', value.Split(' ').Take(countWords));
         }
     }
 }

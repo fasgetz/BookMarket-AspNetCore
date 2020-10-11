@@ -1,4 +1,5 @@
 ﻿using System;
+using BookMarket.Models.DataBase.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -80,7 +81,7 @@ namespace BookMarket.Models.DataBase
         }
 
 
-        //public virtual DbSet<FavoriteUserBook> FavireUserBooks { get; set; }
+        public virtual DbSet<FavoriteUserBook> FavoriteUserBook { get; set; }
         public virtual DbSet<visitUser> UsersVisit { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<CategoryGenre> GenreCategory { get; set; }
@@ -88,6 +89,10 @@ namespace BookMarket.Models.DataBase
         public virtual DbSet<Book> Book { get; set; }
         public virtual DbSet<GenreBook> GenreBooks { get; set; }
         public virtual DbSet<ChapterBook> ChapterBook { get; set; }
+
+
+        // Тест view
+        //public virtual DbSet<FavoriteUserBooksView> testView { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -100,6 +105,15 @@ namespace BookMarket.Models.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            // View in DB
+            //modelBuilder.Entity<FavoriteUserBooksView>(eb =>
+            //{
+            //    eb.HasNoKey();
+            //    eb.ToView("test");
+
+            //});
+
             modelBuilder.Entity<Author>(entity =>
             {
                 entity.Property(e => e.DateBirth).HasColumnType("date");

@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.Profile;
 using BookMarket.Models.ViewModels.SearchBook;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +17,28 @@ namespace BookMarket.Services.Books
         {
             this.db = db;
         }
+
+        public async Task<List<FavoriteBook>> GetFavoritesBooks(string userName)
+        {
+            var favoritesBooks = await db
+                .FavoriteUserBook
+                .Where(i => i.UserId == userName)
+                .Include("BookFavorite.IdAuthorNavigation")
+                .Select(i => new FavoriteBook
+                { 
+                    BookName = i.BookFavorite.Name,
+                    Author = i.BookFavorite.IdAuthorNavigation.NameFamily,
+                    PosterBook = i.BookFavorite.PosterBook,
+                    IdBook = i.IdBookFavorite,
+                    Id = i.Id,
+                    IdAuthor = (int)i.BookFavorite.IdAuthor,
+                    DescriptionBook = i.BookFavorite.Description                    
+                })
+                .ToListAsync();
+
+            return favoritesBooks;
+        }
+
 
 
         /// <summary>

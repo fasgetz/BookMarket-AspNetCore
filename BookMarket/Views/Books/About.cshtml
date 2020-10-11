@@ -25,6 +25,29 @@
                 <a class="btn btn-success" asp-action="GetBook" asp-controller="Books" asp-route-idBook="@Model.book.Id">
                     <span class="fa fa-book"></span> Читать книгу
                 </a>
+                <div class="favoriteBook">
+                    @if (!Model.canAddToFavorite)
+                    {
+                        <form asp-action="AddBookToFavorite" asp-controller="Books" method="post">
+                            <div class="form-group description">
+                                <input type="hidden" name="id" value="@Model.book.Id" />
+                                <input type="hidden" name="addFavorite" value="false" />
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-star-o"></i> Добавить в избранное</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <form asp-action="AddBookToFavorite" asp-controller="Books" method="post">
+                            <div class="form-group description">
+                                <input type="hidden" name="id" value="@Model.book.Id" />
+                                <input type="hidden" name="addFavorite" value="true" />
+                                <button class="btn btn-remove" type="submit"><i class="fa fa-star-o"></i> Убрать из избранного</button>
+                            </div>
+                        </form>
+                    }
+                </div>
+
             </div>
         </div>
     </div>

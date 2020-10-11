@@ -1,0 +1,22 @@
+﻿@model IList<BookMarket.Models.ViewModels.Profile.FavoriteBook>
+
+
+@foreach (var item in Model)
+{
+    <div class="container favoriteBooks">
+        <div class="row text-center">
+            <div class="col-xl-3">
+                <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" alt="PosterBook">
+            </div>
+            <div class="col-xl-9">
+                <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.IdBook" asp-route-name="@item.BookName.ToTranslit()">
+                    <h3 class="favoriteBooks__bookName">@item.BookName</h3>
+                </a>
+                <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor" asp-route-name="@item.Author.ToTranslit()">
+                    <h4 class="favoriteBooks__author">@item.Author</h4>
+                </a>                
+                <p class="favoriteBooks__description">@item.DescriptionBook.GetCountWords(50) ...</p>
+            </div>
+        </div>
+    </div>
+}

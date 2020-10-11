@@ -23,14 +23,23 @@ namespace BookMarket.Controllers
         public ProfileController(IProfileService profileService, IBookService bookService)
         {
             this.bookService = bookService;
-            this.profileService = profileService;
+            this.profileService = profileService;            
         }
         
 
         [HttpGet]
         public IActionResult Index(string name)
-        {            
+        {
             return View("Index", name);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> FavoriteBooksUser(string name)
+        {
+            var data = await bookService.GetFavoritesBooks(name);
+
+            return PartialView("FavoriteBooksUser", data);
         }
 
         [HttpGet]
@@ -55,6 +64,16 @@ namespace BookMarket.Controllers
 
 
             return PartialView(query);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFavoriteBooks(string UserName)
+        {
+            // Запрос на книги
+            //var query = await bookService.GetLastVisitBook(name);
+
+
+            return PartialView();
         }
 
         [HttpGet]

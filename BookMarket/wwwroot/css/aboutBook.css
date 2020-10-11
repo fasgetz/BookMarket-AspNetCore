@@ -1,5 +1,18 @@
 /* Страница AboutBook */
 
+.favoriteBook .btn {
+    margin-top: 10px;
+    background: #fbbe04;
+}
+
+.favoriteBook .btn-remove {
+    background: #2796d3
+}
+
+.favoriteBook .btn-remove:hover {
+    color: white;
+}
+
 .book-view__info__h3rating {
     font-weight: bold;
 }

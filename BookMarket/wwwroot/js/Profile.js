@@ -14,6 +14,22 @@ function profileData(name) {
     });
 }
 
+function FavoriteBooksUser(name) {
+    $.ajax({
+        type: "GET",
+        url: '/Profile/FavoriteBooksUser',
+
+        data: {
+            name: name
+        },
+
+        success: function (data) {
+
+            $(".profile__data").html(data);
+        }
+    });
+}
+
 
 function getLastVisitBooks(name) {
     $.ajax({

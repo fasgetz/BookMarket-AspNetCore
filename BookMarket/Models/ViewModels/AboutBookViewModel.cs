@@ -14,5 +14,10 @@ namespace BookMarket.Models.ViewModels
         public Rating MyComment { get; set; }
 
         public double RatingBook { get; set; }
+
+        /// <summary>
+        /// Возможность добавления в избранные
+        /// </summary>
+        public bool canAddToFavorite { get; set; }
     }
 }

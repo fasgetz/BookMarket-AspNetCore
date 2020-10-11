@@ -1,5 +1,29 @@
 /* Профиль */
 
+/* Избранные книги */
+
+.favoriteBooks {
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.favoriteBooks h3 {
+    font-size: 20px;
+    color: blue;
+}
+
+.favoriteBooks h4 {
+        font-size: 16px;
+        color: blue;
+}
+
+.favoriteBooks img {
+    margin-top: 5px;
+    height: 170px;
+    width: 120px;
+}
+/* ----------- */
 .profile {
     margin-top: 10px;
 }

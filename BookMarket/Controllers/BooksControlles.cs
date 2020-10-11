@@ -184,9 +184,15 @@ namespace BookMarket.Controllers
             if (vm.RatingsBook.Count != 0)
                 vm.RatingBook = vm.RatingsBook.Average(i => i.Mark);
 
-            // Если юзер авторизован, то узнать возможность комментирования
+            // Если юзер авторизован, то узнать возможность комментирования и добавления книги в избранное
             if (User.Identity.IsAuthenticated)
             {
+                // Получаем возможность комментирования
+                vm.canAddToFavorite =
+                    await context
+                    .FavoriteUserBook
+                    .FirstOrDefaultAsync(i => i.UserId == User.Identity.Name && i.IdBookFavorite == (int)id) != null ? true : false;
+
                 // Получаем комментарий
                 vm.MyComment = await context.Ratings
                     .FirstOrDefaultAsync(i => i.IdBook == id && i.IdUser == User.Identity.Name);
@@ -210,6 +216,31 @@ namespace BookMarket.Controllers
         }
 
 
+        [HttpPost]
+        public IActionResult AddBookToFavorite(int? id, bool addFavorite)
+        {
+            // Если пользователь авторизован
+            if (User.Identity.IsAuthenticated)
+            {
+                // Если добавлена в избранное, то убрать
+                if (addFavorite)
+                {
+                    var favorite = context.FavoriteUserBook.FirstOrDefault(i => i.IdBookFavorite == (int)id && i.UserId == User.Identity.Name);
+
+                    context.FavoriteUserBook.Remove(favorite);
+                }
+                // Иначе добавить в избранное
+                else
+                {
+                    context.FavoriteUserBook.Add(new FavoriteUserBook() { IdBookFavorite = (int)id, UserId = User.Identity.Name });
+                    
+                }
+
+                context.SaveChanges();
+            }
+
+            return Redirect($"~/Books/AboutBook?id={id}");
+        }
 
         [HttpGet]
         public IActionResult GetDataBook(int idBook, int page)

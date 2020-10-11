@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.Profile;
 using BookMarket.Models.ViewModels.SearchBook;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,8 @@ namespace BookMarket.Services.Books
 {
     public interface IBookService
     {
+
+        Task<List<FavoriteBook>> GetFavoritesBooks(string userName);
 
         /// <summary>
         /// Выборка последних посещенных книг пользователя
