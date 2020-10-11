@@ -11,6 +11,7 @@ namespace BookMarket.Models.DataBase
             ChapterBook = new HashSet<ChapterBook>();
             VisitsBook = new HashSet<visitUser>();
             UserRating = new HashSet<Rating>();
+            BookFavorites = new HashSet<FavoriteUserBook>();
         }
 
         public int Id { get; set; }
@@ -32,5 +33,10 @@ namespace BookMarket.Models.DataBase
 
         // Посещения книги пользователями
         public virtual ICollection<visitUser> VisitsBook { get; set; }
+
+        /// <summary>
+        /// Фавориты книги
+        /// </summary>
+        public virtual ICollection<FavoriteUserBook> BookFavorites { get; set; }
     }
 }

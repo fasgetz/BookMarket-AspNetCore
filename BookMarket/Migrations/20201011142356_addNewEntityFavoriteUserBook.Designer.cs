@@ -4,14 +4,16 @@ using BookMarket.Models.DataBase;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookMarket.Migrations
 {
     [DbContext(typeof(BookMarketContext))]
-    partial class BookMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20201011142356_addNewEntityFavoriteUserBook")]
+    partial class addNewEntityFavoriteUserBook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,26 +129,6 @@ namespace BookMarket.Migrations
                     b.ToTable("ChapterBook");
                 });
 
-            modelBuilder.Entity("BookMarket.Models.DataBase.FavoriteUserBook", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("IdBookFavorite")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdBookFavorite");
-
-                    b.ToTable("FavoriteUserBook");
-                });
-
             modelBuilder.Entity("BookMarket.Models.DataBase.GenreBook", b =>
                 {
                     b.Property<int>("Id")
@@ -242,16 +224,6 @@ namespace BookMarket.Migrations
                         .HasForeignKey("IdBook")
                         .HasConstraintName("FK_ChapterBook_Book")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("BookMarket.Models.DataBase.FavoriteUserBook", b =>
-                {
-                    b.HasOne("BookMarket.Models.DataBase.Book", "BookFavorite")
-                        .WithMany("BookFavorites")
-                        .HasForeignKey("IdBookFavorite")
-                        .HasConstraintName("FK_UserFavoriteBook")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BookMarket.Models.DataBase.GenreBook", b =>

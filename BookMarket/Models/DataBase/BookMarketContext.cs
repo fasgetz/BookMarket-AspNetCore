@@ -7,6 +7,17 @@ namespace BookMarket.Models.DataBase
 {
     #region Конфигурации
 
+    public class FavoriteUserBookConfiguration : IEntityTypeConfiguration<FavoriteUserBook>
+    {
+        public void Configure(EntityTypeBuilder<FavoriteUserBook> builder)
+        {
+            builder.HasOne(d => d.BookFavorite)
+                .WithMany(p => p.BookFavorites)
+                .HasForeignKey(d => d.IdBookFavorite)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_UserFavoriteBook");
+        }
+    }
 
     public class VisitBookConfiguration : IEntityTypeConfiguration<visitUser>
     {
@@ -69,6 +80,7 @@ namespace BookMarket.Models.DataBase
         }
 
 
+        //public virtual DbSet<FavoriteUserBook> FavireUserBooks { get; set; }
         public virtual DbSet<visitUser> UsersVisit { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<CategoryGenre> GenreCategory { get; set; }
@@ -131,6 +143,7 @@ namespace BookMarket.Models.DataBase
             modelBuilder.ApplyConfiguration(new GenreBookConfiguration());
             modelBuilder.ApplyConfiguration(new RatingBookConfiguration());
             modelBuilder.ApplyConfiguration(new VisitBookConfiguration());
+            modelBuilder.ApplyConfiguration(new FavoriteUserBookConfiguration());
 
             modelBuilder.Entity<ChapterBook>(entity =>
             {
