@@ -57,13 +57,16 @@
 
 /* Карточка Book */
 
+.bookData__name h3, .bookData_author h4 {
+    font-size: 16px;
+}
 
 .bookData__image img {
-  height: 220px;
-  width: 140px;
-  -o-object-fit: cover;
-   object-fit: cover;
-   object-position: center;
+    height: 220px;
+    width: 140px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    object-position: center;
 }
 
 .bookData .bookData__name {

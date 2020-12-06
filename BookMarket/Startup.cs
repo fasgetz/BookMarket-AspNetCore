@@ -46,8 +46,7 @@ namespace BookMarket
             services.AddIdentity<User, IdentityRole>(i => 
             {
                 i.Password.RequireNonAlphanumeric = false;
-            })
-                .AddEntityFrameworkStores<UsersContext>();
+            }).AddEntityFrameworkStores<UsersContext>();
 
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");

@@ -25,7 +25,15 @@ namespace BookMarket.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+                
         }
 
         [HttpPost]
@@ -37,7 +45,8 @@ namespace BookMarket.Controllers
                 {
                     Email = vm.Email,
                     UserName = vm.Email,
-                    dateBirth = vm.DateBirth
+                    dateBirth = vm.DateBirth,
+                    dateRegistration = DateTime.Now
                 };
 
                 var result = await _userManager.CreateAsync(user, vm.Password);
@@ -69,8 +78,16 @@ namespace BookMarket.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
-            string url = Request.Headers["Referer"].ToString();
-            return View(new LoginUserViewModel { ReturnUrl = url });
+            if (!User.Identity.IsAuthenticated)
+            {
+                string url = Request.Headers["Referer"].ToString();
+                return View(new LoginUserViewModel { ReturnUrl = url });
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
         }
 
         [HttpPost]

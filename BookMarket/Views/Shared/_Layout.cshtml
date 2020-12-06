@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Книги - @ViewData["Title"]</title>
+    <title>market-books - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="~/css/mainpage.css" rel="stylesheet" />
@@ -14,7 +14,7 @@
     <header>
         <nav class="menu navbar navbar-expand-md navbar-toggleable-md navbar-light  box-shadow mb-1">
             <div class="container">
-                <a class="navbar-brand text-light" asp-controller="Home" asp-action="Index">BookMarket</a>
+                <a class="navbar-brand text-light" asp-controller="Home" asp-action="Index">market-books</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -26,6 +26,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="SearchBook" asp-action="Index" asp-route-RatingOrdered="true" method="get">Рейтинг книг</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Home" asp-action="Privacy">Проект</a>
                         </li>
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Администратор"))
                         {
@@ -84,9 +87,9 @@
     <footer class="border-top footer">
         <div class="container">
             <div class="row">
-                <div class="col text-center">
+                <div class="col-12 text-center">
                     <a asp-area="" asp-controller="Home" asp-action="Privacy">
-                        &copy; 2020 - BookMarket - Privacy
+                        &copy; 2020 - market-books
                     </a>
                 </div>
             </div>
