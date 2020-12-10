@@ -16,6 +16,7 @@ using Microsoft.Extensions.WebEncoders;
 
 namespace BookMarket
 {
+    //
     public class Startup
     {
         public Startup(IConfiguration configuration)
