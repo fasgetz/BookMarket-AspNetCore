@@ -1,7 +1,9 @@
 ﻿using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.HomeViewModels;
 using BookMarket.Models.ViewModels.Profile;
 using BookMarket.Models.ViewModels.SearchBook;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,12 @@ namespace BookMarket.Services.Books
     public class BookService : IBookService
     {
         BookMarketContext db;
+        private IMemoryCache cache;
 
-        public BookService(BookMarketContext db)
+        public BookService(BookMarketContext db, IMemoryCache memoryCache)
         {
             this.db = db;
+            cache = memoryCache;
         }
 
         public async Task<List<FavoriteBook>> GetFavoritesBooks(string userName)
@@ -48,8 +52,9 @@ namespace BookMarket.Services.Books
         /// <returns>Выборка последних комментариев</returns>
         public async Task<IDictionary<BookViewModel, Rating>> GetLastCommentaries(int CountCommentary)
         {
-            // Выборка последних 4-х комментариев книгам
-            var lastCommentsBooks = (await db.Book
+            Dictionary<BookViewModel, Rating> lastComments = null;
+
+            lastComments = (await db.Book
                 .Where(i => i.UserRating.Count() != 0)
                 .Include("UserRating")
                 .Include("IdAuthorNavigation")
@@ -65,12 +70,67 @@ namespace BookMarket.Services.Books
                     PosterBook = i.PosterBook,
                     RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
                 },
-                s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
-                // Сортируем по дате посещения
+                s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()));
 
-                .OrderByDescending(i => i.Value.Id).Take(4).ToDictionary(pair => pair.Key, pair => pair.Value);
+            //var haveCashed = cache.TryGetValue("lastCommentsBook", out lastComments);
 
-            return lastCommentsBooks;
+            //// Если есть в кеше, то выгрузи
+            //if (haveCashed == false)
+            //{
+            //    // Иначе загрузить
+            //    lastComments = (await db.Book
+            //    .Where(i => i.UserRating.Count() != 0)
+            //    .Include("UserRating")
+            //    .Include("IdAuthorNavigation")
+            //    .Include("IdCategoryNavigation")
+            //    .ToDictionaryAsync(i =>
+            //    new BookViewModel
+            //    {
+            //        Id = i.Id,
+            //        Name = i.Name,
+            //        AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+            //        CategoryName = i.IdCategoryNavigation.Name,
+            //        IdAuthor = (int)i.IdAuthor,
+            //        PosterBook = i.PosterBook,
+            //        RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
+            //    },
+            //    s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
+            //    // Сортируем по дате посещения
+
+            //    .OrderByDescending(i => i.Value.Id).Take(4).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            //    // Записать в кеш
+            //    if (lastComments != null)
+            //    {
+            //        cache.Set("lastCommentsBook", lastComments,
+            //        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1 * 60 * 24)));
+            //    }
+            //}
+
+
+            //// Выборка последних 4-х комментариев книгам
+            //var lastCommentsBooks = (await db.Book
+            //    .Where(i => i.UserRating.Count() != 0)
+            //    .Include("UserRating")
+            //    .Include("IdAuthorNavigation")
+            //    .Include("IdCategoryNavigation")
+            //    .ToDictionaryAsync(i =>
+            //    new BookViewModel
+            //    {
+            //        Id = i.Id,
+            //        Name = i.Name,
+            //        AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+            //        CategoryName = i.IdCategoryNavigation.Name,
+            //        IdAuthor = (int)i.IdAuthor,
+            //        PosterBook = i.PosterBook,
+            //        RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
+            //    },
+            //    s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
+            //    // Сортируем по дате посещения
+
+            //    .OrderByDescending(i => i.Value.Id).Take(4).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            return lastComments;
         }
 
         /// <summary>
@@ -122,6 +182,44 @@ namespace BookMarket.Services.Books
 
 
             return query;
+        }
+
+
+        /// <summary>
+        /// Получить новые книги
+        /// </summary>
+        /// <param name="count">количество новых книг</param>
+        /// <returns>Новые книги</returns>
+        public async Task<List<IndexBook>> GetNewsBooks(int count)
+        {
+            List<IndexBook> newsBook = null;
+
+            
+            newsBook = await db.Book
+            .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+            .OrderByDescending(i => i.Id).Take(4).ToListAsync();
+
+
+            //// Иначе загрузить
+            //var haveCashed = cache.TryGetValue("newsBook", out newsBook);
+            //// Если есть в кеше, то выгрузи
+            //if (haveCashed == false)
+            //{
+            //    // Иначе загрузить
+            //    newsBook = await db.Book
+            //    .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+            //    .OrderByDescending(i => i.Id).Take(4).ToListAsync();
+
+            //    // Записать в кеш
+            //    if (newsBook != null)
+            //    {
+            //        cache.Set("newsBook", newsBook,
+            //        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1*60*24)));
+            //    }
+            //}
+
+
+            return newsBook;
         }
     }
 }

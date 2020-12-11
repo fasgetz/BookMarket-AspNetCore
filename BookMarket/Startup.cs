@@ -1,4 +1,6 @@
+using System;
 using System.IO.Compression;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using BookMarket.Models.DataBase;
@@ -8,6 +10,7 @@ using BookMarket.Services.Books;
 using BookMarket.Services.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +67,17 @@ namespace BookMarket
             // добавляем сервис компрессии
             services.AddResponseCompression(options => options.EnableForHttps = true);
 
+            // добавление кэширования
+            services.AddMemoryCache();
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".MyApp.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(600);
+                options.Cookie.IsEssential = true;
+            });
+
             services.Configure<GzipCompressionProviderOptions>(options =>
             {
                 options.Level = CompressionLevel.Optimal;
@@ -86,12 +100,26 @@ namespace BookMarket
 
             app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse =
+                    r =>
+                    {
+                        string path = r.File.PhysicalPath;
+                        if (path.EndsWith(".css") || path.EndsWith(".js") || path.EndsWith(".gif") || path.EndsWith(".jpg") || path.EndsWith(".png") || path.EndsWith(".svg"))
+                        {
+                            TimeSpan maxAge = new TimeSpan(7, 0, 0, 0);
+                            r.Context.Response.Headers.Append("Cache-Control", "max-age=" + maxAge.TotalSeconds.ToString("0"));
+                        }
+                    }
+            });
 
             app.UseRouting();
 
             app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
+
+            app.UseSession();   // добавляем механизм работы с сессиями
 
             // подключаем компрессию
             app.UseResponseCompression();

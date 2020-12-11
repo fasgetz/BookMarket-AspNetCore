@@ -1,4 +1,5 @@
 ﻿using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.HomeViewModels;
 using BookMarket.Models.ViewModels.Profile;
 using BookMarket.Models.ViewModels.SearchBook;
 using System;
@@ -34,5 +35,13 @@ namespace BookMarket.Services.Books
         /// <param name="name">Имя юзера</param>
         /// <returns>Выборка комментариев юзера</returns>
         Task<IList<Rating>> GetLastCommentariesUser(string name);
+
+
+        /// <summary>
+        /// Получить новые книги
+        /// </summary>
+        /// <param name="count">количество новых книг</param>
+        /// <returns>Новые книги</returns>
+        Task<List<IndexBook>> GetNewsBooks(int count);
     }
 }
