@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using BookMarket.Models.DataBase;
@@ -8,6 +9,7 @@ using BookMarket.Services.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +60,14 @@ namespace BookMarket
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IBookService, BookService>();
             services.AddTransient<IProfileService, ProfileService>();
+
+            // добавляем сервис компрессии
+            services.AddResponseCompression(options => options.EnableForHttps = true);
+
+            services.Configure<GzipCompressionProviderOptions>(options =>
+            {
+                options.Level = CompressionLevel.Optimal;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,7 +93,8 @@ namespace BookMarket
             app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
 
-
+            // подключаем компрессию
+            app.UseResponseCompression();
 
             app.UseEndpoints(endpoints =>
             {

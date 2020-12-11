@@ -335,7 +335,7 @@ namespace BookMarket.Controllers
                         ChapterBook chapter = new ChapterBook();
 
                         // Присваиваем заголовки
-                        chapter.ChapterName = (item.Element("title").LastNode as XElement).Value;
+                        chapter.ChapterName = "Chapter";//(item.Element("title").LastNode as XElement).Value;
                         chapter.NumberChapter = ++numberChapter;
 
                         // Формируем текст главы

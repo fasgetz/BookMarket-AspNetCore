@@ -12,6 +12,7 @@ using BookMarket.Models.ViewModels.SearchBook;
 using BookMarket.Services.Books;
 using BookMarket.Services;
 using BookMarket.Models.UsersIdentity;
+using System.Collections.Generic;
 
 namespace BookMarket.Controllers
 {
@@ -35,12 +36,13 @@ namespace BookMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var topBooks = await context.Book
+                .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+                .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync();
 
             IndexViewModel vm = new IndexViewModel()
             {
-                topBooks = await context.Book
-                .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-                .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync(),
+                topBooks = topBooks,
                 newsBooks = await context.Book
                 .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
                 .OrderByDescending(i => i.Id).Take(4).ToListAsync(),
@@ -55,6 +57,20 @@ namespace BookMarket.Controllers
    
 
             return View(vm);
+        }
+
+
+        public FileResult GetFileFromBytes(byte[] bytesIn)
+        {
+            return File(bytesIn, "image/png");
+        }
+
+        [HttpGet]
+        public IActionResult GetImage(int idBook)
+        {
+            var book = context.Book.FirstOrDefault(i => i.Id == idBook).PosterBook;
+            FileResult image = GetFileFromBytes(book);
+            return image;
         }
 
         public IActionResult Privacy()
