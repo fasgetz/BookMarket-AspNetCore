@@ -52,93 +52,69 @@ namespace BookMarket.Controllers
         }
 
 
-
+        /// <summary>
+        /// Выборка последних комментируемых книг
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> IndexData()
+        public async Task<IActionResult> LastCommentsBook()
         {
-            //List<IndexBook> topBooks = null;
+            var lastCommentBooks = await serviceBooks.GetLastCommentaries(4);
+
+            return PartialView("newComments", lastCommentBooks);
+        }
+
+        /// <summary>
+        /// Выборка недавно добавленных книг
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> newBooks()
+        {
+            var newBooks = await serviceBooks.GetNewsBooks(4);
+
+            return PartialView("booksData", newBooks);
+        }
+
+        /// <summary>
+        /// Выборка топовых книг
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> topBooks()
+        {
             var topBooks = await context.Book
                 .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
                 .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync();
 
+            return PartialView("topBooksData", topBooks);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> IndexData()
+        {
+
             IndexViewModel vm = new IndexViewModel()
             {
-                //topBooks = topBooks,
-                newsBooks = await serviceBooks.GetNewsBooks(4),
+
                 CategoryGenres = await context.GenreCategory
                                     .Include("GenresBook")
                                     .Take(8)
                                     .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList()),
-                lastCommentBooks = await serviceBooks.GetLastCommentaries(4),
+ 
                 topUsers = await userService.GetTopUsers(10),
                 NewUsers = await userService.GetNewUsers(10)
             };
 
-            //if (HttpContext.Session.Keys.Contains("data"))
-            //{
-            //    topBooks = HttpContext.Session.Get<List<IndexBook>>("data");
-            //}
-            //else
-            //{
-            //    topBooks = await Task.Run(() =>
-            //    {
-            //        return context.Book
-            //        .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-            //        .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync();
-            //    });
 
-
-
-            //    HttpContext.Session.Set<List<IndexBook>>("data", topBooks);
-            //}
-
-            vm.topBooks = topBooks;
 
             return PartialView(vm);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            ////List<IndexBook> topBooks = null;
-            //var topBooks = await context.Book
-            //    .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-            //    .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync();
-
-            //IndexViewModel vm = new IndexViewModel()
-            //{
-            //    //topBooks = topBooks,
-            //    newsBooks = await serviceBooks.GetNewsBooks(4),
-            //    CategoryGenres = await context.GenreCategory
-            //                        .Include("GenresBook")
-            //                        .Take(8)
-            //                        .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList()),
-            //    lastCommentBooks = await serviceBooks.GetLastCommentaries(4),
-            //    topUsers = await userService.GetTopUsers(10),
-            //    NewUsers = await userService.GetNewUsers(10)
-            //};
-
-            ////if (HttpContext.Session.Keys.Contains("data"))
-            ////{
-            ////    topBooks = HttpContext.Session.Get<List<IndexBook>>("data");
-            ////}
-            ////else
-            ////{
-            ////    topBooks = await Task.Run(() =>
-            ////    {
-            ////        return context.Book
-            ////        .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-            ////        .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync();
-            ////    });
-
-
-
-            ////    HttpContext.Session.Set<List<IndexBook>>("data", topBooks);
-            ////}
-
-            //vm.topBooks = topBooks;
-
-            //return View(vm);
             return View();
         }
 

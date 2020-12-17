@@ -1,0 +1,33 @@
+﻿@model List<BookMarket.Models.ViewModels.HomeViewModels.IndexBook>
+
+
+@foreach (var item in Model)
+{
+    <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
+        <div class="bookData__image">
+            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
+            </a>
+        </div>
+        <div class="bookData__name">
+            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                <h3>@item.Name</h3>
+            </a>
+        </div>
+        <div class="bookData__rating">
+            @if (item.RatingBook != 0)
+            {
+                <h6>Рейтинг @item.RatingBook.ToString("0.00") <span>★</span></h6>
+            }
+            else
+            {
+                <h6>Нет рейтинга</h6>
+            }
+        </div>
+        <div class="bookData_author">
+            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor" asp-route-name="@item.AuthorNameFamily">
+                <h4>@item.AuthorNameFamily</h4>
+            </a>
+        </div>
+    </div>
+}

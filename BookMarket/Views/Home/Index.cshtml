@@ -4,6 +4,40 @@
     ViewData["Title"] = "Главная страница";
 }
 
+
+<section class="text-center main_page">
+    <h1 class="display-4">Электронная библиотека</h1>
+    <section>
+        <a asp-controller="SearchBook" asp-action="Index" method="get">
+            <div>
+                <h2 class="text-center">Новинки на сайте</h2>
+            </div>
+        </a>
+        <div id="new-books-data" class="row newsBook__groups">
+
+        </div>
+    </section>
+    <section>
+        <a class="mainPage__link" asp-controller="SearchBook" asp-action="Index" asp-route-RatingOrdered="true" method="get">
+            <div>
+                <h2 class="text-center">Популярные книги на сайте</h2>
+            </div>
+        </a>
+        <div id="top-books-data" class="row newsBook__groups">
+
+        </div>
+    </section>
+    <section class="lastCommentsBooks">
+        <h2 class="text-center">Новые комментарии</h2>
+        <div id="last-comments-books-data" class="row newsBook__groups">
+
+        </div>
+    </section>
+
+</section>
+
+
+
 <div id="content">
 
 </div>
@@ -14,6 +48,34 @@
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
+                url: '/Home/newBooks',
+
+                success: function (data) {
+                    $("#new-books-data").html(data);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: '/Home/topBooks',
+
+                success: function (data) {
+                    $("#top-books-data").html(data);
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: '/Home/LastCommentsBook',
+
+                success: function (data) {
+                    $("#last-comments-books-data").html(data);
+                }
+            });
+
+
+            $.ajax({
+                type: "GET",
                 url: '/Home/IndexData',
 
                 success: function (data) {
@@ -21,6 +83,7 @@
                 }
             });
         })
+
 
     </script>
 }

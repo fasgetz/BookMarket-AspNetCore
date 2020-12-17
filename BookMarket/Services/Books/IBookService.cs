@@ -27,7 +27,7 @@ namespace BookMarket.Services.Books
         /// </summary>
         /// <param name="CountCommentary">Количество комментариев</param>
         /// <returns>Выборка последних комментариев</returns>
-        Task<IDictionary<BookViewModel, Rating>> GetLastCommentaries(int CountCommentary);
+        public Task<IEnumerable<KeyValuePair<BookViewModel, Rating>>> GetLastCommentaries(int CountCommentary);
 
         /// <summary>
         /// Выборка последних комментариев юзера

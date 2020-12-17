@@ -50,11 +50,9 @@ namespace BookMarket.Services.Books
         /// </summary>
         /// <param name="CountCommentary">Количество комментариев</param>
         /// <returns>Выборка последних комментариев</returns>
-        public async Task<IDictionary<BookViewModel, Rating>> GetLastCommentaries(int CountCommentary)
+        public async Task<IEnumerable<KeyValuePair<BookViewModel, Rating>>> GetLastCommentaries(int CountCommentary)
         {
-            Dictionary<BookViewModel, Rating> lastComments = null;
-
-            lastComments = (await db.Book
+            var lastComments = (await db.Book
                 .Where(i => i.UserRating.Count() != 0)
                 .Include("UserRating")
                 .Include("IdAuthorNavigation")
@@ -70,65 +68,12 @@ namespace BookMarket.Services.Books
                     PosterBook = i.PosterBook,
                     RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
                 },
-                s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()));
-
-            //var haveCashed = cache.TryGetValue("lastCommentsBook", out lastComments);
-
-            //// Если есть в кеше, то выгрузи
-            //if (haveCashed == false)
-            //{
-            //    // Иначе загрузить
-            //    lastComments = (await db.Book
-            //    .Where(i => i.UserRating.Count() != 0)
-            //    .Include("UserRating")
-            //    .Include("IdAuthorNavigation")
-            //    .Include("IdCategoryNavigation")
-            //    .ToDictionaryAsync(i =>
-            //    new BookViewModel
-            //    {
-            //        Id = i.Id,
-            //        Name = i.Name,
-            //        AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
-            //        CategoryName = i.IdCategoryNavigation.Name,
-            //        IdAuthor = (int)i.IdAuthor,
-            //        PosterBook = i.PosterBook,
-            //        RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
-            //    },
-            //    s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
-            //    // Сортируем по дате посещения
-
-            //    .OrderByDescending(i => i.Value.Id).Take(4).ToDictionary(pair => pair.Key, pair => pair.Value);
-
-            //    // Записать в кеш
-            //    if (lastComments != null)
-            //    {
-            //        cache.Set("lastCommentsBook", lastComments,
-            //        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1 * 60 * 24)));
-            //    }
-            //}
+                s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
+                .OrderByDescending(i => i.Value.DateCreated)
+                .Take(4);
 
 
-            //// Выборка последних 4-х комментариев книгам
-            //var lastCommentsBooks = (await db.Book
-            //    .Where(i => i.UserRating.Count() != 0)
-            //    .Include("UserRating")
-            //    .Include("IdAuthorNavigation")
-            //    .Include("IdCategoryNavigation")
-            //    .ToDictionaryAsync(i =>
-            //    new BookViewModel
-            //    {
-            //        Id = i.Id,
-            //        Name = i.Name,
-            //        AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
-            //        CategoryName = i.IdCategoryNavigation.Name,
-            //        IdAuthor = (int)i.IdAuthor,
-            //        PosterBook = i.PosterBook,
-            //        RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
-            //    },
-            //    s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
-            //    // Сортируем по дате посещения
 
-            //    .OrderByDescending(i => i.Value.Id).Take(4).ToDictionary(pair => pair.Key, pair => pair.Value);
 
             return lastComments;
         }
