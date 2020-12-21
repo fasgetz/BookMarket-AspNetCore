@@ -15,6 +15,8 @@ using BookMarket.Models.UsersIdentity;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using BookMarket.Services.Genres;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BookMarket.Controllers
 {
@@ -40,15 +42,26 @@ namespace BookMarket.Controllers
 
         private readonly IBookService serviceBooks;
         private readonly IUserService userService;
-        private readonly ILogger<HomeController> _logger;
-        BookMarketContext context;
+        private readonly IGenresService genresService;
 
-        public HomeController(ILogger<HomeController> logger, BookMarketContext context, IBookService serviceBooks, IUserService userService)
+
+
+        #region Тесты
+
+        public HomeController(IBookService serviceBooks)
+        {
+            this.serviceBooks = serviceBooks;
+        }
+
+        #endregion
+
+
+        [ActivatorUtilitiesConstructor]
+        public HomeController(IGenresService genresService, IBookService serviceBooks, IUserService userService)
         {
             this.userService = userService;
-            _logger = logger;
             this.serviceBooks = serviceBooks;
-            this.context = context;
+            this.genresService = genresService;
         }
 
 
@@ -81,22 +94,13 @@ namespace BookMarket.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> topBooks()
+        public async Task<IActionResult> topBooks(int count = 4)
         {
 
             // Получаем айдишники топовых книг
-            var ids = context.Ratings
-                .GroupBy(u => u.IdBook)
-                .Select(g => new
-                {
-                    g.Key,
-                    MarkAverage = g.Average(s => s.Mark)
-                })
-                .OrderByDescending(i => i.MarkAverage).Take(4).Select(g => g.Key).ToList();
 
-            var books = context.Book.Where(p => ids.Contains(p.Id))
-                .Select(i => new IndexBook { RatingBook = i.UserRating.Average(i => i.Mark), IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-                .ToList();
+            var books = await serviceBooks.GetTopBooks(count);
+            
 
 
             return PartialView("topBooksData", books);
@@ -111,11 +115,8 @@ namespace BookMarket.Controllers
             IndexViewModel vm = new IndexViewModel()
             {
 
-                CategoryGenres = await context.GenreCategory
-                                    .Include("GenresBook")
-                                    .Take(8)
-                                    .ToDictionaryAsync(i => new CategoryGenre() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Take(3).ToList()),
- 
+                CategoryGenres = await genresService.GetGenresSubCategories(),
+
                 topUsers = await userService.GetTopUsers(10),
                 NewUsers = await userService.GetNewUsers(10)
             };
@@ -137,13 +138,13 @@ namespace BookMarket.Controllers
             return File(bytesIn, "image/png");
         }
 
-        [HttpGet]
+/*        [HttpGet]
         public IActionResult GetImage(int idBook)
         {
             var book = context.Book.FirstOrDefault(i => i.Id == idBook).PosterBook;
             FileResult image = GetFileFromBytes(book);
             return image;
-        }
+        }*/
 
         public IActionResult Privacy()
         {

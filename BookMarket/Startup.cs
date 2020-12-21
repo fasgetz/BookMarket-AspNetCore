@@ -7,6 +7,7 @@ using BookMarket.Models.DataBase;
 using BookMarket.Models.UsersIdentity;
 using BookMarket.Services;
 using BookMarket.Services.Books;
+using BookMarket.Services.Genres;
 using BookMarket.Services.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,12 +58,14 @@ namespace BookMarket
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<BookMarketContext>(options =>
-                options.UseSqlServer(connection), ServiceLifetime.Transient);
+                options.UseSqlServer(connection), ServiceLifetime.Scoped);
 
             // Подключаем сервис по работе с логикой
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IBookService, BookService>();
-            services.AddTransient<IProfileService, ProfileService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IGenresService, GenresService>();
+
 
             // добавляем сервис компрессии
             services.AddResponseCompression(options => options.EnableForHttps = true);

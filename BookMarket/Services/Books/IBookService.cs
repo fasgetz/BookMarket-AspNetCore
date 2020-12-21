@@ -12,6 +12,15 @@ namespace BookMarket.Services.Books
     public interface IBookService
     {
 
+        /// <summary>
+        /// Выборка топовых книг
+        /// </summary>
+        /// <param name="countBooks">количество книг</param>
+        /// <returns>Книги</returns>
+        public Task<List<IndexBook>> GetTopBooks(int countBooks = 4);
+
+
+
         Task<List<FavoriteBook>> GetFavoritesBooks(string userName);
 
         /// <summary>

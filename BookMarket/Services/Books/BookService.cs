@@ -14,12 +14,10 @@ namespace BookMarket.Services.Books
     public class BookService : IBookService
     {
         BookMarketContext db;
-        private IMemoryCache cache;
 
-        public BookService(BookMarketContext db, IMemoryCache memoryCache)
+        public BookService(BookMarketContext db)
         {
             this.db = db;
-            cache = memoryCache;
         }
 
         public async Task<List<FavoriteBook>> GetFavoritesBooks(string userName)
@@ -41,6 +39,33 @@ namespace BookMarket.Services.Books
                 .ToListAsync();
 
             return favoritesBooks;
+        }
+
+        /// <summary>
+        /// Выборка топовых книг
+        /// </summary>
+        /// <param name="countBooks">количество книг</param>
+        /// <returns>Книги</returns>
+        public async Task<List<IndexBook>> GetTopBooks(int countBooks = 4)
+        {
+            // Получаем айдишники топовых книг
+            var ids = await db.Ratings
+                .GroupBy(u => u.IdBook)
+                .Select(g => new
+                {
+                    g.Key,
+                    MarkAverage = g.Average(s => s.Mark)
+                })
+                .OrderByDescending(i => i.MarkAverage).Take(countBooks).Select(g => g.Key).ToListAsync();
+
+            // Получаем выборку книг
+            var books = await db.Book.Where(p => ids.Contains(p.Id))
+                .Select(i => new IndexBook { RatingBook = i.UserRating.Average(i => i.Mark), IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+                .ToListAsync();
+
+
+            return books;
+
         }
 
 
