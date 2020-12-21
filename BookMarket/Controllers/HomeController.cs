@@ -83,11 +83,24 @@ namespace BookMarket.Controllers
         [HttpGet]
         public async Task<IActionResult> topBooks()
         {
-            var topBooks = await context.Book
-                .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-                .OrderByDescending(i => i.RatingBook).Take(4).ToListAsync();
 
-            return PartialView("topBooksData", topBooks);
+            // Получаем айдишники топовых книг
+            var ids = context.Ratings
+                .GroupBy(u => u.IdBook)
+                .Select(g => new
+                {
+                    g.Key,
+                    MarkAverage = g.Average(s => s.Mark)
+                })
+                .OrderByDescending(i => i.MarkAverage).Take(4).Select(g => g.Key).ToList();
+
+            var books = context.Book.Where(p => ids.Contains(p.Id))
+                .Select(i => new IndexBook { RatingBook = i.UserRating.Average(i => i.Mark), IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
+                .ToList();
+
+
+            return PartialView("topBooksData", books);
+
         }
 
 

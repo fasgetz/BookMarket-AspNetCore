@@ -1,23 +1,23 @@
-﻿@model IEnumerable<KeyValuePair<BookMarket.Models.ViewModels.SearchBook.BookViewModel, BookMarket.Models.DataBase.Rating>>
+﻿@model IEnumerable<BookMarket.Models.ViewModels.SearchBook.BookViewModel>
 
 
 @foreach (var item in Model)
 {
     <div class="bookData col-xs-12 col-sm-6 col-md-3 col-centered col-min">
         <div class="bookData__image">
-            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Key.Id">
-                <img src="data:image;base64, @System.Convert.ToBase64String(item.Key.PosterBook)" />
+            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id">
+                <img src="data:image;base64, @System.Convert.ToBase64String(item.PosterBook)" />
             </a>
         </div>
         <div class="bookData__name">
-            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Key.Id" asp-route-name="@item.Key.Name">
-                <h3>@item.Key.Name</h3>
+            <a asp-action="AboutBook" asp-controller="Books" asp-route-id="@item.Id" asp-route-name="@item.Name">
+                <h3>@item.Name</h3>
             </a>
         </div>
         <div class="bookData__rating">
-            @if (item.Key.RatingBook != 0)
+            @if (item.RatingBook != 0)
             {
-                <h6>Рейтинг @item.Key.RatingBook.ToString("0.00") <span>★</span></h6>
+                <h6>Рейтинг @item.RatingBook.ToString("0.00") <span>★</span></h6>
             }
             else
             {
@@ -25,8 +25,8 @@
             }
         </div>
         <div class="bookData_author">
-            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.Key.IdAuthor" asp-route-name="@item.Key.AuthorNameFamily">
-                <h4>@item.Key.AuthorNameFamily</h4>
+            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor" asp-route-name="@item.AuthorNameFamily">
+                <h4>@item.AuthorNameFamily</h4>
             </a>
         </div>
     </div>

@@ -50,32 +50,51 @@ namespace BookMarket.Services.Books
         /// </summary>
         /// <param name="CountCommentary">Количество комментариев</param>
         /// <returns>Выборка последних комментариев</returns>
-        public async Task<IEnumerable<KeyValuePair<BookViewModel, Rating>>> GetLastCommentaries(int CountCommentary)
+        public async Task <IEnumerable<BookViewModel>> GetLastCommentaries(int CountCommentary)
         {
-            var lastComments = (await db.Book
-                .Where(i => i.UserRating.Count() != 0)
+            /*            var lastComments = (await db.Book
+                            .Where(i => i.UserRating.Count() != 0)
+                            .Include("UserRating")
+                            .Include("IdAuthorNavigation")
+                            .Include("IdCategoryNavigation")
+                            .ToDictionaryAsync(i =>
+                            new BookViewModel
+                            {
+                                Id = i.Id,
+                                Name = i.Name,
+                                AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+                                CategoryName = i.IdCategoryNavigation.Name,
+                                IdAuthor = (int)i.IdAuthor,
+                                PosterBook = i.PosterBook,
+                                RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
+                            },
+                            s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
+                            .OrderByDescending(i => i.Value.DateCreated)
+                            .Take(4);*/
+
+
+            // Получаем номера книг последних комментируемых
+            var ids = await db.Ratings.OrderByDescending(i => i.DateCreated).Select(i => i.IdBook).Take(CountCommentary).ToListAsync();
+
+            var books = await db.Book
                 .Include("UserRating")
                 .Include("IdAuthorNavigation")
                 .Include("IdCategoryNavigation")
-                .ToDictionaryAsync(i =>
-                new BookViewModel
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
-                    CategoryName = i.IdCategoryNavigation.Name,
-                    IdAuthor = (int)i.IdAuthor,
-                    PosterBook = i.PosterBook,
-                    RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
-                },
-                s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
-                .OrderByDescending(i => i.Value.DateCreated)
-                .Take(4);
+                .Where(i => ids.Contains(i.Id))
+                .Select(i =>
+                    new BookViewModel
+                    {
+                        Id = i.Id,
+                        Name = i.Name,
+                        AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+                        CategoryName = i.IdCategoryNavigation.Name,
+                        IdAuthor = (int)i.IdAuthor,
+                        PosterBook = i.PosterBook,
+                        RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
+                    })
+                .ToListAsync();
 
-
-
-
-            return lastComments;
+            return books;
         }
 
         /// <summary>
