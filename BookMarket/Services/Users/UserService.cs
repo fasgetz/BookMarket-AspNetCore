@@ -51,7 +51,7 @@ namespace BookMarket.Services
         /// </summary>
         /// <param name="count">Количество пользователей</param>
         /// <returns>Список пользователей</returns>
-        public async Task<IList<TopUser>> GetTopUsers(int count)
+        public async Task<IEnumerable<TopUser>> GetTopUsers(int count)
         {            var users = (await db.Ratings
                 .GroupBy(i => i.IdUser)
                 .Select(i => new TopUser()
@@ -76,7 +76,7 @@ namespace BookMarket.Services
         /// </summary>
         /// <param name="count">Количество пользователей</param>
         /// <returns>Список пользователей</returns>
-        public async Task<IList<TopUser>> GetNewUsers(int count)
+        public async Task<IEnumerable<TopUser>> GetNewUsers(int count)
         {
 
 

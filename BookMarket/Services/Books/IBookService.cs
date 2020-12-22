@@ -51,6 +51,6 @@ namespace BookMarket.Services.Books
         /// </summary>
         /// <param name="count">количество новых книг</param>
         /// <returns>Новые книги</returns>
-        Task<List<IndexBook>> GetNewsBooks(int count);
+        Task<IEnumerable<IndexBook>> GetNewsBooks(int count);
     }
 }

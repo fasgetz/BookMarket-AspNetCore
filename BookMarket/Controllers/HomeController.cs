@@ -21,28 +21,14 @@ using Microsoft.Extensions.DependencyInjection;
 namespace BookMarket.Controllers
 {
 
-    public static class SessionExtensions
-    {
-        public static void Set<T>(this ISession session, string key, T value)
-        {
-            session.SetString(key, JsonSerializer.Serialize<T>(value));
-        }
-
-        public static T Get<T>(this ISession session, string key)
-        {
-            var value = session.GetString(key);
-            return value == null ? default(T) : JsonSerializer.Deserialize<T>(value);
-        }
-    }
-
 
 
     public class HomeController : Controller
     {
 
-        private readonly IBookService serviceBooks;
-        private readonly IUserService userService;
-        private readonly IGenresService genresService;
+        public IBookService serviceBooks { get; private set; }
+        public IUserService userService { get; private set; }
+        public IGenresService genresService { get; private set; }
 
 
 
@@ -51,6 +37,13 @@ namespace BookMarket.Controllers
         public HomeController(IBookService serviceBooks)
         {
             this.serviceBooks = serviceBooks;
+        }
+
+
+        public HomeController(IUserService userService, IGenresService genresService)
+        {
+            this.userService = userService;
+            this.genresService = genresService;
         }
 
         #endregion
@@ -70,9 +63,9 @@ namespace BookMarket.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> LastCommentsBook()
+        public async Task<PartialViewResult> LastCommentsBook(int count = 4)
         {
-            var lastCommentBooks = await serviceBooks.GetLastCommentaries(4);
+            var lastCommentBooks = await serviceBooks.GetLastCommentaries(count);
 
             return PartialView("newComments", lastCommentBooks);
         }
@@ -82,9 +75,9 @@ namespace BookMarket.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> newBooks()
+        public async Task<IActionResult> newBooks(int count = 4)
         {
-            var newBooks = await serviceBooks.GetNewsBooks(4);
+            var newBooks = await serviceBooks.GetNewsBooks(count);
 
             return PartialView("booksData", newBooks);
         }
@@ -109,16 +102,16 @@ namespace BookMarket.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> IndexData()
+        public async Task<IActionResult> IndexData(int genresCount = 8, int subGenresCount = 3, int topUsers = 10, int newUsers = 10)
         {
 
             IndexViewModel vm = new IndexViewModel()
             {
 
-                CategoryGenres = await genresService.GetGenresSubCategories(),
+                CategoryGenres = await genresService.GetGenresSubCategories(genresCount, subGenresCount),
 
-                topUsers = await userService.GetTopUsers(10),
-                NewUsers = await userService.GetNewUsers(10)
+                topUsers = await userService.GetTopUsers(topUsers),
+                NewUsers = await userService.GetNewUsers(newUsers)
             };
 
 
@@ -133,19 +126,6 @@ namespace BookMarket.Controllers
         }
 
 
-        public FileResult GetFileFromBytes(byte[] bytesIn)
-        {
-            return File(bytesIn, "image/png");
-        }
-
-/*        [HttpGet]
-        public IActionResult GetImage(int idBook)
-        {
-            var book = context.Book.FirstOrDefault(i => i.Id == idBook).PosterBook;
-            FileResult image = GetFileFromBytes(book);
-            return image;
-        }*/
-
         public IActionResult Privacy()
         {
             return View();
@@ -156,7 +136,7 @@ namespace BookMarket.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }

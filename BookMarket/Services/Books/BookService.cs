@@ -77,27 +77,6 @@ namespace BookMarket.Services.Books
         /// <returns>Выборка последних комментариев</returns>
         public async Task <IEnumerable<BookViewModel>> GetLastCommentaries(int CountCommentary)
         {
-            /*            var lastComments = (await db.Book
-                            .Where(i => i.UserRating.Count() != 0)
-                            .Include("UserRating")
-                            .Include("IdAuthorNavigation")
-                            .Include("IdCategoryNavigation")
-                            .ToDictionaryAsync(i =>
-                            new BookViewModel
-                            {
-                                Id = i.Id,
-                                Name = i.Name,
-                                AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
-                                CategoryName = i.IdCategoryNavigation.Name,
-                                IdAuthor = (int)i.IdAuthor,
-                                PosterBook = i.PosterBook,
-                                RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0
-                            },
-                            s => s.UserRating.OrderByDescending(i => i.Id).FirstOrDefault()))
-                            .OrderByDescending(i => i.Value.DateCreated)
-                            .Take(4);*/
-
-
             // Получаем номера книг последних комментируемых
             var ids = await db.Ratings.OrderByDescending(i => i.DateCreated).Select(i => i.IdBook).Take(CountCommentary).ToListAsync();
 
@@ -179,7 +158,7 @@ namespace BookMarket.Services.Books
         /// </summary>
         /// <param name="count">количество новых книг</param>
         /// <returns>Новые книги</returns>
-        public async Task<List<IndexBook>> GetNewsBooks(int count)
+        public async Task<IEnumerable<IndexBook>> GetNewsBooks(int count)
         {
             List<IndexBook> newsBook = null;
 
@@ -187,25 +166,6 @@ namespace BookMarket.Services.Books
             newsBook = await db.Book
             .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
             .OrderByDescending(i => i.Id).Take(4).ToListAsync();
-
-
-            //// Иначе загрузить
-            //var haveCashed = cache.TryGetValue("newsBook", out newsBook);
-            //// Если есть в кеше, то выгрузи
-            //if (haveCashed == false)
-            //{
-            //    // Иначе загрузить
-            //    newsBook = await db.Book
-            //    .Select(i => new IndexBook { RatingBook = i.UserRating.Count != 0 ? i.UserRating.Average(i => i.Mark) : 0, IdAuthor = (int)i.IdAuthor, Id = i.Id, Name = i.Name, PosterBook = i.PosterBook, AuthorNameFamily = i.IdAuthorNavigation.NameFamily })
-            //    .OrderByDescending(i => i.Id).Take(4).ToListAsync();
-
-            //    // Записать в кеш
-            //    if (newsBook != null)
-            //    {
-            //        cache.Set("newsBook", newsBook,
-            //        new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1*60*24)));
-            //    }
-            //}
 
 
             return newsBook;

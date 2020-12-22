@@ -33,12 +33,12 @@ namespace BookMarket.Models.ViewModels.HomeViewModels
         /// <summary>
         /// Рейтинг пользователей
         /// </summary>
-        public ICollection<TopUser> topUsers { get; set; }
+        public IEnumerable<TopUser> topUsers { get; set; }
 
 
         /// <summary>
         /// Новые пользователи
         /// </summary>
-        public ICollection<TopUser> NewUsers { get; set; }
+        public IEnumerable<TopUser> NewUsers { get; set; }
     }
 }
