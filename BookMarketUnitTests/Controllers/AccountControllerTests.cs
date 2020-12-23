@@ -20,31 +20,9 @@ using Xunit;
 namespace BookMarketUnitTests.Controllers
 {
 
-    public class FakeUserManager : UserManager<User>
+    public class FakeUserManager
     {
-        public FakeUserManager()
-            : base(new Mock<IUserStore<User>>().Object,
-                  new Mock<IOptions<IdentityOptions>>().Object,
-                  new Mock<IPasswordHasher<User>>().Object,
-                  new IUserValidator<User>[0],
-                  new IPasswordValidator<User>[0],
-                  new Mock<ILookupNormalizer>().Object,
-                  new Mock<IdentityErrorDescriber>().Object,
-                  new Mock<IServiceProvider>().Object,
-                  new Mock<ILogger<UserManager<User>>>().Object)
-        { }
-    }
 
-    public class FakeSignInManager : SignInManager<User>
-    {
-        public FakeSignInManager(UserManager<User> userManager)
-            : base(userManager,
-                  new HttpContextAccessor(),
-                  new Mock<IUserClaimsPrincipalFactory<User>>().Object,
-                  new Mock<IOptions<IdentityOptions>>().Object,
-                  new Mock<ILogger<SignInManager<User>>>().Object
-                  , null, null)
-        { }
 
         public static Mock<UserManager<TUser>> MockUserManager<TUser>(List<TUser> ls) where TUser : class
         {
@@ -62,6 +40,20 @@ namespace BookMarketUnitTests.Controllers
 
             return mgr;
         }
+    }
+
+    public class FakeSignInManager : SignInManager<User>
+    {
+        public FakeSignInManager(UserManager<User> userManager)
+            : base(userManager,
+                  new HttpContextAccessor(),
+                  new Mock<IUserClaimsPrincipalFactory<User>>().Object,
+                  new Mock<IOptions<IdentityOptions>>().Object,
+                  new Mock<ILogger<SignInManager<User>>>().Object
+                  , null, null)
+        { }
+
+
     }
 
 
@@ -86,15 +78,83 @@ namespace BookMarketUnitTests.Controllers
         #endregion
 
 
-        public AccountControllerTests() 
+        public AccountControllerTests()
         {
 
-            userManager = FakeSignInManager.MockUserManager<User>(_users);
+            userManager = FakeUserManager.MockUserManager<User>(_users);
             signInManager = new Mock<FakeSignInManager>(userManager.Object);
 
         }
 
 
+        #region get method Register
+
+
+        /// <summary>
+        /// Проверка возвращаемости страницы, если пользователь не авторизован
+        /// </summary>
+        [Fact]
+        public void NotAuthUserRegisterAction()
+        {
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            // Устанавливаем контекст
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+ 
+                }
+            };
+
+            // Получаем результат перехода на страницу регистрации без аутентификации
+            var result = controller.Register() as IActionResult;
+
+
+            // Возвращаемый тип
+            Assert.IsType<ViewResult>(result);
+
+        }
+
+        /// <summary>
+        /// Проверка перехода на страницу регистрации, если пользователь авторизован
+        /// </summary>
+        [Fact]
+        public void AuthUserRegisterAction()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "example name"),
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Role, "Администратор"),
+                new Claim("custom-claim", "example claim value")                
+            }, "mock"));
+ 
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            // Привязываем пользователя к контексту
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = user
+                }
+            };
+
+            var result = controller.Register() as RedirectToActionResult;
+
+
+            // Устанавливаем фейкового авторзиованного пользователя
+
+
+
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Home", result.ControllerName);
+        }
+
+        #endregion
+
+        #region post method Register
 
         /// <summary>
         /// Проверка на правильность ввод совпадающих паролей
@@ -135,6 +195,93 @@ namespace BookMarketUnitTests.Controllers
         }
 
 
+        /// <summary>
+        /// Успешная регистрация
+        /// </summary>
+        [Fact]
+        public async void SuccessUserRegister()
+        {
+
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+
+            RegisterUserViewModel vm = new RegisterUserViewModel()
+            {
+                Email = "test@email.ru",
+                Password = "pass123QWE",
+                PasswordConfirm = "pass123QWE",
+                DateBirth = DateTime.Now
+            };
+
+
+            // Действие - выполняем регистрацию
+            var res = await controller.Register(vm) as RedirectToActionResult;
+
+            Assert.Equal("Index", res.ActionName);
+            Assert.Equal("Home", res.ControllerName);
+
+            // Проверяем на предмет добавления пользователя в бд
+            Assert.Equal(vm.Email, _users.FirstOrDefault(i => i.Email == vm.Email).Email);
+        }
+
+
+        /// <summary>
+        /// Проверка на ошибку состояния модели ModelState
+        /// </summary>
+        [Fact]
+        public async void NullViewModelSendToRegister()
+        {
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+            // new code added -->
+            controller.ModelState.AddModelError("fakeError", "fakeError");
+
+            RegisterUserViewModel vm = null;
+
+
+            // Действие - выполняем регистрацию
+            var res = await controller.Register(vm) as ViewResult;
+
+
+            Assert.Null(res.Model);
+        }
+
+
+        /// <summary>
+        /// Неудачная регистрация
+        /// </summary>
+        [Fact]
+        public async void FailedRegister()
+        {
+            // Устанавливаем метод для регистрации
+            userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Failed(new IdentityError() { Code = "FakeBadRegister", Description = "bad user register" }));
+
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+
+            RegisterUserViewModel vm = new RegisterUserViewModel()
+            {
+                Email = "test@email",
+                Password = "pass123QWE",
+                PasswordConfirm = "pass123QWE",
+                DateBirth = DateTime.Now
+            };
+
+
+            // Действие - выполняем регистрацию
+            var res = await controller.Register(vm) as ViewResult;
+            // Получаем количество фейковых ошибок
+            int counts = res.ViewData.ModelState.Count;
+
+
+
+            Assert.Equal(1, counts);
+        }
+
+
+        #endregion
+
+
+
 
 
 
@@ -144,54 +291,54 @@ namespace BookMarketUnitTests.Controllers
 
 
 
-/*        [Fact]
-        public async void AuthUser()
-        {
+        /*        [Fact]
+                public async void AuthUser()
+                {
 
 
 
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, "example name"),
-                new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim(ClaimTypes.Role, "Администратор"),
-                new Claim("custom-claim", "example claim value"),
-            }, "mock"));
+                    var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Name, "example name"),
+                        new Claim(ClaimTypes.NameIdentifier, "1"),
+                        new Claim(ClaimTypes.Role, "Администратор"),
+                        new Claim("custom-claim", "example claim value"),
+                    }, "mock"));
 
 
 
 
-            var userMgr = MockUserManager<User>(_users).Object;
+                    var userMgr = MockUserManager<User>(_users).Object;
 
-            var newUser = new User()
-            {
-                Name = "test",
-                Email = "test@mail.ru"
-            };
-
-
-            var password = "P@ssw0rd!";
-
-            var result = await userMgr.CreateAsync(newUser, password);
-
-            //result.Succeeded;
+                    var newUser = new User()
+                    {
+                        Name = "test",
+                        Email = "test@mail.ru"
+                    };
 
 
+                    var password = "P@ssw0rd!";
 
-            Assert.Equal(2, _users.Count);
-            //userMgr.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
+                    var result = await userMgr.CreateAsync(newUser, password);
+
+                    //result.Succeeded;
 
 
 
-            *//*            var controller = new AccountController()
-                        {
-                            HttpContext
-                        }*//*
+                    Assert.Equal(2, _users.Count);
+                    //userMgr.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
 
-            //AccountController controller = new AccountController(userMgr.Object)
 
-            //var MyUser = await userMgr.FindByNameAsync(User.Identity.Name);
-        }*/
+
+                    *//*            var controller = new AccountController()
+                                {
+                                    HttpContext
+                                }*//*
+
+                    //AccountController controller = new AccountController(userMgr.Object)
+
+                    //var MyUser = await userMgr.FindByNameAsync(User.Identity.Name);
+                }*/
 
         #endregion
 

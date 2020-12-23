@@ -1,7 +1,9 @@
 ﻿using BookMarket.Models.UsersIdentity;
 using BookMarket.Models.ViewModels.UsersIdentity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,8 @@ namespace BookMarket.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
+
+        [ActivatorUtilitiesConstructor]
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
@@ -40,19 +44,17 @@ namespace BookMarket.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserViewModel vm)
         {
-            if (!vm.Password.Equals(vm.PasswordConfirm))
-            {
-                ModelState.AddModelError("SamePassword", "Введите одинаковые пароли");
-
-                return View(vm);
-
-            }
-
 
             if (ModelState.IsValid)
             {
+                if (!vm.Password.Equals(vm.PasswordConfirm))
+                {
+                    ModelState.AddModelError("SamePassword", "Введите одинаковые пароли");
 
-                    
+                    return View(vm);
+
+                }
+
 
                 User user = new User()
                 {
