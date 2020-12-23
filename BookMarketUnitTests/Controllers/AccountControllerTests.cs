@@ -100,7 +100,7 @@ namespace BookMarketUnitTests.Controllers
         /// Проверка на правильность ввод совпадающих паролей
         /// </summary>
         [Fact]
-        public async void testing()
+        public async void InputNotSamePasswordToRegister()
         {
             signInManager.Setup(
                     x => x.SignInAsync(It.IsAny<User>(), It.IsAny<bool>(), It.IsAny<string>()))
