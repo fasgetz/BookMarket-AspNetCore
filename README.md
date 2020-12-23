@@ -14,3 +14,4 @@
   + `ORM Entity Framework Core`
   + `LINQ`
   + `Bootstrap 4`
+  + `xUnit`
