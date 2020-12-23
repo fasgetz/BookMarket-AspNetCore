@@ -53,6 +53,8 @@ else
                     <li class="page-item"><a class="page-link" onclick="SearchBooks('@Model.InputWord', @(i + 1), @Model.IdGenre, @(Model.RatingOrdered == true ? 1 : 0))">@(i + 1)</a></li>
                 }
             }
+
+
             @if (Model.page == Math.Ceiling((double)Model.MaxCountBooks / 10))
             {
                 <li class="page-item disabled">
@@ -83,9 +85,12 @@ else
                         </a>
                         <div class="row">
                             <h5 class="col-xl-5 text-center text-xl-left">Автор</h5>
-                            <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor" asp-route-name="@item.AuthorNameFamily.ToTranslit()">
-                                <h6 class="col-xl text-center text-xl-left">@item.AuthorNameFamily</h6>
-                            </a>
+                            <h6 class="col-xl text-center text-xl-left">
+                                <a asp-action="Details" asp-controller="Authors" asp-route-id="@item.IdAuthor" asp-route-name="@item.AuthorNameFamily.ToTranslit()">
+                                    @item.AuthorNameFamily
+                                </a>
+                            </h6>
+
                         </div>
                         <div class="row">
                             <h5 class="col-xl-5 text-center text-xl-left">Жанр</h5>
