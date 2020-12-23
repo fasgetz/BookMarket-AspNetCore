@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -39,8 +40,20 @@ namespace BookMarket.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterUserViewModel vm)
         {
+            if (!vm.Password.Equals(vm.PasswordConfirm))
+            {
+                ModelState.AddModelError("SamePassword", "Введите одинаковые пароли");
+
+                return View(vm);
+
+            }
+
+
             if (ModelState.IsValid)
             {
+
+                    
+
                 User user = new User()
                 {
                     Email = vm.Email,
