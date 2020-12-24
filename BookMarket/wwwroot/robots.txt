@@ -1,0 +1,9 @@
+# Group 1
+User-agent: *
+Allow: /
+
+# Group 2
+User-agent: AhrefsSiteAudit
+Allow: /
+
+Sitemap: https://www.market-books.ru/sitemap.xml
