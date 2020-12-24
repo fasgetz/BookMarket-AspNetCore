@@ -1,14 +1,17 @@
-﻿using BookMarket.Controllers;
+﻿using AutoFixture;
+using BookMarket.Controllers;
 using BookMarket.Models.DataBase;
 using BookMarket.Models.ViewModels.SearchBook;
 using BookMarket.Services.Books;
 using BookMarket.Services.Genres;
 using BookMarketUnitTests.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using Xunit;
 
@@ -70,6 +73,105 @@ namespace BookMarketUnitTests.Controllers
             return filtered;
         }
 
+
+
+        #region Index
+
+        [Fact]
+        public async void GetIndexViewModel()
+        {
+            // Arrange
+            var someEntity = new Fixture() { RepeatCount = 10 }.Create<IDictionary<CategoryGenreVM, System.Collections.Generic.List<GenreBookVM>>>();
+
+            var bookServiceMock = new Mock<IBookService>();
+            var genresServiceMock = new Mock<IGenresService>();
+            genresServiceMock.Setup(i => i.getGenresSubCategoriesCounts()).ReturnsAsync(someEntity);
+
+            var controller = new SearchBookController(genresServiceMock.Object, bookServiceMock.Object);
+
+            var result = await controller.Index(null, 1, true) as ViewResult;
+
+
+            var model = (SearchBookIndexVM)result.Model;
+
+            Assert.IsType<ViewResult>(result);
+            Assert.Equal(someEntity.Count, model.CategoryGenres.Count);
+        }
+
+
+        #endregion
+
+
+        #region LastVisitBooks                
+
+        [Fact]
+        public async void lastVisitBooks_UserNotAuth()
+        {
+            // Arrange
+            var bookServiceMock = new Mock<IBookService>();
+            var genresServiceMock = new Mock<IGenresService>();
+
+
+            var controller = new SearchBookController(genresServiceMock.Object, bookServiceMock.Object);
+
+            // Привязываем пользователя к контексту
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    //User = user
+                }
+            };
+
+            var result = await controller.LastVisitBooks(null);
+
+            Assert.Null(result);
+        }
+
+
+        [Fact]
+        public async void lastVisitBooks_UserIsAuth()
+        {
+
+
+            // Arrange
+            var bookServiceMock = new Mock<IBookService>();
+            var genresServiceMock = new Mock<IGenresService>();
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "example name"),
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Role, "Администратор"),
+                new Claim("custom-claim", "example claim value")
+            }, "mock"));
+
+            bookServiceMock.Setup(i => i.GetLastVisitBook(user.Identity.Name, 5)).ReturnsAsync(RepositoryDB.lastVisitBooksData);
+
+            var controller = new SearchBookController(genresServiceMock.Object, bookServiceMock.Object);
+
+
+
+            // Привязываем пользователя к контексту
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = user
+                }
+            };
+
+
+            var result = await controller.LastVisitBooks(user.Identity.Name) as PartialViewResult;
+
+
+            Assert.IsType<PartialViewResult>(result);
+            Assert.Equal(RepositoryDB.lastVisitBooksData.Count, ((IDictionary<BookViewModel, visitUser>)result.Model).Count);
+
+
+        }
+
+        #endregion
 
 
         /// <summary>

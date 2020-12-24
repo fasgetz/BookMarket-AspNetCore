@@ -13,6 +13,15 @@ namespace BookMarketUnitTests.Repository
 
         #region SearchBookControllerTest
 
+        public static IDictionary<BookViewModel, visitUser> lastVisitBooksData = new Dictionary<BookViewModel, visitUser>()
+        {
+            { new BookViewModel(), new visitUser() },
+            { new BookViewModel(), new visitUser() },
+            { new BookViewModel(), new visitUser() },
+            { new BookViewModel(), new visitUser() },
+            { new BookViewModel(), new visitUser() },
+        };
+
         public static IEnumerable<BookViewModel> listBookViewModel = new List<BookViewModel>()
             {
                 new BookViewModel()
