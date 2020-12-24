@@ -51,7 +51,8 @@ namespace BookMarketUnitTests.Controllers
                   new Mock<IOptions<IdentityOptions>>().Object,
                   new Mock<ILogger<SignInManager<User>>>().Object
                   , null, null)
-        { }
+        {            
+        }
 
 
     }
@@ -72,7 +73,7 @@ namespace BookMarketUnitTests.Controllers
         /// </summary>
         private List<User> _users = new List<User>
         {
-              new User() { Name = "testUser", Id = "123" }
+              new User() { Name = "testUser", Id = "123", Email = "testUser@mail.ru" }
         };
 
         #endregion
@@ -86,6 +87,185 @@ namespace BookMarketUnitTests.Controllers
 
         }
 
+        #region Logout method
+
+
+        /// <summary>
+        /// Выход пользователя из аккаунта
+        /// </summary>
+        [Fact]
+        public async void logout()
+        {
+
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "example name"),
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Role, "Администратор"),
+                new Claim("custom-claim", "example claim value")
+            }, "mock"));
+
+
+            AccountController controller = null;
+            
+
+            // Устанавливаем значение успешной авторизации, в случае, если аккаунт есть в фейковой бд
+            signInManager.Setup(
+                    x => x.SignOutAsync()
+                ).Callback(() => {
+                    controller.ControllerContext.HttpContext.User = null;
+                });
+
+            controller = new AccountController(userManager.Object, signInManager.Object);
+
+            // Привязываем пользователя к контексту
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = user
+                }
+            };
+
+
+            // Действие - выходим из аккаунта
+            var result = await controller.Logout() as RedirectToActionResult;
+
+
+            // Проверяем на то, вышел ли из акаунта
+            Assert.False(controller.User.Identity.IsAuthenticated);
+
+            // Проверяем переход на главную страницу контроллера Home
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Home", result.ControllerName);
+        }
+
+        #endregion
+
+
+        #region post method Login
+
+
+        /// <summary>
+        /// Отправление пустой модели в авторизацию
+        /// </summary>
+        [Fact]
+        public async void NullViewModelTransferToLogin()
+        {
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+            // new code added -->
+            controller.ModelState.AddModelError("fakeError", "fakeError");
+
+            LoginUserViewModel vm = null;
+
+
+            // Действие - выполняем регистрацию
+            var res = await controller.Login(vm) as ViewResult;
+
+
+            Assert.Null(res.Model);
+        }
+
+        /// <summary>
+        /// Неудачная авторизация с выводом информирующей ошибки
+        /// </summary>
+        [Theory]
+        [InlineData("testUser123@mail.ru", "controller/action")]
+        public async void BadAuthorizationUser(string email, string url)
+        {
+
+            // Устанавливаем значение успешной авторизации, в случае, если аккаунт есть в фейковой бд
+            signInManager.Setup(
+                    x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed);
+
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            LoginUserViewModel vm = new LoginUserViewModel()
+            {
+                Email = email,
+                Password = "pass123QWE",
+                RememberMe = true,
+                ReturnUrl = url
+            };
+
+
+            // Результат контроллера
+            var result = await controller.Login(vm) as ViewResult;
+
+            var error = result.ViewData.ModelState.FindKeysWithPrefix("Ошибка авторизации!").FirstOrDefault();
+
+
+
+
+            Assert.NotNull(error.Value);
+            Assert.Equal("Ошибка авторизации!", error.Key);
+        }
+
+
+        /// <summary>
+        /// Успешная авторизация с переходом на URL с которого зашел на страницу авторизации
+        /// </summary>
+        [Theory]
+        [InlineData("testUser@mail.ru", "controller/action")]
+        public async void SuccesAuthorizationUserAndGoToUrl(string email, string url)
+        {
+            // Устанавливаем значение успешной авторизации, в случае, если аккаунт есть в фейковой бд
+            signInManager.Setup(
+                    x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            LoginUserViewModel vm = new LoginUserViewModel()
+            {
+                Email = email,
+                Password = "pass123QWE",
+                RememberMe = true,
+                ReturnUrl = url
+            };
+
+
+            // Результат контроллера
+            var result = await controller.Login(vm) as RedirectResult;
+
+            Assert.NotNull(result.Url);
+        }
+
+
+        /// <summary>
+        /// Успешная авторизация с переходом на главную страницу
+        /// </summary>
+        [Theory]
+        [InlineData("testUser@mail.ru", null)]
+        public async void SuccessAuthorizationUserAndGoIndexPage(string email, string url)
+        {
+            // Устанавливаем значение успешной авторизации, в случае если аккаунт есть в фейковой бд
+            signInManager.Setup(
+                    x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>()))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            LoginUserViewModel vm = new LoginUserViewModel()
+            {
+                Email = email,
+                Password = "pass123QWE",
+                RememberMe = true,
+                ReturnUrl = url
+            };
+
+
+            // Результат контроллера
+            var result = await controller.Login(vm) as RedirectToActionResult;
+
+            // Проверяем успешную авторизацию с переходом на главную страницу
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Home", result.ControllerName);
+
+        }
+
+        #endregion
 
         #region get method Login
 
@@ -159,7 +339,7 @@ namespace BookMarketUnitTests.Controllers
 
 
         /// <summary>
-        /// Проверка возвращаемости страницы, если пользователь не авторизован
+        /// Проверка результата страницы, если пользователь не авторизован
         /// </summary>
         [Fact]
         public void NotAuthUserRegisterAction()

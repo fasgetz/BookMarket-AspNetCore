@@ -130,7 +130,7 @@ namespace BookMarket.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неправильный email и (или) пароль");
+                    ModelState.AddModelError("Ошибка авторизации!", "Неправильный email и (или) пароль");
                 }
             }
 
