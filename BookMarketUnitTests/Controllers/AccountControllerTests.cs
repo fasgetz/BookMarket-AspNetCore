@@ -87,6 +87,74 @@ namespace BookMarketUnitTests.Controllers
         }
 
 
+        #region get method Login
+
+
+        /// <summary>
+        /// Проверка перехода на страницу логина, если пользователь авторизован
+        /// </summary>
+        [Fact]
+        public void UserIsAuthLoginAction()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, "example name"),
+                new Claim(ClaimTypes.NameIdentifier, "1"),
+                new Claim(ClaimTypes.Role, "Администратор"),
+                new Claim("custom-claim", "example claim value")
+            }, "mock"));
+
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            // Привязываем пользователя к контексту
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+                    User = user
+                }
+            };
+
+            var result = controller.Login() as RedirectToActionResult;
+
+
+            // Устанавливаем фейкового авторзиованного пользователя
+
+
+
+            Assert.Equal("Index", result.ActionName);
+            Assert.Equal("Home", result.ControllerName);
+        }
+
+
+        /// <summary>
+        /// Проверка возвращаемости страницы авторизации, если пользователь не авторизован
+        /// </summary>
+        [Fact]
+        public void NotAuthUserLoginAction()
+        {
+            var controller = new AccountController(userManager.Object, signInManager.Object);
+
+            // Устанавливаем контекст
+            controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext()
+                {
+
+                }
+            };
+
+            // Получаем результат перехода на страницу регистрации без аутентификации
+            var result = controller.Login() as IActionResult;
+
+
+            // Возвращаемый тип
+            Assert.IsType<ViewResult>(result);
+
+        }
+
+        #endregion
+
         #region get method Register
 
 
@@ -279,69 +347,6 @@ namespace BookMarketUnitTests.Controllers
 
 
         #endregion
-
-
-
-
-
-
-        #region Old Tests
-
-
-
-
-
-        /*        [Fact]
-                public async void AuthUser()
-                {
-
-
-
-                    var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, "example name"),
-                        new Claim(ClaimTypes.NameIdentifier, "1"),
-                        new Claim(ClaimTypes.Role, "Администратор"),
-                        new Claim("custom-claim", "example claim value"),
-                    }, "mock"));
-
-
-
-
-                    var userMgr = MockUserManager<User>(_users).Object;
-
-                    var newUser = new User()
-                    {
-                        Name = "test",
-                        Email = "test@mail.ru"
-                    };
-
-
-                    var password = "P@ssw0rd!";
-
-                    var result = await userMgr.CreateAsync(newUser, password);
-
-                    //result.Succeeded;
-
-
-
-                    Assert.Equal(2, _users.Count);
-                    //userMgr.Setup(x => x.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(user);
-
-
-
-                    *//*            var controller = new AccountController()
-                                {
-                                    HttpContext
-                                }*//*
-
-                    //AccountController controller = new AccountController(userMgr.Object)
-
-                    //var MyUser = await userMgr.FindByNameAsync(User.Identity.Name);
-                }*/
-
-        #endregion
-
 
 
     }
