@@ -20,6 +20,7 @@ namespace BookMarket.Controllers
             this.userManager = userManager;
         }
 
+
         [HttpGet]
         public IActionResult Index()
         {
