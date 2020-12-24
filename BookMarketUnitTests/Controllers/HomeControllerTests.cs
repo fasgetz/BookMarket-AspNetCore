@@ -5,6 +5,7 @@ using BookMarket.Models.ViewModels.SearchBook;
 using BookMarket.Services;
 using BookMarket.Services.Books;
 using BookMarket.Services.Genres;
+using BookMarketUnitTests.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -17,73 +18,7 @@ using Xunit;
 namespace BookMarketUnitTests.Controllers
 {
 
-    public static class Repository
-    {
-        public static List<IndexBook> GetIndexBooks(int counts = 0)
-        {
-            List<IndexBook> list = new List<IndexBook>()
-            {
-                new IndexBook(),
-                new IndexBook(),
-                new IndexBook(),
-                new IndexBook(),
-                new IndexBook()
-            };
 
-
-            return list.Take(counts != 0 ? counts : list.Count).ToList();
-        }
-
-
-        public static IEnumerable<BookViewModel> GetBookViewModel(int counts = 0)
-        {
-            var list = new List<BookViewModel>()
-            {
-                new BookViewModel(),
-                new BookViewModel(),
-                new BookViewModel(),
-                new BookViewModel(),
-                new BookViewModel()
-            };
-
-            if (counts > 0)
-                list = list.Take(counts).ToList();
-
-            return list;
-        }
-
-
-        public static IDictionary<CategoryGenre, System.Collections.Generic.List<GenreBook>> GetSubGenres(int genresCount = 0, int subGenresCount = 0)
-        {
-            var genres = new Dictionary<CategoryGenre, System.Collections.Generic.List<GenreBook>>();
-
-            genres.Add(new CategoryGenre(), new List<GenreBook>());
-            genres.Add(new CategoryGenre(), new List<GenreBook>());
-            genres.Add(new CategoryGenre(), new List<GenreBook>());
-            genres.Add(new CategoryGenre(), new List<GenreBook>());
-            genres.Add(new CategoryGenre(), new List<GenreBook>());
-
-
-
-            return genres;
-        }
-
-        public static IEnumerable<TopUser> GetTopUsers(int count = 10)
-        {
-            var users = new List<TopUser>()
-            {
-                new TopUser(),
-                new TopUser(),
-                new TopUser(),
-                new TopUser(),
-                new TopUser()
-            };
-
-
-            return users;
-        }
-
-    }
 
 
 
@@ -100,7 +35,7 @@ namespace BookMarketUnitTests.Controllers
             // Arrange
             var bookServiceMock = new Mock<IBookService>();
 
-            bookServiceMock.Setup(service => service.GetNewsBooks(count)).ReturnsAsync(Repository.GetIndexBooks(count));
+            bookServiceMock.Setup(service => service.GetNewsBooks(count)).ReturnsAsync(RepositoryDB.GetIndexBooks(count));
 
             var controller = new HomeController(bookServiceMock.Object);
 
@@ -109,7 +44,7 @@ namespace BookMarketUnitTests.Controllers
             // Получим модель, передаваемую в представление
             var models = partialViewResult.Model as IEnumerable<IndexBook>;
 
-            Assert.Equal(models.Count(), Repository.GetIndexBooks(count).Count);
+            Assert.Equal(models.Count(), RepositoryDB.GetIndexBooks(count).Count);
         }
 
         /// <summary>
@@ -121,7 +56,7 @@ namespace BookMarketUnitTests.Controllers
             // Arrange
             var bookServiceMock = new Mock<IBookService>();
 
-            bookServiceMock.Setup(service => service.GetNewsBooks(4)).ReturnsAsync(Repository.GetIndexBooks(4));
+            bookServiceMock.Setup(service => service.GetNewsBooks(4)).ReturnsAsync(RepositoryDB.GetIndexBooks(4));
 
             var controller = new HomeController(bookServiceMock.Object);          
 
@@ -169,9 +104,9 @@ namespace BookMarketUnitTests.Controllers
             var genresServiceMock = new Mock<IGenresService>();
             var userServiceMock = new Mock<IUserService>();
 
-            userServiceMock.Setup(service => service.GetTopUsers(5)).ReturnsAsync(Repository.GetTopUsers(5));
-            userServiceMock.Setup(service => service.GetNewUsers(5)).ReturnsAsync(Repository.GetTopUsers(5));
-            genresServiceMock.Setup(service => service.GetGenresSubCategories(4, 3)).ReturnsAsync(Repository.GetSubGenres(4, 3));
+            userServiceMock.Setup(service => service.GetTopUsers(5)).ReturnsAsync(RepositoryDB.GetTopUsers(5));
+            userServiceMock.Setup(service => service.GetNewUsers(5)).ReturnsAsync(RepositoryDB.GetTopUsers(5));
+            genresServiceMock.Setup(service => service.GetGenresSubCategories(4, 3)).ReturnsAsync(RepositoryDB.GetSubGenres(4, 3));
 
             // Act
             var controller = new HomeController(userServiceMock.Object, genresServiceMock.Object);
@@ -290,7 +225,7 @@ namespace BookMarketUnitTests.Controllers
         {
             // Arrange
             var mock = new Mock<IBookService>();
-            mock.Setup(service => service.GetLastCommentaries(countBooks)).ReturnsAsync(Repository.GetBookViewModel(countBooks));
+            mock.Setup(service => service.GetLastCommentaries(countBooks)).ReturnsAsync(RepositoryDB.GetBookViewModel(countBooks));
             var controller = new HomeController(mock.Object);
 
 
@@ -302,7 +237,7 @@ namespace BookMarketUnitTests.Controllers
             Assert.IsAssignableFrom<IEnumerable<BookViewModel>>(models); 
             
 
-            Assert.Equal(models.Count(), Repository.GetIndexBooks(countBooks).Count);
+            Assert.Equal(models.Count(), RepositoryDB.GetIndexBooks(countBooks).Count);
 
         }
 
@@ -368,7 +303,7 @@ namespace BookMarketUnitTests.Controllers
         {
             // Arrange
             var mock = new Mock<IBookService>();
-            mock.Setup(service => service.GetTopBooks(count)).ReturnsAsync(Repository.GetIndexBooks(count));
+            mock.Setup(service => service.GetTopBooks(count)).ReturnsAsync(RepositoryDB.GetIndexBooks(count));
             var controller = new HomeController(mock.Object);
 
             // Проверим модель, которая передается в контроллер
@@ -377,7 +312,7 @@ namespace BookMarketUnitTests.Controllers
             var models = partialViewResult.Model as List<IndexBook>;
 
 
-            Assert.Equal(models.Count, Repository.GetIndexBooks(count).Count);
+            Assert.Equal(models.Count, RepositoryDB.GetIndexBooks(count).Count);
         }
 
 
@@ -390,7 +325,7 @@ namespace BookMarketUnitTests.Controllers
         {
             // Arrange
             var mock = new Mock<IBookService>();
-            mock.Setup(service => service.GetTopBooks(4)).ReturnsAsync(Repository.GetIndexBooks());
+            mock.Setup(service => service.GetTopBooks(4)).ReturnsAsync(RepositoryDB.GetIndexBooks());
             var controller = new HomeController(mock.Object);
 
             // Проверим модель, которая передается в контроллер
@@ -409,7 +344,7 @@ namespace BookMarketUnitTests.Controllers
 
             // Arrange
             var mock = new Mock<IBookService>();
-            mock.Setup(service => service.GetTopBooks(4)).ReturnsAsync(Repository.GetIndexBooks());
+            mock.Setup(service => service.GetTopBooks(4)).ReturnsAsync(RepositoryDB.GetIndexBooks());
             var controller = new HomeController(mock.Object);
 
             // Act

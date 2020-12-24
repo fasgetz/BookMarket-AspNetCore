@@ -12,6 +12,7 @@ namespace BookMarket.Models.ViewModels.SearchBook
         public string Name { get; set; }
         public DateTime AddDatabase { get; set; }
         public string CategoryName { get; set; }
+        public int idCategory { get; set; }
         public string Description { get; set; }
 
         public byte[] PosterBook { get; set; }

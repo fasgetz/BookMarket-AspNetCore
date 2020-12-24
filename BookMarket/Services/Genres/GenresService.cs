@@ -1,6 +1,7 @@
 
 
 using BookMarket.Models.DataBase;
+using BookMarket.Models.ViewModels.SearchBook;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,19 @@ namespace BookMarket.Services.Genres
         public GenresService(BookMarketContext db)
         {
             this.db = db;
+        }
+
+
+        /// <summary>
+        /// Поиск жанра книги по номеру
+        /// </summary>
+        /// <param name="idGenre">номер жанра</param>
+        /// <returns>Жанр книги</returns>
+        public async Task<GenreBook> FindGenreBook(int idGenre)
+        {
+            var genre = await db.GenreBooks.FirstOrDefaultAsync(i => i.Id == idGenre);
+
+            return genre;
         }
 
 
@@ -38,5 +52,20 @@ namespace BookMarket.Services.Genres
 
         }
 
+
+        /// <summary>
+        /// Выборка жанров с поджанрами с количеством книг
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IDictionary<CategoryGenreVM, List<GenreBookVM>>> getGenresSubCategoriesCounts()
+        {
+            var CategoryGenres = await db.GenreCategory
+                                .Include("GenresBook")
+                                .ToDictionaryAsync(i => new CategoryGenreVM() { Id = i.Id, Name = i.Name }, s => s.GenresBook.Select(r => new GenreBookVM { Id = r.Id, Name = r.Name, CountBooks = db.Book.Count(i => i.IdCategory == r.Id) }).ToList());
+            
+            
+            return CategoryGenres;
+
+        }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BookMarket.Services.Books
@@ -169,6 +170,66 @@ namespace BookMarket.Services.Books
 
 
             return newsBook;
+        }
+
+
+        /// <summary>
+        /// Выборка книг в поиске
+        /// </summary>
+        /// <param name="IdGenre"></param>
+        /// <param name="page">страница</param>
+        /// <param name="word">название книги</param>
+        /// <param name="RatingOrdered">сортировка по рейтингу</param>
+        /// <returns>Выборку книг</returns>
+        public async Task<IEnumerable<BookViewModel>> GetSearchBooks(int IdGenre = 0, int page = 0, string word = null, byte RatingOrdered = 0)
+        {
+            var books = await db.Book
+                .OrderByDescending(i => RatingOrdered == 1 ? i.UserRating.Average(i => i.Mark) : i.Id)
+                // Фильтруем по ключевому слову
+                .Where(i =>
+                // по жанру
+                IdGenre != 0 ? i.IdCategoryNavigation.Id == IdGenre : true
+                && !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
+
+                .Skip(page == 1 ? 0 : (page - 1) * 10)
+                .Select(i =>
+                new BookViewModel
+                {
+                    Id = i.Id,
+                    AddDatabase = i.AddDatabase,
+                    CategoryName = i.IdCategoryNavigation.Name,
+                    Name = i.Name,
+                    idCategory = IdGenre, // Поджанр книги
+                    IdAuthor = (int)i.IdAuthor,
+                    AuthorNameFamily = i.IdAuthorNavigation.NameFamily,
+                    Description = i.Description,
+                    PosterBook = i.PosterBook,
+                    RatingBook = i.UserRating.Average(i => i.Mark)
+                })
+                .Take(10)
+                .ToListAsync();
+
+
+            return books;
+        }
+
+
+        /// <summary>
+        /// Максимальное количество книг в выборке
+        /// </summary>
+        /// <param name="word">Название книги</param>
+        /// <param name="IdGenre">Номер жанра</param>
+        /// <returns>Максимальное количество книг</returns>
+        public async Task<int> getCountsBooks(string word, ushort IdGenre)
+        {
+            var countBooks = await db.Book // Максимальное количество книг в выборке
+                                .Where(i =>
+                                // по жанру
+                                IdGenre != 0 ? i.IdCategoryNavigation.Id == IdGenre : true
+                                && !string.IsNullOrEmpty(word) ? i.Name.Contains(word) || i.IdAuthorNavigation.Name.Contains(word) || i.IdAuthorNavigation.Family.Contains(word) : true)
+                                .CountAsync();
+
+            return countBooks;
         }
     }
 }

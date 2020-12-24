@@ -14,6 +14,6 @@ namespace BookMarket.Models.ViewModels.SearchBook
         public int MaxCountBooks { get; set; } // Количество книг
         public string GenreName { get; set; } // Имя жанра
         public int IdGenre { get; set; } // Айди жанра
-        public List<BookViewModel> books { get; set; }
+        public IEnumerable<BookViewModel> books { get; set; }
     }
 }

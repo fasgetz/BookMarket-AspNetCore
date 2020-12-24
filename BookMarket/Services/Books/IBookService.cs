@@ -13,6 +13,17 @@ namespace BookMarket.Services.Books
     {
 
         /// <summary>
+        /// Выборка книг в поиске
+        /// </summary>
+        /// <param name="IdGenre"></param>
+        /// <param name="page">страница</param>
+        /// <param name="word">название книги</param>
+        /// <param name="RatingOrdered">сортировка по рейтингу</param>
+        /// <returns>Выборку книг</returns>
+
+        public Task<IEnumerable<BookViewModel>> GetSearchBooks(int IdGenre = 0, int page = 0, string word = null, byte RatingOrdered = 0);
+
+        /// <summary>
         /// Выборка топовых книг
         /// </summary>
         /// <param name="countBooks">количество книг</param>
@@ -52,5 +63,14 @@ namespace BookMarket.Services.Books
         /// <param name="count">количество новых книг</param>
         /// <returns>Новые книги</returns>
         Task<IEnumerable<IndexBook>> GetNewsBooks(int count);
+
+
+        /// <summary>
+        /// Максимальное количество книг в выборке
+        /// </summary>
+        /// <param name="word">Название книги</param>
+        /// <param name="IdGenre">Номер жанра</param>
+        /// <returns>Максимальное количество книг</returns>
+        Task<int> getCountsBooks(string word, ushort IdGenre);
     }
 }
